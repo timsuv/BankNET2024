@@ -56,7 +56,7 @@ namespace BankNET2024
 
                 if (ValidLogIn(userNamn, password))
                 {
-                    Console.WriteLine("works");
+                    UserMainMenu();
                     break;
                 }
                 else
@@ -68,7 +68,6 @@ namespace BankNET2024
             }
             Console.WriteLine("SLut på försökt hejdå");
         }
-        
         public bool ValidLogIn(string userName, string password)
         {
             if (users.ContainsKey(userName) && users[userName] == password)
@@ -81,5 +80,14 @@ namespace BankNET2024
             }
             
         }
+        private void UserMainMenu()
+        {
+            List<string> options = ["Metod 1", "Metod 1", "Metod 1", "Metod 1"];
+            Menu menu = new(options, "menu");
+
+            menu.MenuRun();
+        }
+
+
     }
 }

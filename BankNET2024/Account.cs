@@ -25,5 +25,27 @@ namespace BankNET2024
 
         public Dictionary<string, string> LoginDetails { get; set; }
 
+        public void Deposit()
+        {
+
+        }
+        public void Withdraw()
+        {
+
+        }
+
+        public void DisplayAccount()
+        {
+            Console.WriteLine("");
+        }
+        public void Transfer()
+        {
+
+        }
+        public void TransferToUser()
+        {
+
+        }
     }
+
 }

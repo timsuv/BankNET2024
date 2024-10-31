@@ -23,7 +23,7 @@ namespace BankNET2024
         public string ContactInformation { get; set; }
 
 
-
+        public Dictionary<string, string> LoginDetails { get; set; }
 
     }
 }

@@ -9,9 +9,11 @@ namespace BankNET2024
 {
     internal class ManageBank
     {
-        Dictionary<string, string> users = new()
+        List<User> users = new List<User>
         {
-            { "a", "l" }
+            new User(true, "001", "admin"),
+            new User(false, "002", "12345"),
+            new User(false,"003", "54321")
         };
         public ManageBank()
         {
@@ -70,15 +72,13 @@ namespace BankNET2024
         }
         public bool ValidLogIn(string userName, string password)
         {
-            if (users.ContainsKey(userName) && users[userName] == password)
+            var tempUser = users.Find(u => u.AccountNumber == userName);
+            if (tempUser != null && tempUser.PassWord == password)
             {
+
                 return true;
             }
-            else
-            {
-                return false;
-            }
-            
+            return false;
         }
         private void UserMainMenu()
         {

@@ -12,6 +12,5 @@ namespace BankNET2024
         public float Balance { get; set; }
 
         
-
     }
 }

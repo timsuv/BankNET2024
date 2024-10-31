@@ -8,6 +8,10 @@ namespace BankNET2024
 {
     public class Account
     {
+        public string AccountNumber { get; set; }
+        public float Balance { get; set; }
+
+        
 
     }
 }

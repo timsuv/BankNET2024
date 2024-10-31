@@ -6,7 +6,7 @@
         {
             ManageBank manageBank = new();
 
-            manageBank.LogIn();
+            manageBank.TempLogIn();
         }
     }
 }

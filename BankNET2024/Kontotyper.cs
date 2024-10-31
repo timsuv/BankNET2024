@@ -9,12 +9,12 @@ namespace BankNET2024
     public class AccountType
     {
         //Basklasser
-        public string AccountNumber {  get; set; }
+        public string AccountNumber { get; set; }
         public float Balance { get; set; }
-        public string Currency {  get; set; }
+        public string Currency { get; set; }
 
-        public AccountType(string accountnumber, float balance, string currency) 
-        
+        public AccountType(string accountnumber, float balance, string currency)
+
         {
             AccountNumber = accountnumber;
             Balance = balance;
@@ -45,10 +45,20 @@ namespace BankNET2024
             Console.WriteLine($"Konto: {AccountNumber}, Balance: {Balance} {Currency}");
 
         }
+    }
+    public class SavingsAccount : AccountType
+    {
+
 
 
 
         // Sparkonto (årlig ränta)
+
+
+        //Lånekonto
+
+
+
 
 
 

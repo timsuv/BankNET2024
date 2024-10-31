@@ -1,15 +1,14 @@
 namespace BankNET2024;
 
-public class User
+public class User(bool isAdmin, string userName, string passWord, string contactInformation = "")
 {
-    public bool IsAdmin;
-    public string AccountNumber;
-    public string PassWord;
-    public User(bool isAdmin, string accountNumber, string passWord)
-    {
-        IsAdmin = isAdmin;
-        AccountNumber = accountNumber;
-        PassWord = passWord;
-    }
+
+    public bool IsAdmin { get; set; } = isAdmin;
+    public string UserName { get; set; } = userName;
+    public string PassWord { get; set; } = passWord;
+    public string ContactInformation { get; set; } = contactInformation;
+    public List<Account> Accounts { get; set; } = []; // Initierar kontolistan
+
+
 
 }

@@ -72,7 +72,7 @@ namespace BankNET2024
         }
         public bool ValidLogIn(string userName, string password)
         {
-            var tempUser = users.Find(u => u.AccountNumber == userName);
+            var tempUser = users.Find(u => u.UserName == userName);
             if (tempUser != null && tempUser.PassWord == password)
             {
 
@@ -82,12 +82,43 @@ namespace BankNET2024
         }
         private void UserMainMenu()
         {
-            List<string> options = ["Metod 1", "Metod 1", "Metod 1", "Metod 1"];
+            List<string> options = ["Metod 1", "Metod 1", "Metod 1", "Metod 1", "Exit"];
             Menu menu = new(options, "menu");
 
             menu.MenuRun();
         }
+//        private void CreateAccount()
+//        {
+//            var newAccount = new Account(
+//                accountNumber: "1",
+//                balance: 50036.32M,
+//                name: "Bob Åberg",
+//                contactInfo: "bob@gmail.com, 0728539675",
+//                amount: 0M,
+//                password: "apa1"
+//            );
 
+//            var newAccount2 = new Account(
+//            accountNumber: "22",
+//            balance: 40036.32M,
+//            name: "Emil Lönneberga",
+//            contactInfo: "Emil.233@gmail.com, 0721939396",
+//            amount: 0M,
+//            password: "apa2"
+//        );
+//            var newAccount3 = new Account(
+//                accountNumber: "333",
+//                balance: 30036.32M,
+//                name: "Anders Strömberg",
+//                contactInfo: "Anders.213@gmail.com, 0721602756",
+//                amount: 0M,
+//                password: "apa3"
+//);
+
+//            Accounts.Add(newAccount);
+//            Accounts.Add(newAccount2);
+//            Accounts.Add(newAccount3);
+//        }
 
     }
 }

@@ -3,6 +3,7 @@ namespace BankNET2024;
 public class Loan
 {
     //Interest rate on loan
+    public int Balance;
     public decimal InterestRate;
     public int Salary;
     public int LoanRequest;

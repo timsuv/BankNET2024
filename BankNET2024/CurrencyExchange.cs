@@ -9,6 +9,7 @@ namespace BankNET2024
     public class CurrencyExchange 
     {
         //Exchange rate for different USD & EUR
+        public int Balance;
         public float USD;
         public float EUR;
         

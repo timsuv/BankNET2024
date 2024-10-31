@@ -48,19 +48,9 @@ namespace BankNET2024
     }
     public class SavingsAccount : AccountType
     {
-
-
-
-
         // Sparkonto (årlig ränta)
-
-
+        
         //Lånekonto
-
-
-
-
-
-
+        
     }
 }

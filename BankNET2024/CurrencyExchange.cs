@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BankNET2024
 {
-    public class CurrencyExchange
+    public class CurrencyExchange 
     {
         //Exchange rate for different USD & EUR
         public float USD;
@@ -25,8 +25,8 @@ namespace BankNET2024
         public void Exchange()
         {
             Console.WriteLine($"Your account balance is {Balance} SEK");
-            Console.WriteLine($"Your account balance in USD is {Balance * USD}USD");
-            Console.WriteLine($"Your account balance in EUR is {Balance * EUR}USD");
+            Console.WriteLine($"Your account balance in USD is {Balance * USD} USD");
+            Console.WriteLine($"Your account balance in EUR is {Balance * EUR} EUR");
         }
         
     }

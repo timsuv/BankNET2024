@@ -9,9 +9,9 @@ namespace BankNET2024
     public class AccountType
     {
         //Basklasser
-        public string AccountNumber; 
-        public float Balance; 
-        public string Currency;
+        public string AccountNumber {  get; set; }
+        public float Balance { get; set; }
+        public string Currency {  get; set; }
 
         public AccountType(string accountnumber, float balance, string currency) 
         

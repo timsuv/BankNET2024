@@ -9,43 +9,46 @@ namespace BankNET2024
     public class AccountType
     {
         //Basklasser
-        public string AccountNumber;
-        public decimal TotalBalance;
+        public string AccountNumber; 
+        public float Balance; 
         public string Currency;
 
-        public AccountType(string accountnumber, decimal totalbalance, string currency) 
+        public AccountType(string accountnumber, float balance, string currency) 
         
         {
             AccountNumber = accountnumber;
-            TotalBalance = totalbalance;
+            Balance = balance;
             Currency = currency;
         }
 
         // insättning
-        public void Deposit(Decimal amount)
+        public void Deposit(float amount)
         {
-            TotalBalance += amount;
+            Balance += amount;
         }
 
-        // Uttag från konto, returnerar false om uttaget överstiger saldot
-        public bool Withdraw(decimal amount)
+        // Uttag från konto, säger till om uttaget överstiger saldot
+        public bool Withdraw(float amount)
         {
-            if (TotalBalance >= amount)
+            if (Balance >= amount)
             {
-                TotalBalance -= amount;
+                Balance -= amount;
                 return true;
             }
             return false;
         }
 
 
-
-
         // Visar  kontoinformation
+        public void ShowAccountDetails()
+        {
+            Console.WriteLine($"Konto: {AccountNumber}, Balance: {Balance} {Currency}");
+
+        }
 
 
 
-        // Sparkonto som har en årlig ränta
+        // Sparkonto (årlig ränta)
 
 
 

@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace BankNET2024
 {
+<<<<<<< HEAD
     internal class TransactionLog
+=======
+    public class TransactionLog
+>>>>>>> c818ba4980cd7ee4f90a8838493a166309125f00
     {
 
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BankApp;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -60,21 +61,29 @@ namespace BankNET2024
 
                 if (ValidLogIn(userNamn, password))
                 {
-                    Console.WriteLine("Works");
+                    MainMenu();
                     break;
                 }
                 else
                 {
-                    Console.WriteLine("Try again");
+                    attempts--;
+                    Console.WriteLine($"Try again, försök kvar: {attempts}");
                 }
-
-                attempts--;
                 if (attempts == 0)
                 {
                     Console.WriteLine("SLUT PÅ FÖRSÖK");
                     Environment.Exit(0);
                 }
             }
+        }
+        private void MainMenu() // Temp- need methods and check if its admin 
+        {
+            List<string> options = ["Transfer", "Withdraw", "Insert", "Create Account", "Take a loan", "Min information"];
+
+            Menu menu = new(options, "Bank menu");
+
+            menu.MenuRun();
+
         }
         public bool ValidLogIn(string? userName, string password)
         {

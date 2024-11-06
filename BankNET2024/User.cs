@@ -37,7 +37,19 @@ namespace BankNET2024
         public void DisplayAccounts()
         {
             //visar infos om alla accounts med bara nummer och balance
-            Console.WriteLine("");
+            if (Accounts != null)
+            {
+                foreach (var account in Accounts)
+                {
+                    Console.WriteLine(account);
+                }
+            }
+        }
+        public override string ToString()
+        {
+           
+            return $"Username: {Username}, Password: ****, FirstName: {FirstName}, LastName: {LastName}, " +
+           $"PhoneNumber: {PhoneNumber}, Salary: {Salary:C}";
         }
     }
 

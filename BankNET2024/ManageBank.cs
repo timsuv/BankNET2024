@@ -35,12 +35,12 @@ namespace BankNET2024
         {
             var attempts = 3;
             string password;
-            string? userNamn;
+            string? userName;
 
             while (attempts != 0)
             {
                 Console.Write("Skriv in användarnamn: ");
-                userNamn = Console.ReadLine();
+                userName = Console.ReadLine();
 
                 Console.Write("Skriv in lösenordet: ");
                 password = string.Empty; // Återställ lösenordet för varje inmatning
@@ -59,9 +59,10 @@ namespace BankNET2024
 
                 Console.WriteLine(); // Ny rad efter lösenordet har skrivits in
 
-                if (ValidLogIn(userNamn, password))
+                if (ValidLogIn(userName, password))
                 {
-                    MainMenu();
+                    var tempUSer = Users?.FirstOrDefault(user => user.Username == userName && user.Password == password);
+                    MainMenu(tempUSer);
                     break;
                 }
                 else
@@ -76,13 +77,21 @@ namespace BankNET2024
                 }
             }
         }
-        private void MainMenu() // Temp- need methods and check if its admin 
+        private void MainMenu(User user) // Temp- need methods and check if its admin 
         {
             List<string> options = ["Transfer", "Withdraw", "Insert", "Create Account", "Take a loan", "Min information"];
 
             Menu menu = new(options, "Bank menu");
 
-            menu.MenuRun();
+            switch (menu.MenuRun())
+            {
+                case 5:
+                    Console.WriteLine(user);
+                    break;
+                    
+                default:
+                    break;
+            }
 
         }
         public bool ValidLogIn(string? userName, string password)

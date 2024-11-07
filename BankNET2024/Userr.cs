@@ -6,9 +6,16 @@ using System.Threading.Tasks;
 
 namespace BankNET2024
 {
-    public class User
+    public class Userr: IUser
     {
-        public User(string username, string password, string firstName, string lastName, string phoneNumber, List<Account> accounts)
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string PhoneNumber { get; set; }
+        public List<Accountt> Accounts { get; set; }
+
+        public Userr(string username, string password, string firstName, string lastName, string phoneNumber, List<Accountt> accounts)
         {
             Username = username;
             Password = password;
@@ -16,30 +23,30 @@ namespace BankNET2024
             LastName = lastName;
             PhoneNumber = phoneNumber;
             Accounts = accounts;
+
+            Accounts.Add(new Accountt("kkk", 1000));
         }
-
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string PhoneNumber { get; set; }
-        public List<Account> Accounts { get; set; }
-
-        //  public bool IsLocked { get; set; } kommer senare
-        //public int Attempts { get; set; }
 
         public void CreateOwnAccout()
         {
-
+            Accounts.Add(new Account("111", 0));
         }
         public void DisplayAccounts()
         {
             //visar infos om alla accounts med bara nummer och balance
-            Console.WriteLine("\nHär kommer listan med alla konto:");
-            foreach (var account in Accounts)
+            if (Accounts != null)
             {
-                Console.WriteLine($"Konto: {account.AccountNumber} Saldo: {account.Balance}");
+                foreach (var account in Accounts)
+                {
+                    Console.WriteLine(account);
+                }
             }
+        }
+        public override string ToString()
+        {
+           
+            return $"Username: {Username}, Password: ****, FirstName: {FirstName}, LastName: {LastName}, " +
+           $"PhoneNumber: {PhoneNumber}";
         }
     }
 

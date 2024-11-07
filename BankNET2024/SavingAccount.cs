@@ -10,7 +10,6 @@ namespace BankNET2024
     {
         
         //Savings account, needs an interest rate, savings amount, savings account number
-        
         public decimal InterestRate { get; private set; }
         public decimal SavingBalance { get; set; }
         
@@ -22,10 +21,11 @@ namespace BankNET2024
         }
         
         
-        //Methods to deposit, withdraw & display balance
+        //Methods to deposit (& calculate interest), withdraw & display balance
         public void Deposit(decimal amount)
         {
             amount += SavingBalance;
+            Console.WriteLine($"The interest on this deposit of {amount} SEK is" + (InterestRate * amount) + " SEK");
         }
 
         public void Withdraw(decimal amount)
@@ -35,7 +35,7 @@ namespace BankNET2024
             
         public void DisplayBalance()
         {
-            Console.WriteLine($"Savings balance: {SavingBalance}");
+            Console.WriteLine($"Savings balance: {SavingBalance} SEK");
         }
         
     }

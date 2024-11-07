@@ -7,7 +7,6 @@ public class Loan
     public int LoanRequest;
     public int LoanAmount;
     
-    
     //Method for admin to change interest rate
     public void UpdateInterestRate()
     {

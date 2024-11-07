@@ -11,8 +11,9 @@ namespace BankNET2024
     {
         public List<IUser>? Users { get; set; } = [
 
-            new User("A", "A", "O", "D", "ddd", []), // Temp User
-            new Admin("A", "C")
+            new User("A", "A", "O", "D", "ddd", [new Account("Def", 23993)]), // Temp User
+            new User("C", "A", "O", "D", "ddd", [new Account("def", 1000)]), // Temp User
+            new Admin("Ad", "C")
 
             ];
         public ManageBank()
@@ -86,33 +87,47 @@ namespace BankNET2024
                 }
             }
         }
-        private void MainMenu(IUser user) // Temp- need methods and check if its admin 
+        private void UserMenu(IUser user)
         {
-            List<string> options = ["Transfer", "Withdraw", "Insert", "Create Accountt", "Take a loan", "Min information"];
+            var tempUser = (User)user;
+
+            List<string> options = ["Transfer", "Withdraw", "Deposit", "Create Account", "Take a loan", "Min information"];
 
             Menu menu = new(options, "Bank menu");
 
-            switch (menu.MenuRun())
+            while (true)
             {
-                case 5:
-                    Console.WriteLine(user);
-                    break;
-                    
-                default:
-                    break;
-            }
 
-        }
-        private void UserMenu(IUser user)
-        {
-            List<string> option = [""];
+                switch (menu.MenuRun())
+                {
+                    case 0:
+                        var account = tempUser.GetAccount();
+                        if (account != null)
+                        {
+                            account.TempWithdraw();
+                        }
+                        else
+                        {
+                            Console.WriteLine("Ingen giltig konto hittades.");
+                        }
+                        break;
+                    case 5:
+                        Console.WriteLine(tempUser);
+                        tempUser.DisplayAccounts();
+                        Console.ReadLine();
+                        break;
+
+                    default:
+                        break;
+                }
+            }
         }
         private void AdminMenu(IUser user)
         {
 
         }
 
-        public bool ValidLogIn(string? userName, string password)
+        private bool ValidLogIn(string? userName, string password)
         {
             var tempUser = Users?.Find(u => u.Username == userName);
             if (tempUser != null && tempUser.Password == password)

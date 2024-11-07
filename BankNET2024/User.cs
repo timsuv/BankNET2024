@@ -24,9 +24,19 @@ namespace BankNET2024
             PhoneNumber = phoneNumber;
             Accounts = accounts;
 
-  
         }
+        public Account GetAccount()
+        {
+            Console.WriteLine("Vilket konto: ");
+            string account = Console.ReadLine();
 
+            var foundAccount = Accounts.FirstOrDefault(a => a.AccountNumber == account);
+            if (foundAccount == null)
+            {
+                Console.WriteLine("Konto hittades inte.");
+            }
+            return foundAccount;
+        }
         public void CreateOwnAccout()
         {
 

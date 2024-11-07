@@ -12,13 +12,6 @@ namespace BankNET2024
         public decimal Euro { get; set; } 
         public decimal Usd { get; set; }
         
-        //Constructor to create instance in admin
-        public CurrencyChange(decimal euro, decimal usd)
-        {
-            this.Euro = euro;
-            this.Usd = usd;
-        }
-        
         //Override constructor
         public CurrencyChange()
         {
@@ -36,20 +29,17 @@ namespace BankNET2024
         {
             Usd = newRateUsd;
         }
-
         
         //Method to return latest Euro & Usd rates for account
-        
         public decimal getEuro()
         {
-            return newRateEuro ;
-        }
-
-        public decimal getUsd()
-        {
-            return newRateUsd;
+            return Euro ;
         }
         
+        public decimal getUsd()
+        {
+            return Usd;
+        }
         
     }
 }

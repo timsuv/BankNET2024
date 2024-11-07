@@ -43,22 +43,16 @@ namespace BankNET2024
         }
         
         
-        //Currency converter
-        private CurrencyChange conversion = new CurrencyChange();
-        private decimal balanceInEuro;
-        private decimal balanceInUsd;
+        //Instance of CurrencyChange class
+        private CurrencyChange balanceConverter = new CurrencyChange();
         
-        //Balance * conversion.getEuro() = balanceInEuro
-        
+        //Display balance in SEK, EUR, USD
         public void Exchange()
         {
             Console.WriteLine($"Current balance in SEK is {Balance}");
-            Console.WriteLine($"Current balance in USD is {balanceInUsd}");
-            Console.WriteLine($"Current balance in EUR is {balanceInEuro}");
+            Console.WriteLine("Current balance in USD is " + (Balance * balanceConverter.getUsd()) + "$");
+            Console.WriteLine($"Current balance in EUR is " + (Balance * balanceConverter.getEuro() + "€"));
         }
         
-
-
-
     }
 }

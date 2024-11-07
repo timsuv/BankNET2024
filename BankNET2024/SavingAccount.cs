@@ -8,12 +8,10 @@ namespace BankNET2024
 {
     public class SavingAccount : Account
     {
-        
         //Savings account, needs an interest rate, savings amount, savings account number
         public decimal InterestRate { get; private set; }
         public decimal SavingBalance { get; set; }
-        
-        
+
         //Constructor
         public SavingAccount(string accountNumber, decimal balance, decimal savingBalance) : base(accountNumber, balance)
         {

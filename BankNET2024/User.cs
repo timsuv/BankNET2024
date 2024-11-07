@@ -8,14 +8,13 @@ namespace BankNET2024
 {
     public class User
     {
-        public User(string username, string password, string firstName, string lastName, string phoneNumber, decimal salary, List<Account> accounts)
+        public User(string username, string password, string firstName, string lastName, string phoneNumber, List<Account> accounts)
         {
             Username = username;
             Password = password;
             FirstName = firstName;
             LastName = lastName;
             PhoneNumber = phoneNumber;
-            Salary = salary;
             Accounts = accounts;
         }
 

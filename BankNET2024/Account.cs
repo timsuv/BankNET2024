@@ -44,7 +44,7 @@ namespace BankNET2024
         {
             Console.WriteLine("");
         }
-        public async Task TransferToUser(List<Account> accounts)
+        public async Task Transfer(List<Account> accounts)
         {
             Console.WriteLine("\nWhich account do you want to transfer to?");
             string accountNumber = Console.ReadLine();
@@ -75,19 +75,7 @@ namespace BankNET2024
             }
         }
 
-        public async Task TransferToUser(Account toAccount, decimal amount)
-        {
-            if (toAccount != null && Balance >= amount)
-            {
-                Balance -= amount;
-                toAccount.Balance += amount;
-                Console.WriteLine($"Transferred {amount} from {AccountNumber} to {toAccount.AccountNumber}");
-            }
-            else
-            {
-                Console.WriteLine("Transfer failed. Check account balance or account details.");
-            }
-        }
+        
         private void CreateAccount()
         {
             var newAccount = new Account(

@@ -106,68 +106,44 @@ namespace BankNET2024
         }
         public async Task Transfer(List<Account> accounts)
         {
-            Console.WriteLine("\nWhich account do you want to transfer to?");
+            Console.WriteLine("\nVilket konto vill du sätta in på?");
             string accountNumber = Console.ReadLine();
 
             Account toAccount = accounts.FirstOrDefault(a => a.AccountNumber == accountNumber);
 
             if (toAccount != null)
             {
-                Console.WriteLine("\nEnter the amount to transfer:");
-                decimal amount = decimal.Parse(Console.ReadLine());
-
-                if (Balance >= amount)
+                Console.WriteLine("\nAnge mängden pengar: ");
+                string input = Console.ReadLine();
+                if (decimal.TryParse(input, out decimal amount) && amount > 0)
                 {
-                    Balance -= amount;
-                    toAccount.Balance += amount;
-                    var log = $"Transferred {amount} from {AccountNumber} to {toAccount.AccountNumber}";
-                    Console.WriteLine(log);
-                    Transaction transaction = new Transaction(DateTime.Now, new List<string> { log });
+                    if (Balance >= amount)
+                    {
+                        Balance -= amount;
+                        toAccount.Balance += amount;
+                        var log = $"Överförde {amount} från {AccountNumber} till {toAccount.AccountNumber}";
+                        Console.WriteLine(log);
+                        Transaction transaction = new Transaction(DateTime.Now, new List<string> { log });
+                    }
+                    else
+                    {
+                        Console.WriteLine("Uttag misslyckades. Inte tillräckligt med pengar.");
+                    }
                 }
                 else
                 {
-                    Console.WriteLine("Transfer failed. Insufficient balance.");
+                    Console.WriteLine("Ogiltig mängd. Ange en positiv siffra");
                 }
             }
             else
             {
-                Console.WriteLine("Transfer failed. Invalid account number.");
+                Console.WriteLine("Uttag misslyckades. Detta bankkonto existerar inte.");
             }
         }
 
-        
-        private void CreateAccount()
-        {
-            var newAccount = new Account(
-                accountNumber: "1",
-                balance: 50036.32M,
-                name: "Bob Åberg",
-                contactInfo: "bob@gmail.com, 0728539675",
-                amount: 0M,
-                password: "apa1"
-            );
 
-            var newAccount2 = new Account(
-            accountNumber: "22",
-            balance: 40036.32M,
-            name: "Emil Lönneberga",
-            contactInfo: "Emil.233@gmail.com, 0721939396",
-            amount: 0M,
-            password: "apa2"
-        );
-            var newAccount3 = new Account(
-                accountNumber: "333",
-                balance: 30036.32M,
-                name: "Anders Strömberg",
-                contactInfo: "Anders.213@gmail.com, 0721602756",
-                amount: 0M,
-                password: "apa3"
-);
 
-            Accounts.Add(newAccount);
-            Accounts.Add(newAccount2);
-            Accounts.Add(newAccount3);
-        }
+       
 
     }
 }

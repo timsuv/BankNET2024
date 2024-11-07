@@ -34,17 +34,16 @@ namespace BankNET2024
 
         public void Deposit(List<Account> accounts)
         {
-            Console.WriteLine("\nVilket konto vill du dra ut från??");
+            Console.WriteLine("\nVilket konto vill du sätta in på?");
             string accountNumber = Console.ReadLine();
 
             Account toAccount = accounts.FirstOrDefault(a => a.AccountNumber == accountNumber);
 
             if (toAccount != null)
             {
-                Console.WriteLine("\nAnge mängden pengar. ");
-                decimal amount = decimal.Parse(Console.ReadLine());
-
-                if (amount < 0)
+                Console.WriteLine("\nAnge mängden pengar: ");
+                string input = Console.ReadLine();
+                if (decimal.TryParse(input, out decimal amount) && amount > 0)
                 {
                     Balance += amount;
                     toAccount.Balance += amount;
@@ -52,36 +51,46 @@ namespace BankNET2024
                     Console.WriteLine(log);
                     Transaction transaction = new Transaction(DateTime.Now, new List<string> { log });
                 }
-
+                else
+                {
+                    Console.WriteLine("Ogiltig mängd. Ange en positiv siffra.");
+                }
             }
             else
             {
-                Console.WriteLine("Uttag misslyckades. Detta bankkonto existerar inte.");
+                Console.WriteLine("Insättning misslyckades. Detta bankkonto existerar inte.");
             }
         }
+
         public void Withdraw(List<Account> accounts)
         {
-            Console.WriteLine("\nVilket konto vill du dra ut från??");
+            Console.WriteLine("\nVilket konto vill du dra ut från?");
             string accountNumber = Console.ReadLine();
 
             Account toAccount = accounts.FirstOrDefault(a => a.AccountNumber == accountNumber);
 
             if (toAccount != null)
             {
-                Console.WriteLine("\nAnge mängden pengar. ");
-                decimal amount = decimal.Parse(Console.ReadLine());
-
-                if (Balance >= amount && amount < 0)
+                Console.WriteLine("\nAnge mängden pengar: ");
+                string input = Console.ReadLine();
+                if (decimal.TryParse(input, out decimal amount) && amount > 0)
                 {
-                    Balance -= amount;
-                    toAccount.Balance += amount;
-                    var log = $"Mängden pengar uttagen: {amount} från {AccountNumber}";
-                    Console.WriteLine(log);
-                    Transaction transaction = new Transaction(DateTime.Now, new List<string> { log });
+                    if (Balance >= amount)
+                    {
+                        Balance -= amount;
+                        toAccount.Balance += amount;
+                        var log = $"Mängden pengar uttagen: {amount} från {AccountNumber}";
+                        Console.WriteLine(log);
+                        Transaction transaction = new Transaction(DateTime.Now, new List<string> { log });
+                    }
+                    else
+                    {
+                        Console.WriteLine("Uttag misslyckades. Inte tillräckligt med pengar.");
+                    }
                 }
                 else
                 {
-                    Console.WriteLine("Uttag misslyckades. Inte tillräckligt med pengar.");
+                    Console.WriteLine("Ogiltig mängd. Ange en positiv siffra.");
                 }
             }
             else
@@ -89,6 +98,7 @@ namespace BankNET2024
                 Console.WriteLine("Uttag misslyckades. Detta bankkonto existerar inte.");
             }
         }
+
 
         public void DisplayAccount(User user)
         {

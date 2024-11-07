@@ -11,7 +11,7 @@ namespace BankNET2024
     {
         public List<IUser>? Users { get; set; } = [
 
-            new User("A", "A", "O", "D", "ddd", [new Account("Def", 23993)]), // Temp User
+            new User("A", "A", "O", "D", "ddd", [new Account("Def", 10000), new Account("s", 20000)]), // Temp User
             new User("C", "A", "O", "D", "ddd", [new Account("def", 1000)]), // Temp User
             new Admin("Ad", "C")
 
@@ -91,7 +91,7 @@ namespace BankNET2024
         {
             var tempUser = (User)user;
 
-            List<string> options = ["Transfer", "Withdraw", "Deposit", "Create Account", "Take a loan", "Min information"];
+            List<string> options = ["Withdraw", "Deposit", "Min info" , "Min Transfer"];
 
             Menu menu = new(options, "Bank menu");
 
@@ -111,10 +111,21 @@ namespace BankNET2024
                             Console.WriteLine("Ingen giltig konto hittades.");
                         }
                         break;
-                    case 5:
+                    case 1:
+                        var tempAcc = tempUser.GetAccount();
+                        if(tempAcc != null)
+                        {
+                            tempAcc.Deposit2();
+                        }
+
+                        break;
+                    case 2:
                         Console.WriteLine(tempUser);
                         tempUser.DisplayAccounts();
                         Console.ReadLine();
+                        break;
+                    case 3:
+                        Transfer(tempUser);
                         break;
 
                     default:
@@ -126,7 +137,21 @@ namespace BankNET2024
         {
 
         }
+        private void Transfer(User user)
+        {
+            var fromAccount = user.GetAccount();
+            var toAccount = user.GetAccount();
+            
+            if(fromAccount != null && toAccount != null)
+            {
+                Console.WriteLine("\nEnter the amount to transfer:");
+                decimal amount = decimal.Parse(Console.ReadLine());
 
+
+                fromAccount.Balance -= amount;
+                toAccount.Balance += amount;    
+            }
+        }
         private bool ValidLogIn(string? userName, string password)
         {
             var tempUser = Users?.Find(u => u.Username == userName);

@@ -18,84 +18,28 @@ namespace BankNET2024
         }
         public string AccountNumber { get; set; }
         public decimal Balance { get; set; }
+        //public Account(decimal balance)
+        //{
+        //    AccountNumber = GenerateUniqueAccountNumber();
+        //    Balance = balance;
+        //}
+        //private string GenerateUniqueAccountNumber()
+        //{
+        //    return Guid.NewGuid().ToString(); // Ger ett unikt kontonummer som t.ex. "3f84c023-b2d4-4c90-98f0-13fd4b9d2bcd"
+        //}
 
         public void Deposit2()
         {
             Console.WriteLine("\nAnge mängden pengar. ");
             decimal amount = decimal.Parse(Console.ReadLine());
 
-            if (amount < 0)
+            if (amount > 0)
             {
                 Balance += amount;
                 var log = $"Mängden pengar inlagd: {amount} på {AccountNumber}";
                 Console.WriteLine(log);
                 Transaction transaction = new Transaction(DateTime.Now, new List<string> { log });
-            }
-        }
-        public void Deposit(List<Account> accounts)
-        {
-            Console.WriteLine("\nVilket konto vill du dra ut från??");
-            string accountNumber = Console.ReadLine();
-
-            Account toAccount = accounts.FirstOrDefault(a => a.AccountNumber == accountNumber);
-
-            if (toAccount != null)
-            {
-                Console.WriteLine("\nAnge mängden pengar. ");
-                decimal amount = decimal.Parse(Console.ReadLine());
-
-                if (amount < 0)
-                {
-                    Balance += amount;
-                    toAccount.Balance += amount;
-                    var log = $"Mängden pengar inlagd: {amount} på {AccountNumber}";
-                    Console.WriteLine(log);
-                    Transaction transaction = new Transaction(DateTime.Now, new List<string> { log });
-                }
-
-            }
-            else
-            {
-                Console.WriteLine("Uttag misslyckades. Detta bankkonto existerar inte.");
-            }
-        }
-        public void Withdraw(List<Account> accounts) 
-        {
-            Console.WriteLine("\nVilket konto vill du dra ut från??");
-            string accountNumber = Console.ReadLine();
-
-            Account toAccount = accounts.FirstOrDefault(a => a.AccountNumber == accountNumber);
-
-            if (toAccount != null)
-            {
-                try
-                {
-                    Console.WriteLine("\nAnge mängden pengar. ");
-                    decimal amount = decimal.Parse(Console.ReadLine());
-
-                    if (Balance >= amount && amount < 0)
-                    {
-                        Balance -= amount;
-                        toAccount.Balance += amount;
-                        var log = $"Mängden pengar uttagen: {amount} från {AccountNumber}";
-                        Console.WriteLine(log);
-                        Transaction transaction = new Transaction(DateTime.Now, new List<string> { log });
-                    }
-                    else
-                    {
-                        Console.WriteLine("Uttag misslyckades. Inte tillräckligt med pengar.");
-                    }
-                }
-                catch (Exception ex)
-                {
-
-                    Console.WriteLine(ex.Message) ;
-                }
-                
-            }
-            else
-            {
-                Console.WriteLine("Uttag misslyckades. Detta bankkonto existerar inte.");
+                Console.Read();
             }
         }
         public void TempWithdraw()
@@ -104,6 +48,14 @@ namespace BankNET2024
             decimal amount = decimal.Parse(Console.ReadLine());
 
             Balance -= amount;
+
+            var log = $"Mängden pengar uttagen: {amount} från {AccountNumber}";
+            Console.WriteLine(log);
+            Transaction transaction = new Transaction(DateTime.Now, new List<string> { log });
+        }
+        public void TempTransfer()
+        {
+
         }
         public async Task Transfer(List<Account> accounts)
         {

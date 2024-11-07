@@ -125,7 +125,8 @@ namespace BankNET2024
                         Console.ReadLine();
                         break;
                     case 3:
-                        Transfer(tempUser);
+                        GetAllAccountNumbers();
+                        Console.ReadLine();
                         break;
 
                     default:
@@ -137,19 +138,26 @@ namespace BankNET2024
         {
 
         }
-        private void Transfer(User user)
+
+        private void Transfer()
         {
-            var fromAccount = user.GetAccount();
-            var toAccount = user.GetAccount();
-            
-            if(fromAccount != null && toAccount != null)
+           
+        }
+        private void GetAllAccountNumbers()
+        {
+            Console.WriteLine("\nAlla kontonummer över alla användare:");
+            if (Users != null)
             {
-                Console.WriteLine("\nEnter the amount to transfer:");
-                decimal amount = decimal.Parse(Console.ReadLine());
-
-
-                fromAccount.Balance -= amount;
-                toAccount.Balance += amount;    
+                foreach (var user in Users)
+                {
+                    if (user is User tempUser)
+                    {
+                        foreach (var account in tempUser.Accounts)
+                        {
+                            Console.WriteLine($"Användare: {tempUser.Username}, Kontonummer: {account.AccountNumber}");
+                        }
+                    }
+                }
             }
         }
         private bool ValidLogIn(string? userName, string password)

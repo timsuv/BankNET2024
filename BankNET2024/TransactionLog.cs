@@ -8,8 +8,12 @@ namespace BankNET2024
 {
     public class Transaction
     {
-        public string ID { get; set; }
-        public float BalanceAmount { get; set; }
+        public Transaction(DateTime transferTime, List<string> transactions)
+        {
+            TransferTime = transferTime;
+            Transactions = transactions;
+        }
+
         public DateTime TransferTime { get; set; }
         public List<string> Transactions { get; set; }
         public void TransactionHistory()

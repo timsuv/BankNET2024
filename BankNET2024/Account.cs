@@ -44,18 +44,34 @@ namespace BankNET2024
         {
             Console.WriteLine("");
         }
-        public async Task Transfer(string toAccountNumber, decimal amount)
+        public async Task TransferToUser(List<Account> accounts)
         {
-            var toAccount = Accounts.FirstOrDefault(a => a.AccountNumber == toAccountNumber);
-            if (toAccount != null && Balance >= amount)
+            Console.WriteLine("\nWhich account do you want to transfer to?");
+            string accountNumber = Console.ReadLine();
+
+            Account toAccount = accounts.FirstOrDefault(a => a.AccountNumber == accountNumber);
+
+            if (toAccount != null)
             {
-                Balance -= amount;
-                toAccount.Balance += amount;
-                Console.WriteLine($"Transferred {amount} from {AccountNumber} to {toAccountNumber}");
+                Console.WriteLine("\nEnter the amount to transfer:");
+                decimal amount = decimal.Parse(Console.ReadLine());
+
+                if (Balance >= amount)
+                {
+                    Balance -= amount;
+                    toAccount.Balance += amount;
+                    var log = $"Transferred {amount} from {AccountNumber} to {toAccount.AccountNumber}";
+                    Console.WriteLine(log);
+                    Transaction transaction = new Transaction(DateTime.Now, new List<string> { log });
+                }
+                else
+                {
+                    Console.WriteLine("Transfer failed. Insufficient balance.");
+                }
             }
             else
             {
-                Console.WriteLine("Transfer failed. Check account balance or account number.");
+                Console.WriteLine("Transfer failed. Invalid account number.");
             }
         }
 

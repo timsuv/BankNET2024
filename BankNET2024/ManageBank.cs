@@ -11,7 +11,7 @@ namespace BankNET2024
     {
         public List<IUser>? Users { get; set; } = [
 
-            new Userr("A", "A", "O", "D", "ddd", []), // Temp User
+            new User("A", "A", "O", "D", "ddd", []), // Temp User
             new Admin("A", "C")
 
             ];
@@ -68,7 +68,7 @@ namespace BankNET2024
                     {
                         AdminMenu(tempUser);
                     }
-                    else if(tempUser is Userr)
+                    else if(tempUser is User)
                     {
                         UserMenu(tempUser);
                     }

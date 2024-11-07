@@ -66,14 +66,12 @@ namespace BankNET2024
 
                     if (tempUser is Admin)
                     {
-                        Console.WriteLine("ADMIN WORK");
+                        AdminMenu(tempUser);
                     }
                     else if(tempUser is User)
                     {
-                        Console.WriteLine("IS USER");
+                        UserMenu(tempUser);
                     }
-
-                   // MainMenu(tempUser);
                     break;
                 }
                 else
@@ -107,7 +105,7 @@ namespace BankNET2024
         }
         private void UserMenu(IUser user)
         {
-
+            List<string> option = [""];
         }
         private void AdminMenu(IUser user)
         {

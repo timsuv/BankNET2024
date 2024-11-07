@@ -29,7 +29,7 @@ namespace BankNET2024
 
         public void CreateOwnAccout()
         {
-            Accounts.Add(new Account("111", 0));
+           
         }
         public void DisplayAccounts()
         {

@@ -9,9 +9,10 @@ namespace BankNET2024
 {
     internal class ManageBank
     {
-        public List<User>? Users { get; set; } = [
+        public List<IUser>? Users { get; set; } = [
 
-            new User("A", "A", "O", "D", "ddd", []) // Temp User
+            new User("A", "A", "O", "D", "ddd", []), // Temp User
+            new Admin("A", "C")
 
             ];
         public ManageBank()
@@ -61,7 +62,18 @@ namespace BankNET2024
 
                 if (ValidLogIn(userName, password))
                 {
-                    MainMenu(Users?.FirstOrDefault(user => user.Username == userName && user.Password == password));
+                    var tempUser = Users?.FirstOrDefault(user => user.Username == userName && user.Password == password);
+
+                    if (tempUser is Admin)
+                    {
+                        Console.WriteLine("ADMIN WORK");
+                    }
+                    else if(tempUser is User)
+                    {
+                        Console.WriteLine("IS USER");
+                    }
+
+                   // MainMenu(tempUser);
                     break;
                 }
                 else
@@ -76,7 +88,7 @@ namespace BankNET2024
                 }
             }
         }
-        private void MainMenu(User user) // Temp- need methods and check if its admin 
+        private void MainMenu(IUser user) // Temp- need methods and check if its admin 
         {
             List<string> options = ["Transfer", "Withdraw", "Insert", "Create Account", "Take a loan", "Min information"];
 
@@ -93,9 +105,18 @@ namespace BankNET2024
             }
 
         }
+        private void UserMenu(IUser user)
+        {
+
+        }
+        private void AdminMenu(IUser user)
+        {
+
+        }
+
         public bool ValidLogIn(string? userName, string password)
         {
-            var tempUser = Users.Find(u => u.Username == userName);
+            var tempUser = Users?.Find(u => u.Username == userName);
             if (tempUser != null && tempUser.Password == password)
             {
                 return true;

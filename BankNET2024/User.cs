@@ -6,8 +6,15 @@ using System.Threading.Tasks;
 
 namespace BankNET2024
 {
-    public class User
+    public class User: IUser
     {
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string PhoneNumber { get; set; }
+        public List<Account> Accounts { get; set; }
+
         public User(string username, string password, string firstName, string lastName, string phoneNumber, List<Account> accounts)
         {
             Username = username;
@@ -16,21 +23,13 @@ namespace BankNET2024
             LastName = lastName;
             PhoneNumber = phoneNumber;
             Accounts = accounts;
+
+            Accounts.Add(new Account("kkk", 1000));
         }
-
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string PhoneNumber { get; set; }
-        public List<Account> Accounts { get; set; }
-
-        //  public bool IsLocked { get; set; } kommer senare
-        //public int Attempts { get; set; }
 
         public void CreateOwnAccout()
         {
-            //Accounts.Add(new Account(Account );
+            Accounts.Add(new Account("111", 0));
         }
         public void DisplayAccounts()
         {

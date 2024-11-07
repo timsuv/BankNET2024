@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -40,7 +41,7 @@ namespace BankNET2024
             Balance -= Amount;
         }
 
-        public void DisplayAccount()
+        public void DisplayAccount(User user)
         {
             Console.WriteLine("");
         }

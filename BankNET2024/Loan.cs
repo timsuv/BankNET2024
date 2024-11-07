@@ -3,12 +3,11 @@ namespace BankNET2024;
 public class Loan
 {
     //Interest rate on loan
-    public int Balance;
     public decimal InterestRate;
-    public int Salary;
     public int LoanRequest;
     public int LoanAmount;
-
+    
+    
     //Method for admin to change interest rate
     public void UpdateInterestRate()
     {
@@ -17,7 +16,7 @@ public class Loan
     }
     
     //Method for user to take loan, with restriction on how much they can take
-    public void TakeLoan()
+    public void RequestLoan()
     {
         Console.WriteLine("Enter your monthly salary");
         Salary = int.Parse(Console.ReadLine());

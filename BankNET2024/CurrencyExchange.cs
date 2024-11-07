@@ -6,20 +6,19 @@ using System.Threading.Tasks;
 
 namespace BankNET2024
 {
-    public class CurrencyExchange 
+    public static class CurrencyExchange 
     {
         //Exchange rate for different USD & EUR
-        public int Balance;
-        public float USD;
-        public float EUR;
+        public decimal USD;
+        public decimal EUR;
         
         // Method for admin to update currency rate
         public void UpdateRate()
         {
             Console.WriteLine("Update USD rate");
-            USD = float.Parse(Console.ReadLine());
+            USD = decimal.Parse(Console.ReadLine());
             Console.WriteLine("Update EUR rate");
-            EUR = float.Parse(Console.ReadLine());
+            EUR = decimal.Parse(Console.ReadLine());
         }
         
         //Method to allow user to view balance in different account rates

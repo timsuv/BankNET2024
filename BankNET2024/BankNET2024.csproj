@@ -7,4 +7,11 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="AccountManagment.cs" />
+    <Compile Remove="CurrencyExchange.cs" />
+    <Compile Remove="Kontotyper.cs" />
+    <Compile Remove="Loan.cs" />
+  </ItemGroup>
+
 </Project>

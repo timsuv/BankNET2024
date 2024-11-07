@@ -8,9 +8,36 @@ namespace BankNET2024
 {
     public class SavingAccount : Account
     {
-        public SavingAccount(string accountNumber, decimal balance, string name, string contactInfo, decimal amount, string password) : base(accountNumber, balance, name, contactInfo, amount, password)
+        
+        //Savings account, needs an interest rate, savings amount, savings account number
+        
+        public decimal InterestRate { get; private set; }
+        public decimal SavingBalance { get; set; }
+        
+        
+        //Constructor
+        public SavingAccount(string accountNumber, decimal balance, decimal savingBalance) : base(accountNumber, balance)
         {
-
+            this.SavingBalance = savingBalance;
         }
+        
+        
+        //Methods to deposit, withdraw & display balance
+        public void Deposit(decimal amount)
+        {
+            amount += SavingBalance;
+        }
+
+        public void Withdraw(decimal amount)
+        {
+            amount -= SavingBalance;
+        }
+            
+        public void DisplayBalance()
+        {
+            Console.WriteLine($"Savings balance: {SavingBalance}");
+        }
+        
     }
+    
 }

@@ -6,20 +6,18 @@ using System.Threading.Tasks;
 
 namespace BankNET2024
 {
-    public class Account
+    public class Account 
     {
         public Account(string accountNumber, decimal balance)
         {
             AccountNumber = accountNumber;
             Balance = balance;
-
         }
 
         public string AccountNumber { get; set; }
         public decimal Balance { get; set; }
-
-
-
+        
+        
         public void Deposit(decimal amount)
         {
             Balance += amount;
@@ -28,8 +26,7 @@ namespace BankNET2024
         {
             Balance -= amount;
         }
-
-
+        
         public void Transfer(Account AccountSender, Account AccountReceiver, decimal amount)//mellan egan konto t.ex sparkonto
         {
             //var toAccount = Accounts.FirstOrDefault(a => a.AccountNumber == toAccountNumber);
@@ -44,11 +41,22 @@ namespace BankNET2024
             //    Console.WriteLine("Transfer failed. Check account balance or account number.");
             //}
         }
+        
+        
+        //Currency converter
+        private CurrencyChange conversion = new CurrencyChange();
+        private decimal balanceInEuro;
+        private decimal balanceInUsd;
+        
+        //Balance * conversion.getEuro() = balanceInEuro
+        
         public void Exchange()
         {
-            //visa växling valuta men inte mycket mer
+            Console.WriteLine($"Current balance in SEK is {Balance}");
+            Console.WriteLine($"Current balance in USD is {balanceInUsd}");
+            Console.WriteLine($"Current balance in EUR is {balanceInEuro}");
         }
-
+        
 
 
 

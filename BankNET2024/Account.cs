@@ -14,11 +14,7 @@ namespace BankNET2024
         {
             AccountNumber = accountNumber;
             Balance = balance;
-            Name = name;
-            ContactInformation = contactInfo;
-            Amount = amount;
-            Password = password;
-
+       
 
 
         }

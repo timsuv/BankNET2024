@@ -59,7 +59,7 @@ namespace BankNET2024
                 Console.WriteLine("Uttag misslyckades. Detta bankkonto existerar inte.");
             }
         }
-        public void Withdraw(List<Account> accounts)
+        public void Withdraw(List<Account> accounts) 
         {
             Console.WriteLine("\nVilket konto vill du dra ut från??");
             string accountNumber = Console.ReadLine();

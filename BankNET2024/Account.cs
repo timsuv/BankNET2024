@@ -55,7 +55,7 @@ namespace BankNET2024
         }
         public void TempTransfer()
         {
-
+            Console.WriteLine(  "");
         }
         public async Task Transfer(List<Account> accounts)
         {

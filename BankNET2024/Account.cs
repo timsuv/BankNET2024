@@ -68,21 +68,30 @@ namespace BankNET2024
 
             if (toAccount != null)
             {
-                Console.WriteLine("\nAnge mängden pengar. ");
-                decimal amount = decimal.Parse(Console.ReadLine());
+                try
+                {
+                    Console.WriteLine("\nAnge mängden pengar. ");
+                    decimal amount = decimal.Parse(Console.ReadLine());
 
-                if (Balance >= amount && amount < 0)
-                {
-                    Balance -= amount;
-                    toAccount.Balance += amount;
-                    var log = $"Mängden pengar uttagen: {amount} från {AccountNumber}";
-                    Console.WriteLine(log);
-                    Transaction transaction = new Transaction(DateTime.Now, new List<string> { log });
+                    if (Balance >= amount && amount < 0)
+                    {
+                        Balance -= amount;
+                        toAccount.Balance += amount;
+                        var log = $"Mängden pengar uttagen: {amount} från {AccountNumber}";
+                        Console.WriteLine(log);
+                        Transaction transaction = new Transaction(DateTime.Now, new List<string> { log });
+                    }
+                    else
+                    {
+                        Console.WriteLine("Uttag misslyckades. Inte tillräckligt med pengar.");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    Console.WriteLine("Uttag misslyckades. Inte tillräckligt med pengar.");
+
+                    Console.WriteLine(ex.Message) ;
                 }
+                
             }
             else
             {

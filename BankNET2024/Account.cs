@@ -32,13 +32,62 @@ namespace BankNET2024
         public string Password { get; set; }
 
 
-        public void Deposit()
+        public void Deposit(List<Account> accounts)
         {
-            Balance += Amount;
+            Console.WriteLine("\nVilket konto vill du dra ut från??");
+            string accountNumber = Console.ReadLine();
+
+            Account toAccount = accounts.FirstOrDefault(a => a.AccountNumber == accountNumber);
+
+            if (toAccount != null)
+            {
+                Console.WriteLine("\nAnge mängden pengar. ");
+                decimal amount = decimal.Parse(Console.ReadLine());
+
+                if (amount < 0)
+                {
+                    Balance += amount;
+                    toAccount.Balance += amount;
+                    var log = $"Mängden pengar inlagd: {amount} på {AccountNumber}";
+                    Console.WriteLine(log);
+                    Transaction transaction = new Transaction(DateTime.Now, new List<string> { log });
+                }
+
+            }
+            else
+            {
+                Console.WriteLine("Uttag misslyckades. Detta bankkonto existerar inte.");
+            }
         }
-        public void Withdraw()
+        public void Withdraw(List<Account> accounts)
         {
-            Balance -= Amount;
+            Console.WriteLine("\nVilket konto vill du dra ut från??");
+            string accountNumber = Console.ReadLine();
+
+            Account toAccount = accounts.FirstOrDefault(a => a.AccountNumber == accountNumber);
+
+            if (toAccount != null)
+            {
+                Console.WriteLine("\nAnge mängden pengar. ");
+                decimal amount = decimal.Parse(Console.ReadLine());
+
+                if (Balance >= amount && amount < 0)
+                {
+                    Balance -= amount;
+                    toAccount.Balance += amount;
+                    var log = $"Mängden pengar uttagen: {amount} från {AccountNumber}";
+                    Console.WriteLine(log);
+                    Transaction transaction = new Transaction(DateTime.Now, new List<string> { log });
+                }
+                else
+                {
+                    Console.WriteLine("Uttag misslyckades. Inte tillräckligt med pengar.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Uttag misslyckades. Detta bankkonto existerar inte.");
+            }
         }
 
         public void DisplayAccount(User user)

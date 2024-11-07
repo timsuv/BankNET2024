@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace BankNET2024
 {
-    public class Account
+    public class Accountt
+
     {
-        public Account(string accountNumber, decimal balance)
+        public Accountt(string accountNumber, decimal balance)
         {
             AccountNumber = accountNumber;
             Balance = balance;
@@ -30,7 +31,7 @@ namespace BankNET2024
         }
 
 
-        public void Transfer(Account AccountSender, Account AccountReceiver, decimal amount)//mellan egan konto t.ex sparkonto
+        public void Transfer(Accountt AccountSender, Accountt AccountReceiver, decimal amount)//mellan egan konto t.ex sparkonto
         {
             //var toAccount = Accounts.FirstOrDefault(a => a.AccountNumber == toAccountNumber);
             //if (toAccount != null && Balance >= amount)

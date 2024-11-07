@@ -11,7 +11,7 @@ namespace BankNET2024
     {
         public List<IUser>? Users { get; set; } = [
 
-            new User("A", "A", "O", "D", "ddd", []), // Temp User
+            new Userr("A", "A", "O", "D", "ddd", []), // Temp User
             new Admin("A", "C")
 
             ];
@@ -68,7 +68,7 @@ namespace BankNET2024
                     {
                         Console.WriteLine("ADMIN WORK");
                     }
-                    else if(tempUser is User)
+                    else if(tempUser is Userr)
                     {
                         Console.WriteLine("IS USER");
                     }
@@ -90,7 +90,7 @@ namespace BankNET2024
         }
         private void MainMenu(IUser user) // Temp- need methods and check if its admin 
         {
-            List<string> options = ["Transfer", "Withdraw", "Insert", "Create Account", "Take a loan", "Min information"];
+            List<string> options = ["Transfer", "Withdraw", "Insert", "Create Accountt", "Take a loan", "Min information"];
 
             Menu menu = new(options, "Bank menu");
 

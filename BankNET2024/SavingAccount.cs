@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BankNET2024
 {
-    public class SavingAccount : Account
+    public class SavingAccount : Accountt
     {
         public SavingAccount(string accountNumber, decimal balance, string name ) : base(accountNumber, balance)
         {

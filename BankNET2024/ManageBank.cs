@@ -11,7 +11,7 @@ namespace BankNET2024
     {
         public List<User>? Users { get; set; } = [
 
-            new User("A", "A", "O", "D", "ddd", 10000, new List<Account>()) // Temp User
+            new User("A", "A", "O", "D", "ddd", []) // Temp User
 
             ];
         public ManageBank()
@@ -61,8 +61,7 @@ namespace BankNET2024
 
                 if (ValidLogIn(userName, password))
                 {
-                    var tempUSer = Users?.FirstOrDefault(user => user.Username == userName && user.Password == password);
-                    MainMenu(tempUSer);
+                    MainMenu(Users?.FirstOrDefault(user => user.Username == userName && user.Password == password));
                     break;
                 }
                 else

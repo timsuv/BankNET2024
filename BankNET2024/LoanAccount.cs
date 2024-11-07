@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 namespace BankNET2024
 {
     public class LoanAccount : Account
     {
         public decimal LoanAmount { get; set; }
         public decimal LoanBalance { get; set; }
-        public decimal InterestRate = 2;
+        public decimal InterestRate = 0.025m;
         public decimal WithdrawAmount { get; set; }
         
         public LoanAccount(string accountNumber, decimal balance) : base(accountNumber, balance)
@@ -23,7 +22,7 @@ namespace BankNET2024
             
             if (LoanAmount < (Balance * 5))
             {
-                LoanAmount += LoanBalance;
+                LoanBalance += LoanAmount;
                 Console.WriteLine($"Requested loan amount of {LoanAmount} was successful with an interest rate of {InterestRate}, or " + (InterestRate * LoanAmount));
             }
             else
@@ -43,14 +42,13 @@ namespace BankNET2024
 
             if (WithdrawAmount < LoanBalance)
             {
-                WithdrawAmount -= LoanBalance;
+                LoanBalance -= WithdrawAmount;
             }
             else
             {
                 Console.WriteLine("Requested withdrawal amount is too high, please try again with a lower amount");
             }
         }
-        
         
     }
 }

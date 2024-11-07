@@ -15,9 +15,9 @@
 
             //Apply for Loan
             LoanAccount user1Loan = new LoanAccount(JoshuaAccount.AccountNumber, JoshuaAccount.Balance);
-            user1Loan.ApplyForLoan(400);
+            user1Loan.ApplyForLoan(400.00m);
             user1Loan.DisplayLoanAmount();
-            user1Loan.Withdraw(200);
+            user1Loan.Withdraw(200.00m);
             user1Loan.DisplayLoanAmount();
             
             

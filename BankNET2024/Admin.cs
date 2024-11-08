@@ -12,21 +12,18 @@ namespace BankNET2024
         {
         }
         
-        //Private instance of CurrencyChange class
-        private CurrencyChange adminConverter;
+        
+        
+        
         
         //Methods for admin to update currency rate through CW, maybe add try catch or if/else later
-        public void UpdateEuro()
-        {
-            Console.WriteLine("Enter EURO to SEK rate");
-            decimal.TryParse(Console.ReadLine(), out decimal newRateEur);
-            adminConverter.UpdateEuro(newRateEur);
+        public void UpdateEuro(decimal dailyRateEuro)
+        { 
+            CurrencyChange.UpdateEuro(dailyRateEuro);
         }
-        public void UpdateUsd()
+        public void UpdateUsd(decimal dailyRateUsd)
         {
-            Console.WriteLine("Enter USD to SEK rate");
-            decimal.TryParse(Console.ReadLine(), out decimal newRateUsd);
-            adminConverter.UpdateUsd(newRateUsd);
+            CurrencyChange.UpdateUsd(dailyRateUsd);
         }
 
     }

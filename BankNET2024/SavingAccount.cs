@@ -22,13 +22,13 @@ namespace BankNET2024
         //Methods to deposit (& calculate interest), withdraw & display balance
         public void Deposit(decimal amount)
         {
-            amount += SavingBalance;
+            SavingBalance += amount;
             Console.WriteLine($"The interest on this deposit of {amount} SEK is" + (InterestRate * amount) + " SEK");
         }
 
         public void Withdraw(decimal amount)
         {
-            amount -= SavingBalance;
+            SavingBalance -= amount;
         }
             
         public void DisplayBalance()

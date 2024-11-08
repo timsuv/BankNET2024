@@ -8,35 +8,31 @@ namespace BankNET2024
 {
     public class CurrencyChange
     {
-        //Declare Euro and Usd 
-        public decimal Euro { get; set; } 
-        public decimal Usd { get; set; }
         
-        //Override constructor
-        public CurrencyChange()
-        {
-        }
-
+        //Variables and methods here of static type 
+        //Declare Euro and Usd 
+        public static decimal Euro { get; private set; } 
+        public static decimal Usd { get; private set; }
+        
+        
         //Update Euro & Usd methods
-        public decimal newRateEuro;
-        public decimal newRateUsd;
-        public void UpdateEuro(decimal newRateEuro)
+        public static void UpdateEuro(decimal newRateEuro)
         {
             Euro = newRateEuro;
         }
         
-        public void UpdateUsd(decimal newRateUsd)
+        public static void UpdateUsd(decimal newRateUsd)
         {
             Usd = newRateUsd;
         }
         
         //Method to return latest Euro & Usd rates for account
-        public decimal getEuro()
+        public static decimal getEuro()
         {
             return Euro ;
         }
         
-        public decimal getUsd()
+        public static decimal getUsd()
         {
             return Usd;
         }

@@ -267,6 +267,7 @@ namespace BankNET2024
                     ForeignAccount foreignAccount = new ForeignAccount("For", amount, selectedCurrency);
                     Console.WriteLine($"Ditt nya konto har skapats med valutan {selectedCurrency} och summan {amount:C2}.");
                     user.Accounts.Add(new Account("For", amount));
+                    
                 }
                 else
                 {

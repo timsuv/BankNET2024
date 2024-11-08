@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,12 +11,12 @@ namespace BankNET2024
 {
     internal class ManageBank
     {
-        public List<IUser>? Users { get; set; } = new List<IUser>
-            {
+        public static List<IUser>? Users { get; set; } =
+            [
                 new User("Joel", "A", "O", "D", "ddd", new List<Account> { new Account("Acc10", 10000), new Account("Save001", 20000) }), // Temp User
                 new User("Tim", "A", "O", "D", "ddd", new List<Account> { new Account("Acc20", 1000) }), // Temp User
                 new Admin("Ossy", "C", "Ossy", "A") // Admin
-            };
+            ];
         public ManageBank()
         {
             string bankArt = @"
@@ -91,11 +92,7 @@ namespace BankNET2024
         private async Task UserMenu(IUser user)
         {
             var tempUser = (User)user;
-
-            List<string> options = new List<string> { "Withdraw", "Deposit", "Min info", "Transfer", "Mina Transaktioner" };
-
-            Menu menu = new Menu(options, "Bank menu");
-
+            Menu menu = new(["Withdraw", "Deposit", "Min info", "Transfer", "Mina Transaktioner", "Exit"], "Bank menu");
             while (true)
             {
                 switch (menu.MenuRun())
@@ -130,6 +127,9 @@ namespace BankNET2024
                     case 4:
                         ShowTransferLog(tempUser.GetAccount());
                         break;
+                    case 5:
+                        Environment.Exit(0);
+                        break;
                     default:
                         break;
                 }
@@ -137,24 +137,47 @@ namespace BankNET2024
         }
         private void AdminMenu(IUser user)
         {
-            Menu menu = new Menu(new List<string> { "Show all Users", "Delete User" }, "Admin menu");
+            Menu menu = new(["Show all Users", "Delete User"], "Admin menu");
 
-            switch (menu.MenuRun())
+            while (true)
             {
-                case 0:
-                    if (Users != null)
-                    {
-                        foreach (var u in Users)
+                switch (menu.MenuRun())
+                {
+                    case 0:
+                        if (Users != null)
                         {
-                            Console.WriteLine(u);
+                            foreach (var u in Users)
+                            {
+                                Console.WriteLine(u);
+                            }
                         }
-                    }
-                    GetAllAccountNumbers();
-                    Console.ReadLine();
-                    break;
-                default:
-                    break;
+                        GetAllAccountNumbers();
+                        Console.ReadLine();
+                        break;
+                    case 1:
+                        DeleteUser();
+                        break;
+                    default:
+                        break;
+                }
             }
+        }
+        private void DeleteUser()
+        {
+            Console.WriteLine("Ange användarnamn: ");
+            string? userName = Console.ReadLine();
+            var userToDelete = Users?.Find(u => u.Username == userName);
+
+            if (userToDelete != null && userToDelete is not Admin)
+            {
+                Users?.Remove(userToDelete);
+                Console.WriteLine("Användaren togs bort.");
+            }
+            else
+            {
+                Console.WriteLine("Något gick fel.");
+            }
+            Console.ReadLine();
         }
         private async Task Transfer(User user)
         {

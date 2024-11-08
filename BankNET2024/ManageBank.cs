@@ -91,7 +91,7 @@ namespace BankNET2024
         {
             var tempUser = (User)user;
 
-            List<string> options = ["Withdraw", "Deposit", "Min info" , "Min Transfer"];
+            List<string> options = ["Withdraw", "Deposit", "Min info" , "Min Transfer", "Mina Transaktioner"];
 
             Menu menu = new(options, "Bank menu");
 
@@ -127,6 +127,29 @@ namespace BankNET2024
                     case 3:
                         GetAllAccountNumbers();
                         Console.ReadLine();
+                        break;
+                    case 4:
+                        var account1 = tempUser.GetAccount();
+                        if (account1 != null)
+                        {
+                            Console.WriteLine($"Visar transaktionshistorik för konto {account1.AccountNumber}");
+                            if (account1.Transactions != null && account1.Transactions.Count > 0)
+                            {
+                                foreach (var transaction in account1.Transactions)
+                                {
+                                    transaction.DisplayTransactionHistory();
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("Inga transaktioner hittades.");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Ingen giltig konto hittades.");
+                        }
+                        Console.ReadKey();
                         break;
 
                     default:

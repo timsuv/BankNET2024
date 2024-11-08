@@ -6,19 +6,24 @@ using System.Threading.Tasks;
 
 namespace BankNET2024
 {
-    public class Transaction
+    public class TransactionLog
     {
-        public Transaction(DateTime transferTime, List<string> transactions)
+        public TransactionLog(DateTime transferTime, string log)
         {
             TransferTime = transferTime;
-            Transactions = transactions;
+            Log = log;
         }
 
         public DateTime TransferTime { get; set; }
-        public List<string> Transactions { get; set; }
-        public void TransactionHistory()
+        public string Log { get; set; }
+        public void DisplayTransactionHistory()
         {
+            Console.WriteLine($"{TransferTime}: {Log}");
+        }
 
+        public override string ToString()
+        {
+            return $"Date: {TransferTime}, Description: {Log}";
         }
 
     }

@@ -13,8 +13,8 @@ namespace BankNET2024
     {
         public static List<IUser>? Users { get; set; } =
             [
-                new User("Joel", "A", "O", "D", "ddd", new List<Account> { new Account("Acc10", 10000), new Account("Save001", 20000) }), // Temp User
-                new User("Tim", "A", "O", "D", "ddd", new List<Account> { new Account("Acc20", 1000) }), // Temp User
+                new User("Joel", "A", "O", "D", "ddd", [new Account("Acc10", 10000), new Account("Acc30", 20000)]), // Temp User
+                new User("Tim", "A", "O", "D", "ddd", [new Account("Acc20", 1000), new SavingAccount("Save001", 10000)]), // Temp User
                 new Admin("Ossy", "C", "Ossy", "A") // Admin
             ];
         public ManageBank()
@@ -235,7 +235,7 @@ namespace BankNET2024
                     {
                         foreach (var account in tempUser.Accounts)
                         {
-                            Console.WriteLine($"Användare: {tempUser.Username}, Kontonummer: {account.AccountNumber}, Amount");
+                            Console.WriteLine($"Användare: {tempUser.Username}, Kontonummer: {account.AccountNumber}, Amount {account.Balance}");
                         }
                     }
                 }

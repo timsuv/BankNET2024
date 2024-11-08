@@ -8,10 +8,21 @@ namespace BankNET2024
 {
     public class SavingAccount : Account
     {
-        public  decimal IntrestRate { get; set; }
+        private decimal IntrestRate = 0.3m;
         public SavingAccount(string accountNumber, decimal balance) : base(accountNumber, balance)
         {
+            Task.Run(() => IncreaseBalance());
+        }
 
+        public async Task IncreaseBalance()
+        {
+            while (true)
+            {
+                decimal intrest = Balance * IntrestRate;
+                Balance += intrest;
+                Transactions.Add(new TransactionLog(DateTime.Now, $"Interest added: {intrest}"));
+                await Task.Delay(10000);
+            }
         }
     }
 }

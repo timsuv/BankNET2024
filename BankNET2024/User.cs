@@ -41,6 +41,7 @@ namespace BankNET2024
         {
 
         }
+
         public void DisplayAccounts()
         {
             //visar infos om alla accounts med bara nummer och balance

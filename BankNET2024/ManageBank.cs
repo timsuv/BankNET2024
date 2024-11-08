@@ -92,7 +92,7 @@ namespace BankNET2024
         private async Task UserMenu(IUser user)
         {
             var tempUser = (User)user;
-            Menu menu = new(["Withdraw", "Deposit", "Min info", "Transfer", "Mina Transaktioner", "Exit"], "Bank menu");
+            Menu menu = new(["Withdraw", "Deposit", "Min info", "Transfer", "Mina Transaktioner","Skapa en konto med utländsk valuta", "Exit"], "Bank menu");
             while (true)
             {
                 switch (menu.MenuRun())
@@ -128,6 +128,10 @@ namespace BankNET2024
                         ShowTransferLog(tempUser.GetAccount());
                         break;
                     case 5:
+                        CreateAccountCurrency(tempUser);
+                        Console.ReadLine();
+                        break;
+                    case 6:
                         Environment.Exit(0);
                         break;
                     default:
@@ -240,6 +244,40 @@ namespace BankNET2024
                     }
                 }
             }
+        }
+        public void CreateAccountCurrency(User user)
+        {
+            Console.WriteLine("Välj valutan du skulle ville ha på ditt nya konton");
+
+            int i = 1;
+            foreach (Currency currency in Enum.GetValues(typeof(Currency)))
+            {
+                Console.WriteLine($"{i}. {currency}");
+                i++;
+            }
+
+            Console.Write("Skriv in numret för den valuta du vill välja: ");
+            if (int.TryParse(Console.ReadLine(), out int choice) && choice > 0 && choice <= Enum.GetValues(typeof(Currency)).Length)
+            {
+                Currency selectedCurrency = (Currency)(choice - 1); 
+
+                Console.WriteLine("Vilken summa vill du ha?");
+                if (decimal.TryParse(Console.ReadLine(), out decimal amount))
+                {
+                    ForeignAccount foreignAccount = new ForeignAccount("For", amount, selectedCurrency);
+                    Console.WriteLine($"Ditt nya konto har skapats med valutan {selectedCurrency} och summan {amount:C2}.");
+                    user.Accounts.Add(new Account("For", amount));
+                }
+                else
+                {
+                    Console.WriteLine("Felaktig inmatning. Försök igen.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Ogiltigt val. Försök igen.");
+            }
+
         }
         private static void ShowTransferLog(Account account1)
         {

@@ -13,7 +13,10 @@ namespace BankNET2024
         {
             Task.Run(() => IncreaseBalance());
         }
-
+        public override void Withdraw()
+        {
+            Console.WriteLine("Cant withdraw from this account");
+        }
         public async Task IncreaseBalance()
         {
             while (true)

@@ -32,7 +32,7 @@ namespace BankNET2024
                 Console.ReadLine();
             }
         }
-        public void Withdraw()
+        public virtual void Withdraw()
         {
             decimal amount = Amount();
 

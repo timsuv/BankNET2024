@@ -14,6 +14,7 @@ namespace BankNET2024
         public string LastName { get; set; }
         public string PhoneNumber { get; set; }
         public List<Account> Accounts { get; set; }
+        private int _loans = 5;
 
         public User(string username, string password, string firstName, string lastName, string phoneNumber, List<Account> accounts)
         {
@@ -51,6 +52,12 @@ namespace BankNET2024
                     Console.WriteLine(account);
                 }
             }
+        }
+        public void TakeALoan()
+        {
+            var account = GetAccount();
+
+
         }
         public override string ToString()
         {

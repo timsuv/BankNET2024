@@ -110,10 +110,7 @@ namespace BankNET2024
                         break;
                     case 1:
                         var tempAcc = tempUser.GetAccount();
-                        if (tempAcc != null)
-                        {
-                            tempAcc.Deposit();
-                        }
+                        tempAcc?.Deposit();
                         break;
                     case 2:
                         Console.WriteLine(tempUser);

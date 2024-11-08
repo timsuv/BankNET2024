@@ -57,10 +57,6 @@ namespace BankNET2024
             Transactions.Add(new TransactionLog(DateTime.Now, $"Uttag: {amount:C2}"));
             Console.ReadLine();
         }
-        public void TempTransfer()
-        {
-            Console.WriteLine(  "");
-        }
         //public async Task Transfer(List<Account> accounts)
         //{
         //    Console.WriteLine("\nWhich account do you want to transfer to?");

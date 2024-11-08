@@ -11,9 +11,9 @@ namespace BankNET2024
     {
         public List<IUser>? Users { get; set; } = [
 
-            new User("A", "A", "O", "D", "ddd", [new Account("Def", 10000), new Account("s", 20000)]), // Temp User
-            new User("C", "A", "O", "D", "ddd", [new Account("def", 1000)]), // Temp User
-            new Admin("Ad", "C")
+            new User("Joel", "A", "O", "D", "ddd", [new Account("Acc10", 10000), new Account("Save001", 20000)]), // Temp User
+            new User("Tim", "A", "O", "D", "ddd", [new Account("Acc20", 1000)]), // Temp User
+            new Admin("Ossy", "C") // Admin
 
             ];
         public ManageBank()
@@ -125,12 +125,11 @@ namespace BankNET2024
                         Console.ReadLine();
                         break;
                     case 3:
-                        GetAllAccountNumbers();
+                        Transfer(tempUser);
                         Console.ReadLine();
                         break;
                     case 4:
-                        var account1 = tempUser.GetAccount();
-                        
+                        ShowTransferLog(tempUser.GetAccount());
                         break;
 
                     default:
@@ -163,6 +162,9 @@ namespace BankNET2024
 
             Console.WriteLine($"Pengarna skickdes från {fromAccount} till {toAccount}\n");
 
+            fromAccount.Transactions.Add(new TransactionLog(DateTime.Now, $"Överföring: {amount} till {toAccount.AccountNumber}"));
+            toAccount.Transactions.Add(new TransactionLog(DateTime.Now, $"Överföring: {amount} från {fromAccount.AccountNumber}")); 
+
             GetAllAccountNumbers();
 
 
@@ -178,7 +180,7 @@ namespace BankNET2024
                     {
                         foreach (var account in tempUser.Accounts)
                         {
-                            Console.WriteLine($"Användare: {tempUser.Username}, Kontonummer: {account.AccountNumber}");
+                            Console.WriteLine($"Användare: {tempUser.Username}, Kontonummer: {account.AccountNumber}, Amount");
                         }
                     }
                 }

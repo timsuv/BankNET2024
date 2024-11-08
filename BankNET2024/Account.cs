@@ -15,25 +15,13 @@ namespace BankNET2024
         {
             AccountNumber = accountNumber;
             Balance = balance;
-            Transactions = new List<TransactionLog>();
-
-
+            Transactions = [];
         }
         public string AccountNumber { get; set; }
         public decimal Balance { get; set; }
         public List<TransactionLog> Transactions { get; set; }
 
-        //public Account(decimal balance)
-        //{
-        //    AccountNumber = GenerateUniqueAccountNumber();
-        //    Balance = balance;
-        //}
-        //private string GenerateUniqueAccountNumber()
-        //{
-        //    return Guid.NewGuid().ToString(); // Ger ett unikt kontonummer som t.ex. "3f84c023-b2d4-4c90-98f0-13fd4b9d2bcd"
-        //}
-
-        public void Deposit2()
+        public void Deposit()
         {
             Console.WriteLine("\nAnge mängden pengar. ");
             decimal amount = decimal.Parse(Console.ReadLine());
@@ -46,7 +34,7 @@ namespace BankNET2024
                 Console.ReadLine();
             }
         }
-        public void TempWithdraw()
+        public void Withdraw()
         {
             Console.WriteLine("\nAnge mängden pengar. ");
             decimal amount = decimal.Parse(Console.ReadLine());
@@ -91,7 +79,5 @@ namespace BankNET2024
         {
             return $"Account number: {AccountNumber}, BAlance {Balance}";
         }
-
-
     }
 }

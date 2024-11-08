@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,7 +14,7 @@ namespace BankNET2024
 
             new User("Joel", "A", "O", "D", "ddd", [new Account("Acc10", 10000), new Account("Save001", 20000)]), // Temp User
             new User("Tim", "A", "O", "D", "ddd", [new Account("Acc20", 1000)]), // Temp User
-            new Admin("Ossy", "C") // Admin
+            new Admin("Ossy", "C", "Ossy", "A") // Admin
 
             ];
         public ManageBank()
@@ -104,7 +105,7 @@ namespace BankNET2024
                         var account = tempUser.GetAccount();
                         if (account != null)
                         {
-                            account.TempWithdraw();
+                            account.Withdraw();
                         }
                         else
                         {
@@ -115,7 +116,7 @@ namespace BankNET2024
                         var tempAcc = tempUser.GetAccount();
                         if(tempAcc != null)
                         {
-                            tempAcc.Deposit2();
+                            tempAcc.Deposit();
                         }
 
                         break;
@@ -131,7 +132,6 @@ namespace BankNET2024
                     case 4:
                         ShowTransferLog(tempUser.GetAccount());
                         break;
-
                     default:
                         break;
                 }
@@ -139,35 +139,64 @@ namespace BankNET2024
         }
         private void AdminMenu(IUser user)
         {
+            Menu menu = new(["Show all Users", "Delete User"], "Admin menu");
 
+            switch (menu.MenuRun())
+            {
+                case 0:
+                    foreach (var u in Users)
+                    {
+                        Console.WriteLine(u);
+                    }
+                    GetAllAccountNumbers();
+                    Console.ReadLine();
+                    break;
+                default:
+                    break;
+            }
         }
-
         private void Transfer(User user)
         {
-            GetAllAccountNumbers();
-            Console.WriteLine("-------------------------");
+            // Get the account from which the money will be transferred
             var fromAccount = user.GetAccount();
 
+            // Prompt the user to enter the account number to which the money will be transferred
             Console.WriteLine("Till vilket konto: ");
             string? inputToAccount = Console.ReadLine();
 
+            // Find the user and account that matches the entered account number
             var toUser = Users?.OfType<User>().FirstOrDefault(u => u.Accounts.Any(a => a.AccountNumber == inputToAccount));
             var toAccount = toUser?.Accounts.FirstOrDefault(a => a.AccountNumber == inputToAccount);
 
+            // Prompt the user to enter the amount of money to transfer
             Console.WriteLine("Hur mycket pengar: ");
-            decimal amount = decimal.Parse(Console.ReadLine());
+            if (decimal.TryParse(Console.ReadLine(), out decimal amount))
+            {
+                // Check if the destination account exists and if the amount is less than the balance of the destination account
+                if (toAccount != null && amount < toAccount.Balance)
+                {
+                    // Perform the transfer by updating the balances of both accounts
+                    toAccount.Balance += amount;
+                    fromAccount.Balance -= amount;
 
-            toAccount.Balance += amount;
-            fromAccount.Balance -= amount;
+                    // Log the transfer details
+                    Console.WriteLine($"Pengarna skickdes från {fromAccount} till {toAccount}\n");
 
-            Console.WriteLine($"Pengarna skickdes från {fromAccount} till {toAccount}\n");
-
-            fromAccount.Transactions.Add(new TransactionLog(DateTime.Now, $"Överföring: {amount} till {toAccount.AccountNumber}"));
-            toAccount.Transactions.Add(new TransactionLog(DateTime.Now, $"Överföring: {amount} från {fromAccount.AccountNumber}")); 
-
-            GetAllAccountNumbers();
-
-
+                    // Add transaction logs to both accounts
+                    fromAccount.Transactions.Add(new TransactionLog(DateTime.Now, $"Överföring: {amount} till {toAccount.AccountNumber}"));
+                    toAccount.Transactions.Add(new TransactionLog(DateTime.Now, $"Överföring: {amount} från {fromAccount.AccountNumber}"));
+                }
+                else
+                {
+                    // Display an error message if something went wrong
+                    Console.WriteLine("Nåt gick fel");
+                }
+            }
+            else
+            {
+                // Display an error message if the entered amount is invalid
+                Console.WriteLine("Ogiltigt belopp.");
+            }
         }
         private void GetAllAccountNumbers()
         {
@@ -186,7 +215,7 @@ namespace BankNET2024
                 }
             }
         }
-        private void ShowTransferLog(Account account1)
+        private static void ShowTransferLog(Account account1)
         {
             if (account1 != null)
             {

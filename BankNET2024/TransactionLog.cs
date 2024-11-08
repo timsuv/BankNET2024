@@ -20,7 +20,6 @@ namespace BankNET2024
         {
             Console.WriteLine($"{TransferTime}: {Log}");
         }
-
         public override string ToString()
         {
             return $"Date: {TransferTime}, Description: {Log}";

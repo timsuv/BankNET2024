@@ -7,8 +7,7 @@
             ManageBank manageBank = new();
 
             manageBank.LogIn();
-
-            
+        
         }
     }
 }

@@ -14,7 +14,7 @@ namespace BankNET2024
         public static List<IUser>? Users { get; set; } =
             [
                 new User("Joel", "A", "O", "D", "ddd", [new Account("Acc10", 10000), new Account("Acc30", 20000)]), // Temp User
-                new User("Tim", "A", "O", "D", "ddd", [new Account("Acc20", 1000), new SavingAccount("Save001", 10000)]), // Temp User
+                new User("Tim", "A", "O", "D", "ddd", [new Account("Acc20", 1000), new SavingAccount("Save10", 10000)]), // Temp User
                 new Admin("Ossy", "C", "Ossy", "A") // Admin
             ];
         public ManageBank()
@@ -92,7 +92,7 @@ namespace BankNET2024
         private async Task UserMenu(IUser user)
         {
             var tempUser = (User)user;
-            Menu menu = new(["Withdraw", "Deposit", "Min info", "Transfer", "Mina Transaktioner", "Öppna konto med annan valuta", "Exit"], "Bank menu");
+            Menu menu = new(["Withdraw", "Deposit", "Min info", "Transfer", "Mina Transaktioner", "Change Currency", "Exit"], "Bank menu");
             while (true)
             {
                 switch (menu.MenuRun())
@@ -118,14 +118,14 @@ namespace BankNET2024
                         Console.ReadLine();
                         break;
                     case 3:
-                        await Transfer(tempUser);
+                        await Transfer2(tempUser);
                         Console.ReadLine();
                         break;
                     case 4:
                         ShowTransferLog(tempUser.GetAccount());
                         break;
                     case 5:
-                        CreateAccountCurrency(tempUser);
+                        ChangeCurrency(tempUser);
                         Console.ReadLine();
                         break;
                     case 6:
@@ -226,6 +226,80 @@ namespace BankNET2024
                 Console.WriteLine("Ogiltigt belopp.");
             }
         }
+        private async Task Transfer2(User user)
+        {
+            // Get the account from which the money will be transferred
+            var fromAccount = user.GetAccount();
+
+            // Prompt the user to enter the account number to which the money will be transferred
+            Console.WriteLine("Till vilket konto: ");
+            string? inputToAccount = Console.ReadLine();
+
+            // Find the user and account that matches the entered account number
+            var toUser = Users?.OfType<User>().FirstOrDefault(u => u.Accounts.Any(a => a.AccountNumber == inputToAccount));
+            var toAccount = toUser?.Accounts.FirstOrDefault(a => a.AccountNumber == inputToAccount);
+
+            // Prompt the user to enter the amount of money to transfer
+            Console.WriteLine("Hur mycket pengar: ");
+            if (decimal.TryParse(Console.ReadLine(), out decimal amount))
+            {
+                // Check if the destination account exists and if the amount is less than the balance of the source account
+                if (toAccount != null && fromAccount != null && amount <= fromAccount.Balance)
+                {
+                    // Convert the amount to the destination account's currency
+                    decimal convertedAmount = ChangeTransferAmount(amount, fromAccount, toAccount);
+
+                    // Perform the transfer
+                    toAccount.Balance += convertedAmount;
+                    fromAccount.Balance -= amount;
+                    Console.WriteLine($"Omvandlad summa {convertedAmount}");
+                    Console.WriteLine("Skickar...");
+                    await Task.Delay(1000); // Simulate a delay
+
+                    
+                    // Log the transfer details
+                    Console.WriteLine($"Pengarna skickades från {fromAccount.AccountNumber} ny balans: {fromAccount.Balance} till {toAccount.AccountNumber} ny balans: {toAccount.Balance}\n");
+
+                    // Add transaction logs to both accounts
+                    fromAccount.Transactions.Add(new TransactionLog(DateTime.Now, $"Överföring: {amount} {fromAccount.Currency} till {toAccount.AccountNumber}"));
+                    toAccount.Transactions.Add(new TransactionLog(DateTime.Now, $"Överföring: {convertedAmount} {toAccount.Currency} från {fromAccount.AccountNumber}"));
+                }
+                else
+                {
+                    // Display an error message if something went wrong
+                    Console.WriteLine("Nåt gick fel");
+                }
+            }
+            else
+            {
+                // Display an error message if the entered amount is invalid
+                Console.WriteLine("Ogiltigt belopp.");
+            }
+        }
+        private decimal ChangeTransferAmount(decimal amount, Account fromAccount, Account toAccount)
+        {
+            var currencyDictionary = Admin.GetCurrencyDictionary();
+
+            if (currencyDictionary.TryGetValue(fromAccount.Currency, out decimal fromExchangeRate) &&
+                currencyDictionary.TryGetValue(toAccount.Currency, out decimal toExchangeRate))
+            {
+                // Omvandla beloppet från källkontots valuta till målkontots valuta
+                decimal convertedAmount;
+                if (fromExchangeRate > toExchangeRate)
+                {
+                    convertedAmount = amount * (fromExchangeRate / toExchangeRate);
+                }
+                else
+                {
+                    convertedAmount = amount / (toExchangeRate / fromExchangeRate);
+                }
+                return convertedAmount;
+            }
+            else
+            {
+                throw new InvalidOperationException("Ogiltig valuta.");
+            }
+        }
         private void GetAllAccountNumbers()
         {
             Console.WriteLine("\nAlla kontonummer över alla användare:");
@@ -243,14 +317,14 @@ namespace BankNET2024
                 }
             }
         }
-        private static void ShowTransferLog(Account account1)
+        private static void ShowTransferLog(Account account)
         {
-            if (account1 != null)
+            if (account != null)
             {
-                Console.WriteLine($"Visar transaktionshistorik för konto {account1.AccountNumber}");
-                if (account1.Transactions != null && account1.Transactions.Count > 0)
+                Console.WriteLine($"Visar transaktionshistorik för konto {account.AccountNumber}");
+                if (account.Transactions != null && account.Transactions.Count > 0)
                 {
-                    foreach (var transaction in account1.Transactions)
+                    foreach (var transaction in account.Transactions)
                     {
                         transaction.DisplayTransactionHistory();
                     }
@@ -275,41 +349,79 @@ namespace BankNET2024
             }
             return false;
         }
-        public void CreateAccountCurrency(User user)
+        private void ChangeCurrency(User user)
         {
-            Console.WriteLine("Välj valutan du skulle ville ha på ditt nya konton");
+            var acc = user.GetAccount();
 
-            int i = 1;
-            foreach (Currency currency in Enum.GetValues(typeof(Currency)))
+            if (acc != null)
             {
-                Console.WriteLine($"{i}. {currency}");
-                i++;
-            }
-
-            Console.Write("Skriv in numret för den valuta du vill välja: ");
-            if (int.TryParse(Console.ReadLine(), out int choice) && choice > 0 && choice <= Enum.GetValues(typeof(Currency)).Length)
-            {
-                Currency selectedCurrency = (Currency)(choice - 1);
-
-                Console.WriteLine("Vilken summa vill du ha?");
-                if (decimal.TryParse(Console.ReadLine(), out decimal amount))
+                Console.WriteLine("Vilken valuta vill du byta till?");
+                var currencyDictionary = Admin.GetCurrencyDictionary();
+                foreach (var currency in currencyDictionary)
                 {
-                    ForeignAccount foreignAccount = new ForeignAccount("For", amount, selectedCurrency);
-                    Console.WriteLine($"Ditt nya konto har skapats med valutan {selectedCurrency} och summan {amount:C2}.");
-                    user.Accounts.Add(new Account("For", amount));
-
+                    Console.WriteLine(currency.Key);
+                }
+                string newCurrency = Console.ReadLine().ToUpper();
+                if (currencyDictionary.TryGetValue(newCurrency, out decimal newExchangeRate) &&
+                    currencyDictionary.TryGetValue(acc.Currency, out decimal currentExchangeRate))
+                {
+                    if (currentExchangeRate > newExchangeRate)
+                    {
+                        acc.Balance *= (currentExchangeRate / newExchangeRate);
+                    }
+                    else
+                    {
+                        acc.Balance /= (newExchangeRate / currentExchangeRate);
+                    }
+                    acc.Currency = newCurrency;
+                    Console.WriteLine($"Currency changed to {acc.Currency}. New balance: {acc.Balance:F2}  {acc.Currency:F}");
                 }
                 else
                 {
-                    Console.WriteLine("Felaktig inmatning. Försök igen.");
+                    Console.WriteLine("Ogiltig valuta");
                 }
+
+
             }
-            else
-            {
-                Console.WriteLine("Ogiltigt val. Försök igen.");
-            }
+            //public void CreateAccountCurrency(User user)
+            //{
+            //    Console.WriteLine("Välj valutan du skulle ville ha på ditt nya konton");
+
+            //    int i = 1;
+            //    foreach (Currency currency in Enum.GetValues(typeof(Currency)))
+            //    {
+            //        Console.WriteLine($"{i}. {currency}");
+            //        i++;
+            //    }
+
+            //    Console.Write("Skriv in numret för den valuta du vill välja: ");
+            //    if (int.TryParse(Console.ReadLine(), out int choice) && choice > 0 && choice <= Enum.GetValues(typeof(Currency)).Length)
+            //    {
+            //        Currency selectedCurrency = (Currency)(choice - 1);
+
+            //        Console.WriteLine("Vilken summa vill du ha?");
+            //        if (decimal.TryParse(Console.ReadLine(), out decimal amount))
+            //        {
+            //            ForeignAccount foreignAccount = new ForeignAccount("For", amount, selectedCurrency);
+            //            Console.WriteLine($"Ditt nya konto har skapats med valutan {selectedCurrency} och summan {amount:C2}.");
+            //            user.Accounts.Add(new Account("For", amount));
+
+            //        }
+            //        else
+            //        {
+            //            Console.WriteLine("Felaktig inmatning. Försök igen.");
+            //        }
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine("Ogiltigt val. Försök igen.");
+            //    }
+
+            //}
+        }
+        private void ChangeCurrency()
+        {
 
         }
-
     }
 }

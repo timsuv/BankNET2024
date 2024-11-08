@@ -26,6 +26,25 @@ namespace BankNET2024
         {
             return $"EMP{employeeCounter++}";
         }
+        public static Dictionary<string, decimal> GetCurrencyDictionary()
+        {
+            Dictionary<string, decimal> currencyDictionary = new()
+            {
+                {"SEK", 1 },
+                { "USD", 10.50m }, // Amerikansk dollar
+                { "EUR", 11.00m }, // Euro
+                { "GBP", 12.70m }, // Brittiskt pund
+                { "NOK", 1.00m },  // Norsk krona
+                { "DKK", 1.50m },  // Dansk krona
+                { "JPY", 0.075m }, // Japansk yen
+                { "CNY", 1.40m },  // Kinesisk yuan
+                { "INR", 0.13m },  // Indisk rupie
+                { "CHF", 11.70m }, // Schweizisk franc
+                { "CAD", 8.00m }
+            };
+
+            return currencyDictionary;
+        }
         public override string ToString()
         {
             return $"Admin Info: Username: {Username}, First Name: {FirstName}, Last Name: {LastName}, Employee ID: {EmployeeID}";

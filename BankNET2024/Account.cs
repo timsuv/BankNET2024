@@ -19,6 +19,7 @@ namespace BankNET2024
         }
         public string AccountNumber { get; set; }
         public decimal Balance { get; set; }
+        public string Currency { get; set; } = "SEK";
         public List<TransactionLog> Transactions { get; set; }
         public void Deposit()
         {
@@ -57,7 +58,9 @@ namespace BankNET2024
         }
         public override string ToString()
         {
-            return $"Account number: {AccountNumber}, BAlance {Balance}";
+            return $"Account number: {AccountNumber}, BAlance {Balance:F} {Currency:F}";
         }
+       
+        
     }
 }

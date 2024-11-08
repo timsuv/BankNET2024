@@ -10,31 +10,29 @@ namespace BankNET2024
 {
     internal class ManageBank
     {
-        public List<IUser>? Users { get; set; } = [
-
-            new User("Joel", "A", "O", "D", "ddd", [new Account("Acc10", 10000), new Account("Save001", 20000)]), // Temp User
-            new User("Tim", "A", "O", "D", "ddd", [new Account("Acc20", 1000)]), // Temp User
-            new Admin("Ossy", "C", "Ossy", "A") // Admin
-
-            ];
+        public List<IUser>? Users { get; set; } = new List<IUser>
+            {
+                new User("Joel", "A", "O", "D", "ddd", new List<Account> { new Account("Acc10", 10000), new Account("Save001", 20000) }), // Temp User
+                new User("Tim", "A", "O", "D", "ddd", new List<Account> { new Account("Acc20", 1000) }), // Temp User
+                new Admin("Ossy", "C", "Ossy", "A") // Admin
+            };
         public ManageBank()
         {
             string bankArt = @"
-███▄▄▄▄      ▄████████     ███     ▀█████████▄     ▄████████ ███▄▄▄▄      ▄█   ▄█▄ 
-███▀▀▀██▄   ███    ███ ▀█████████▄   ███    ███   ███    ███ ███▀▀▀██▄   ███ ▄███▀ 
-███   ███   ███    █▀     ▀███▀▀██   ███    ███   ███    ███ ███   ███   ███▐██▀   
-███   ███  ▄███▄▄▄         ███   ▀  ▄███▄▄▄██▀    ███    ███ ███   ███  ▄█████▀    
-███   ███ ▀▀███▀▀▀         ███     ▀▀███▀▀▀██▄  ▀███████████ ███   ███ ▀▀█████▄    
-███   ███   ███    █▄      ███       ███    ██▄   ███    ███ ███   ███   ███▐██▄   
-███   ███   ███    ███     ███       ███    ███   ███    ███ ███   ███   ███ ▀███▄ 
- ▀█   █▀    ██████████    ▄████▀   ▄█████████▀    ███    █▀   ▀█   █▀    ███   ▀█▀ 
-                                                                         ▀         
-";
+    ███▄▄▄▄      ▄████████     ███     ▀█████████▄     ▄████████ ███▄▄▄▄      ▄█   ▄█▄ 
+    ███▀▀▀██▄   ███    ███ ▀█████████▄   ███    ███   ███    ███ ███▀▀▀██▄   ███ ▄███▀ 
+    ███   ███   ███    █▀     ▀███▀▀██   ███    ███   ███    ███ ███   ███   ███▐██▀   
+    ███   ███  ▄███▄▄▄         ███   ▀  ▄███▄▄▄██▀    ███    ███ ███   ███  ▄█████▀    
+    ███   ███ ▀▀███▀▀▀         ███     ▀▀███▀▀▀██▄  ▀███████████ ███   ███ ▀▀█████▄    
+    ███   ███   ███    █▄      ███       ███    ██▄   ███    ███ ███   ███   ███▐██▄   
+    ███   ███   ███    ███     ███       ███    ███   ███    ███ ███   ███   ███ ▀███▄ 
+     ▀█   █▀    ██████████    ▄████▀   ▄█████████▀    ███    █▀   ▀█   █▀    ███   ▀█▀ 
+                                                                             ▀         
+    ";
 
             Console.WriteLine(bankArt);
-
         }
-        public void LogIn()
+        public async Task LogIn()
         {
             var attempts = 3;
             string password;
@@ -47,6 +45,8 @@ namespace BankNET2024
 
                 Console.Write("Skriv in lösenordet: ");
                 password = string.Empty; // Återställ lösenordet för varje inmatning
+
+                await Task.Delay(1000); // Simulera en liten fördröjningsprocess
 
                 // Läs in tangenttryckningar utan att visa dem
                 while (true)
@@ -70,9 +70,9 @@ namespace BankNET2024
                     {
                         AdminMenu(tempUser);
                     }
-                    else if(tempUser is User)
+                    else if (tempUser is User)
                     {
-                        UserMenu(tempUser);
+                        await UserMenu(tempUser);
                     }
                     break;
                 }
@@ -88,17 +88,16 @@ namespace BankNET2024
                 }
             }
         }
-        private void UserMenu(IUser user)
+        private async Task UserMenu(IUser user)
         {
             var tempUser = (User)user;
 
-            List<string> options = ["Withdraw", "Deposit", "Min info" , "Transfer", "Mina Transaktioner"];
+            List<string> options = new List<string> { "Withdraw", "Deposit", "Min info", "Transfer", "Mina Transaktioner" };
 
-            Menu menu = new(options, "Bank menu");
+            Menu menu = new Menu(options, "Bank menu");
 
             while (true)
             {
-
                 switch (menu.MenuRun())
                 {
                     case 0:
@@ -114,11 +113,10 @@ namespace BankNET2024
                         break;
                     case 1:
                         var tempAcc = tempUser.GetAccount();
-                        if(tempAcc != null)
+                        if (tempAcc != null)
                         {
                             tempAcc.Deposit();
                         }
-
                         break;
                     case 2:
                         Console.WriteLine(tempUser);
@@ -126,7 +124,7 @@ namespace BankNET2024
                         Console.ReadLine();
                         break;
                     case 3:
-                        Transfer(tempUser);
+                        await Transfer(tempUser);
                         Console.ReadLine();
                         break;
                     case 4:
@@ -139,14 +137,17 @@ namespace BankNET2024
         }
         private void AdminMenu(IUser user)
         {
-            Menu menu = new(["Show all Users", "Delete User"], "Admin menu");
+            Menu menu = new Menu(new List<string> { "Show all Users", "Delete User" }, "Admin menu");
 
             switch (menu.MenuRun())
             {
                 case 0:
-                    foreach (var u in Users)
+                    if (Users != null)
                     {
-                        Console.WriteLine(u);
+                        foreach (var u in Users)
+                        {
+                            Console.WriteLine(u);
+                        }
                     }
                     GetAllAccountNumbers();
                     Console.ReadLine();
@@ -155,7 +156,7 @@ namespace BankNET2024
                     break;
             }
         }
-        private void Transfer(User user)
+        private async Task Transfer(User user)
         {
             // Get the account from which the money will be transferred
             var fromAccount = user.GetAccount();
@@ -175,12 +176,14 @@ namespace BankNET2024
                 // Check if the destination account exists and if the amount is less than the balance of the destination account
                 if (toAccount != null && amount < toAccount.Balance)
                 {
-                    // Perform the transfer by updating the balances of both accounts
                     toAccount.Balance += amount;
                     fromAccount.Balance -= amount;
 
+                    Console.WriteLine("Skickar...");
+                    await Task.Delay(1000); // Simulate a delay
+
                     // Log the transfer details
-                    Console.WriteLine($"Pengarna skickdes från {fromAccount} till {toAccount}\n");
+                    Console.WriteLine($"Pengarna skickdes från {fromAccount.AccountNumber} ny balans; {fromAccount.Balance} till {toAccount.AccountNumber} ny balans {toAccount.Balance}\n");
 
                     // Add transaction logs to both accounts
                     fromAccount.Transactions.Add(new TransactionLog(DateTime.Now, $"Överföring: {amount} till {toAccount.AccountNumber}"));

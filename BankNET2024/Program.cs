@@ -2,11 +2,11 @@
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             ManageBank manageBank = new();
 
-            manageBank.LogIn();
+            await manageBank.LogIn();
         
         }
     }

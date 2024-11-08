@@ -11,15 +11,16 @@ namespace BankNET2024
 {
     public class Account
     {
-        public Account(string accountNumber, decimal balance)
+        public Account(string accountNumber, decimal balance, string currency = "SEK")
         {
             AccountNumber = accountNumber;
             Balance = balance;
+            Currency = currency;
             Transactions = [];
         }
         public string AccountNumber { get; set; }
         public decimal Balance { get; set; }
-        public string Currency { get; set; } = "SEK";
+        public string Currency { get; set; }
         public List<TransactionLog> Transactions { get; set; }
         public void Deposit()
         {

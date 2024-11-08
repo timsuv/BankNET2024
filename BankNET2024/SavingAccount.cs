@@ -8,22 +8,37 @@ namespace BankNET2024
 {
     public class SavingAccount : Account
     {
+        // Interest rate for the savings account
         private decimal IntrestRate = 0.3m;
+
+        // Constructor to initialize the savings account with account number and balance
         public SavingAccount(string accountNumber, decimal balance) : base(accountNumber, balance)
         {
+            // Start a task to periodically increase the balance with interest
             Task.Run(() => IncreaseBalance());
         }
+
+        // Override the Withdraw method to prevent withdrawals from the savings account
         public override void Withdraw()
         {
-            Console.WriteLine("Cant withdraw from this account");
+            Console.WriteLine("Can't withdraw from this account");
         }
+
+        // Method to periodically increase the balance with interest
         public async Task IncreaseBalance()
         {
             while (true)
             {
+                // Calculate the interest
                 decimal intrest = Balance * IntrestRate;
+
+                // Add the interest to the balance
                 Balance += intrest;
+
+                // Log the interest addition transaction
                 Transactions.Add(new TransactionLog(DateTime.Now, $"Interest added: {intrest}"));
+
+                // Wait for 10 seconds before adding interest again
                 await Task.Delay(10000);
             }
         }

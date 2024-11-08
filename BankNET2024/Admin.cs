@@ -45,6 +45,7 @@ namespace BankNET2024
 
             return currencyDictionary;
         }
+        
         public override string ToString()
         {
             return $"Admin Info: Username: {Username}, First Name: {FirstName}, Last Name: {LastName}, Employee ID: {EmployeeID}";

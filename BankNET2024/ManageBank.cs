@@ -252,17 +252,25 @@ namespace BankNET2024
                     // Perform the transfer
                     toAccount.Balance += convertedAmount;
                     fromAccount.Balance -= amount;
-                    Console.WriteLine($"Omvandlad summa {convertedAmount}");
-                    Console.WriteLine("Skickar...");
-                    await Task.Delay(1000); // Simulate a delay
+                    if (convertedAmount != 0)
+                    {
+                        Console.WriteLine($"Omvandlad summa {convertedAmount}");
+                        Console.WriteLine("Skickar...");
+                        await Task.Delay(1000); // Simulate a delay
+                                                // Log the transfer details
+                        Console.WriteLine($"Pengarna skickades från {fromAccount.AccountNumber} ny balans: {fromAccount.Balance} till {toAccount.AccountNumber} ny balans: {toAccount.Balance}\n");
+
+                        // Add transaction logs to both accounts
+                        fromAccount.Transactions.Add(new TransactionLog(DateTime.Now, $"Överföring: {amount} {fromAccount.Currency} till {toAccount.AccountNumber}"));
+                        toAccount.Transactions.Add(new TransactionLog(DateTime.Now, $"Överföring: {convertedAmount} {toAccount.Currency} från {fromAccount.AccountNumber}"));
+                    }
+                    else
+                    {
+                        Console.WriteLine("Något gick fel");
+                    }
 
                     
-                    // Log the transfer details
-                    Console.WriteLine($"Pengarna skickades från {fromAccount.AccountNumber} ny balans: {fromAccount.Balance} till {toAccount.AccountNumber} ny balans: {toAccount.Balance}\n");
-
-                    // Add transaction logs to both accounts
-                    fromAccount.Transactions.Add(new TransactionLog(DateTime.Now, $"Överföring: {amount} {fromAccount.Currency} till {toAccount.AccountNumber}"));
-                    toAccount.Transactions.Add(new TransactionLog(DateTime.Now, $"Överföring: {convertedAmount} {toAccount.Currency} från {fromAccount.AccountNumber}"));
+                    
                 }
                 else
                 {
@@ -280,25 +288,30 @@ namespace BankNET2024
         {
             var currencyDictionary = Admin.GetCurrencyDictionary();
 
-            if (currencyDictionary.TryGetValue(fromAccount.Currency, out decimal fromExchangeRate) &&
+            try 
+            {
+                // Kontrollera om valutorna finns i valutadictionaryn
+                if (currencyDictionary.TryGetValue(fromAccount.Currency, out decimal fromExchangeRate) &&
                 currencyDictionary.TryGetValue(toAccount.Currency, out decimal toExchangeRate))
-            {
-                // Omvandla beloppet från källkontots valuta till målkontots valuta
-                decimal convertedAmount;
-                if (fromExchangeRate > toExchangeRate)
                 {
-                    convertedAmount = amount * (fromExchangeRate / toExchangeRate);
+                    // Omvandla beloppet från källkontots valuta till målkontots valuta
+                    decimal convertedAmount;
+                    if (fromExchangeRate > toExchangeRate)
+                    {
+                        convertedAmount = amount * (fromExchangeRate / toExchangeRate);
+                    }
+                    else
+                    {
+                        convertedAmount = amount / (toExchangeRate / fromExchangeRate);
+                    }
+                    return convertedAmount;
                 }
-                else
-                {
-                    convertedAmount = amount / (toExchangeRate / fromExchangeRate);
-                }
-                return convertedAmount;
             }
-            else
+            catch (Exception ex) 
             {
-                throw new InvalidOperationException("Ogiltig valuta.");
+                Console.WriteLine($"Något gick fel {ex.Message}");
             }
+            return 0;
         }
         private void GetAllAccountNumbers()
         {
@@ -418,10 +431,6 @@ namespace BankNET2024
             //    }
 
             //}
-        }
-        private void ChangeCurrency()
-        {
-
         }
     }
 }

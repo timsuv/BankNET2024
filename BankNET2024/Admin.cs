@@ -8,7 +8,7 @@ namespace BankNET2024
 {
     public class Admin : IUser
     {
-        private static int employeeCounter = 1000; // Startvärde för ID-räkningen
+        private static int employeeCounter = 1000; // Start value for employee ID   
 
         public Admin(string username, string password)
         {

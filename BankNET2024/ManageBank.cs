@@ -91,7 +91,7 @@ namespace BankNET2024
         {
             var tempUser = (User)user;
 
-            List<string> options = ["Withdraw", "Deposit", "Min info" , "Min Transfer", "Mina Transaktioner"];
+            List<string> options = ["Withdraw", "Deposit", "Min info" , "Transfer", "Mina Transaktioner"];
 
             Menu menu = new(options, "Bank menu");
 
@@ -130,26 +130,7 @@ namespace BankNET2024
                         break;
                     case 4:
                         var account1 = tempUser.GetAccount();
-                        if (account1 != null)
-                        {
-                            Console.WriteLine($"Visar transaktionshistorik för konto {account1.AccountNumber}");
-                            if (account1.Transactions != null && account1.Transactions.Count > 0)
-                            {
-                                foreach (var transaction in account1.Transactions)
-                                {
-                                    transaction.DisplayTransactionHistory();
-                                }
-                            }
-                            else
-                            {
-                                Console.WriteLine("Inga transaktioner hittades.");
-                            }
-                        }
-                        else
-                        {
-                            Console.WriteLine("Ingen giltig konto hittades.");
-                        }
-                        Console.ReadKey();
+                        
                         break;
 
                     default:
@@ -162,9 +143,29 @@ namespace BankNET2024
 
         }
 
-        private void Transfer()
+        private void Transfer(User user)
         {
-           
+            GetAllAccountNumbers();
+            Console.WriteLine("-------------------------");
+            var fromAccount = user.GetAccount();
+
+            Console.WriteLine("Till vilket konto: ");
+            string? inputToAccount = Console.ReadLine();
+
+            var toUser = Users?.OfType<User>().FirstOrDefault(u => u.Accounts.Any(a => a.AccountNumber == inputToAccount));
+            var toAccount = toUser?.Accounts.FirstOrDefault(a => a.AccountNumber == inputToAccount);
+
+            Console.WriteLine("Hur mycket pengar: ");
+            decimal amount = decimal.Parse(Console.ReadLine());
+
+            toAccount.Balance += amount;
+            fromAccount.Balance -= amount;
+
+            Console.WriteLine($"Pengarna skickdes från {fromAccount} till {toAccount}\n");
+
+            GetAllAccountNumbers();
+
+
         }
         private void GetAllAccountNumbers()
         {
@@ -182,6 +183,29 @@ namespace BankNET2024
                     }
                 }
             }
+        }
+        private void ShowTransferLog(Account account1)
+        {
+            if (account1 != null)
+            {
+                Console.WriteLine($"Visar transaktionshistorik för konto {account1.AccountNumber}");
+                if (account1.Transactions != null && account1.Transactions.Count > 0)
+                {
+                    foreach (var transaction in account1.Transactions)
+                    {
+                        transaction.DisplayTransactionHistory();
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Inga transaktioner hittades.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Ingen giltig konto hittades.");
+            }
+            Console.ReadKey();
         }
         private bool ValidLogIn(string? userName, string password)
         {

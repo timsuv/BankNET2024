@@ -29,14 +29,21 @@ namespace BankNET2024
         //  public bool IsLocked { get; set; } kommer senare
         //public int Attempts { get; set; }
 
-        public void CreateOwnAccout()
+        
+        
+        
+        
+        public void AddAccount()
         {
-            //Accounts.Add(new Account(Account );
+            //Option to select what type of account to add (either add savings account, or apply for loan)
+            //If savings, add savings account to List<Account> accounts
+            //If savings, go through check with balance then add
         }
+        
         public void DisplayAccounts()
         {
             //visar infos om alla accounts med bara nummer och balance
-            Console.WriteLine("");
+            //CW List or dictionary from user constructor of type Accounts
         }
     }
 

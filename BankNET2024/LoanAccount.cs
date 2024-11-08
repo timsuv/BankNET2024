@@ -9,7 +9,7 @@ namespace BankNET2024
     {
         public decimal LoanAmount { get; set; }
         public decimal LoanBalance { get; set; }
-        public decimal InterestRate = 0.025m;
+        private decimal InterestRate = 0.025m;
         public decimal WithdrawAmount { get; set; }
         
         public LoanAccount(string accountNumber, decimal balance) : base(accountNumber, balance)

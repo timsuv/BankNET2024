@@ -9,15 +9,15 @@ namespace BankNET2024
     public class SavingAccount : Account
     {
         //Savings account, needs an interest rate, savings amount, savings account number
-        public decimal InterestRate { get; private set; }
+        private decimal InterestRate = 0.033m;
         public decimal SavingBalance { get; set; }
+        public string savingsAccountNumber { get; set; }
 
         //Constructor
         public SavingAccount(string accountNumber, decimal balance, decimal savingBalance) : base(accountNumber, balance)
         {
             this.SavingBalance = savingBalance;
         }
-        
         
         //Methods to deposit (& calculate interest), withdraw & display balance
         public void Deposit(decimal amount)
@@ -34,6 +34,7 @@ namespace BankNET2024
         public void DisplayBalance()
         {
             Console.WriteLine($"Savings balance: {SavingBalance} SEK");
+            Console.WriteLine($"The accrued interest is " + (InterestRate * SavingBalance));
         }
         
     }

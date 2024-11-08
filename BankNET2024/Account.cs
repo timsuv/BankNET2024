@@ -17,7 +17,6 @@ namespace BankNET2024
         public string AccountNumber { get; set; }
         public decimal Balance { get; set; }
         
-        
         public void Deposit(decimal amount)
         {
             Balance += amount;
@@ -43,15 +42,16 @@ namespace BankNET2024
         }
         
         
+        
         //Instance of CurrencyChange class
         private CurrencyChange balanceConverter = new CurrencyChange();
         
         //Display balance in SEK, EUR, USD
         public void Exchange()
         {
-            Console.WriteLine($"Current balance in SEK is {Balance}");
+            Console.WriteLine($"Current balance in SEK is {Balance} SEK");
             Console.WriteLine("Current balance in USD is " + (Balance * balanceConverter.getUsd()) + "$");
-            Console.WriteLine($"Current balance in EUR is " + (Balance * balanceConverter.getEuro() + "€"));
+            Console.WriteLine("Current balance in EUR is " + (Balance * balanceConverter.getEuro() + "€"));
         }
         
     }

@@ -47,7 +47,7 @@ namespace BankNET2024
                 Console.Write("Enter password: "); // Prompt the user to enter the password
                 password = string.Empty; // Reset the password for each input
 
-                await Task.Delay(10000); // Simulate a small delay process
+                 // Simulate a small delay process
 
                 // Read key inputs without displaying them
                 while (true)
@@ -66,7 +66,8 @@ namespace BankNET2024
                 if (ValidLogIn(userName, password))
                 {
                     var tempUser = _users?.FirstOrDefault(user => user.Username == userName && user.Password == password); // Get the user object
-
+                    Console.WriteLine("Logging in....");
+                    await Task.Delay(2000);
                     if (tempUser is Admin) // Check if the user is an admin or user
                     {
                         AdminMenu(tempUser);

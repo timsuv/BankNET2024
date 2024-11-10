@@ -9,7 +9,7 @@ namespace BankNET2024
     public class SavingAccount : Account
     {
         // Interest rate for the savings account
-        private decimal IntrestRate = 0.3m;
+        private decimal _intrestRate = 0.03m;
 
         // Constructor to initialize the savings account with account number and balance
         public SavingAccount(string accountNumber, decimal balance) : base(accountNumber, balance)
@@ -30,7 +30,7 @@ namespace BankNET2024
             while (true)
             {
                 // Calculate the interest
-                decimal intrest = Balance * IntrestRate;
+                decimal intrest = Balance * _intrestRate;
 
                 // Add the interest to the balance
                 Balance += intrest;

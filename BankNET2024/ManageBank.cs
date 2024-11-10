@@ -11,7 +11,7 @@ namespace BankNET2024
 {
     internal class ManageBank
     {
-        public static List<IUser>? Users { get; set; } =
+        private static List<IUser>? _users =
             [
                 new User("Joel", "A", "O", "D", "ddd", [new Account("Acc10", 10000), new Account("Acc30", 20000)]), // Temp User
                 new User("Tim", "A", "O", "D", "ddd", [new Account("Acc20", 1000), new SavingAccount("Save10", 10000)]), // Temp User
@@ -65,7 +65,7 @@ namespace BankNET2024
 
                 if (ValidLogIn(userName, password))
                 {
-                    var tempUser = Users?.FirstOrDefault(user => user.Username == userName && user.Password == password); // Get the user object
+                    var tempUser = _users?.FirstOrDefault(user => user.Username == userName && user.Password == password); // Get the user object
 
                     if (tempUser is Admin) // Check if the user is an admin or user
                     {
@@ -140,15 +140,15 @@ namespace BankNET2024
         private void AdminMenu(IUser user)
         {
             var admin = (Admin)user;
-            Menu menu = new(["Show all Users", "Delete User", "Change Currency value", "Show dict"], "Admin menu");
+            Menu menu = new(["Show all _users", "Delete User", "Change Currency value", "Show dict"], "Admin menu");
             while (true)
             {
                 switch (menu.MenuRun())
                 {
                     case 0:
-                        if (Users != null)
+                        if (_users != null)
                         {
-                            foreach (var u in Users)
+                            foreach (var u in _users)
                             {
                                 Console.WriteLine(u);
                             }
@@ -179,11 +179,11 @@ namespace BankNET2024
         {
             Console.WriteLine("Ange användarnamn: ");
             string? userName = Console.ReadLine();
-            var userToDelete = Users?.Find(u => u.Username == userName);
+            var userToDelete = _users?.Find(u => u.Username == userName);
 
             if (userToDelete != null && userToDelete is not Admin)
             {
-                Users?.Remove(userToDelete);
+                _users?.Remove(userToDelete);
                 Console.WriteLine("Användaren togs bort.");
             }
             else
@@ -202,7 +202,7 @@ namespace BankNET2024
             string? inputToAccount = Console.ReadLine();
 
             // Find the user and account that matches the entered account number
-            var toUser = Users?.OfType<User>().FirstOrDefault(u => u.Accounts.Any(a => a.AccountNumber == inputToAccount));
+            var toUser = _users?.OfType<User>().FirstOrDefault(u => u.Accounts.Any(a => a.AccountNumber == inputToAccount));
             var toAccount = toUser?.Accounts.FirstOrDefault(a => a.AccountNumber == inputToAccount);
 
             // Prompt the user to enter the amount of money to transfer
@@ -281,9 +281,9 @@ namespace BankNET2024
         private void GetAllAccountNumbers()
         {
             Console.WriteLine("\nAlla kontonummer över alla användare:");
-            if (Users != null)
+            if (_users != null)
             {
-                foreach (var user in Users)
+                foreach (var user in _users)
                 {
                     if (user is User tempUser)
                     {
@@ -320,7 +320,7 @@ namespace BankNET2024
         }
         private bool ValidLogIn(string? userName, string password)
         {
-            var tempUser = Users?.Find(u => u.Username == userName);
+            var tempUser = _users?.Find(u => u.Username == userName);
             if (tempUser != null && tempUser.Password == password)
             {
                 return true;

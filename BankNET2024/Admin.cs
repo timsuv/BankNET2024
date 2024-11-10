@@ -5,7 +5,7 @@ namespace BankNET2024
 {
     public class Admin : IUser
     {
-        private static int _employeeCounter = 1000; // Start value for employee ID   
+        private static int _employeeCounter = 0; // Start value for employee ID   
         private static Dictionary<string, decimal> _currencyDictionary = new()
         {
             { "SEK", 1 },
@@ -36,7 +36,7 @@ namespace BankNET2024
         public string LastName { get; set; }
         public string EmployeeID { get; private set; }
 
-        private string GenerateEmployeeID()
+        private string GenerateEmployeeID() // Generate uniq employee ID
         {
             return $"EMP{_employeeCounter++}";
         }

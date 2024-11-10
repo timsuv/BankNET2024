@@ -38,10 +38,6 @@ namespace BankNET2024
             }
             return foundAccount;
         }
-        public void CreateOwnAccout()
-        {
-
-        }
         public void DisplayAccounts()
         {
             //visar infos om alla accounts med bara nummer och balance
@@ -52,12 +48,6 @@ namespace BankNET2024
                     Console.WriteLine(account);
                 }
             }
-        }
-        public void TakeALoan()
-        {
-            var account = GetAccount();
-
-
         }
         public override string ToString()
         {

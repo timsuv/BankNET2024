@@ -118,7 +118,7 @@ namespace BankNET2024
                         Console.ReadLine();
                         break;
                     case 3:
-                        await Transfer2(tempUser);
+                        await Transfer(tempUser);
                         Console.ReadLine();
                         break;
                     case 4:
@@ -139,8 +139,8 @@ namespace BankNET2024
         }
         private void AdminMenu(IUser user)
         {
-            Menu menu = new(["Show all Users", "Delete User"], "Admin menu");
-
+            var admin = (Admin)user;
+            Menu menu = new(["Show all Users", "Delete User", "Change Currency value", "Show dict"], "Admin menu");
             while (true)
             {
                 switch (menu.MenuRun())
@@ -158,6 +158,16 @@ namespace BankNET2024
                         break;
                     case 1:
                         DeleteUser();
+                        break;
+                    case 2:
+                        admin.ChangeCurrencyRate();
+                        break;
+                    case 3:
+                        foreach (var u in Admin.GetCurrencyDictionary())
+                        {
+                            Console.WriteLine($"{u.Key}: {u.Value}");
+                        }
+                        Console.ReadLine();
                         break;
                     default:
                         break;
@@ -181,7 +191,7 @@ namespace BankNET2024
             }
             Console.ReadLine();
         }
-        private async Task Transfer(User user)
+        private async Task Transfer2(User user)
         {
             // Get the account from which the money will be transferred
             var fromAccount = user.GetAccount();
@@ -226,7 +236,7 @@ namespace BankNET2024
                 Console.WriteLine("Ogiltigt belopp.");
             }
         }
-        private async Task Transfer2(User user)
+        private async Task Transfer(User user)
         {
             // Get the account from which the money will be transferred
             var fromAccount = user.GetAccount();
@@ -269,7 +279,6 @@ namespace BankNET2024
                         Console.WriteLine("Något gick fel");
                     }
 
-                    
                     
                 }
                 else
@@ -396,41 +405,6 @@ namespace BankNET2024
 
 
             }
-            //public void CreateAccountCurrency(User user)
-            //{
-            //    Console.WriteLine("Välj valutan du skulle ville ha på ditt nya konton");
-
-            //    int i = 1;
-            //    foreach (Currency currency in Enum.GetValues(typeof(Currency)))
-            //    {
-            //        Console.WriteLine($"{i}. {currency}");
-            //        i++;
-            //    }
-
-            //    Console.Write("Skriv in numret för den valuta du vill välja: ");
-            //    if (int.TryParse(Console.ReadLine(), out int choice) && choice > 0 && choice <= Enum.GetValues(typeof(Currency)).Length)
-            //    {
-            //        Currency selectedCurrency = (Currency)(choice - 1);
-
-            //        Console.WriteLine("Vilken summa vill du ha?");
-            //        if (decimal.TryParse(Console.ReadLine(), out decimal amount))
-            //        {
-            //            ForeignAccount foreignAccount = new ForeignAccount("For", amount, selectedCurrency);
-            //            Console.WriteLine($"Ditt nya konto har skapats med valutan {selectedCurrency} och summan {amount:C2}.");
-            //            user.Accounts.Add(new Account("For", amount));
-
-            //        }
-            //        else
-            //        {
-            //            Console.WriteLine("Felaktig inmatning. Försök igen.");
-            //        }
-            //    }
-            //    else
-            //    {
-            //        Console.WriteLine("Ogiltigt val. Försök igen.");
-            //    }
-
-            //}
         }
     }
 }

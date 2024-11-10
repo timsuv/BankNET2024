@@ -14,7 +14,7 @@ namespace BankNET2024
         public string LastName { get; set; }
         public string PhoneNumber { get; set; }
         public List<Account> Accounts { get; set; }
-        private int _loans = 5;
+        //private int _loans = 5;
 
         public User(string username, string password, string firstName, string lastName, string phoneNumber, List<Account> accounts)
         {
@@ -26,10 +26,10 @@ namespace BankNET2024
             Accounts = accounts;
 
         }
-        public Account GetAccount()
+        public Account? GetAccount()
         {
             Console.WriteLine("Vilket konto: ");
-            string account = Console.ReadLine();
+            string? account = Console.ReadLine();
 
             var foundAccount = Accounts.FirstOrDefault(a => a.AccountNumber == account);
             if (foundAccount == null)

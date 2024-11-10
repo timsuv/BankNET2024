@@ -39,35 +39,35 @@ namespace BankNET2024
             string password;
             string? userName;
 
-            while (attempts != 0)
+            while (attempts != 0) // Loop until the attempts are exhausted
             {
-                Console.Write("Skriv in användarnamn: ");
+                Console.Write("Enter username: "); // Prompt the user to enter the username
                 userName = Console.ReadLine();
 
-                Console.Write("Skriv in lösenordet: ");
-                password = string.Empty; // Återställ lösenordet för varje inmatning
+                Console.Write("Enter password: "); // Prompt the user to enter the password
+                password = string.Empty; // Reset the password for each input
 
-                await Task.Delay(1000); // Simulera en liten fördröjningsprocess
+                await Task.Delay(10000); // Simulate a small delay process
 
-                // Läs in tangenttryckningar utan att visa dem
+                // Read key inputs without displaying them
                 while (true)
                 {
-                    var key = Console.ReadKey(intercept: true); // Intercept: true döljer inmatningen
+                    var key = Console.ReadKey(intercept: true); // Intercept: true hides the input
 
-                    if (key.Key == ConsoleKey.Enter) // Avsluta när Enter trycks
+                    if (key.Key == ConsoleKey.Enter) // Exit when Enter is pressed
                         break;
 
-                    password += key.KeyChar; // Lägg till tecknet i lösenordet
-                    Console.Write("*"); // Visa en asterisk istället
+                    password += key.KeyChar; // Add the character to the password
+                    Console.Write("*"); // Display an asterisk instead
                 }
 
-                Console.WriteLine(); // Ny rad efter lösenordet har skrivits in
+                Console.WriteLine(); // New line after the password is entered
 
                 if (ValidLogIn(userName, password))
                 {
-                    var tempUser = Users?.FirstOrDefault(user => user.Username == userName && user.Password == password);
+                    var tempUser = Users?.FirstOrDefault(user => user.Username == userName && user.Password == password); // Get the user object
 
-                    if (tempUser is Admin)
+                    if (tempUser is Admin) // Check if the user is an admin or user
                     {
                         AdminMenu(tempUser);
                     }
@@ -79,26 +79,26 @@ namespace BankNET2024
                 }
                 else
                 {
-                    attempts--;
-                    Console.WriteLine($"Try again, försök kvar: {attempts}");
+                    attempts--; // Decrement the attempts
+                    Console.WriteLine($"Try again, attempts left: {attempts}");
                 }
                 if (attempts == 0)
                 {
-                    Console.WriteLine("SLUT PÅ FÖRSÖK");
+                    Console.WriteLine("OUT OF ATTEMPTS"); // Display a message when the attempts are exhausted
                     Environment.Exit(0);
                 }
             }
         }
         private async Task UserMenu(IUser user)
         {
-            var tempUser = (User)user;
-            Menu menu = new(["Withdraw", "Deposit", "Min info", "Transfer", "Mina Transaktioner", "Change Currency", "Exit"], "Bank menu");
+            var tempUser = (User)user; // Cast the user object to a User object
+            Menu menu = new(["Withdraw", "Deposit", "Min info", "Transfer", "Mina Transaktioner", "Change Currency", "Exit"], "Bank menu"); // Create a menu object
             while (true)
             {
-                switch (menu.MenuRun())
+                switch (menu.MenuRun()) // Run the menu
                 {
                     case 0:
-                        var account = tempUser.GetAccount();
+                        var account = tempUser.GetAccount(); // Get the account
                         if (account != null)
                         {
                             account.Withdraw();
@@ -122,7 +122,7 @@ namespace BankNET2024
                         Console.ReadLine();
                         break;
                     case 4:
-                        ShowTransferLog(tempUser.GetAccount());
+                        ShowTransferLog(tempUser?.GetAccount());
                         break;
                     case 5:
                         ChangeCurrency(tempUser);
@@ -161,6 +161,7 @@ namespace BankNET2024
                         break;
                     case 2:
                         admin.ChangeCurrencyRate();
+                        Console.ReadLine();
                         break;
                     case 3:
                         foreach (var u in Admin.GetCurrencyDictionary())
@@ -190,51 +191,6 @@ namespace BankNET2024
                 Console.WriteLine("Något gick fel.");
             }
             Console.ReadLine();
-        }
-        private async Task Transfer2(User user)
-        {
-            // Get the account from which the money will be transferred
-            var fromAccount = user.GetAccount();
-
-            // Prompt the user to enter the account number to which the money will be transferred
-            Console.WriteLine("Till vilket konto: ");
-            string? inputToAccount = Console.ReadLine();
-
-            // Find the user and account that matches the entered account number
-            var toUser = Users?.OfType<User>().FirstOrDefault(u => u.Accounts.Any(a => a.AccountNumber == inputToAccount));
-            var toAccount = toUser?.Accounts.FirstOrDefault(a => a.AccountNumber == inputToAccount);
-
-            // Prompt the user to enter the amount of money to transfer
-            Console.WriteLine("Hur mycket pengar: ");
-            if (decimal.TryParse(Console.ReadLine(), out decimal amount))
-            {
-                // Check if the destination account exists and if the amount is less than the balance of the destination account
-                if (toAccount != null && amount < toAccount.Balance)
-                {
-                    toAccount.Balance += amount;
-                    fromAccount.Balance -= amount;
-
-                    Console.WriteLine("Skickar...");
-                    await Task.Delay(1000); // Simulate a delay
-
-                    // Log the transfer details
-                    Console.WriteLine($"Pengarna skickdes från {fromAccount.AccountNumber} ny balans; {fromAccount.Balance} till {toAccount.AccountNumber} ny balans {toAccount.Balance}\n");
-
-                    // Add transaction logs to both accounts
-                    fromAccount.Transactions.Add(new TransactionLog(DateTime.Now, $"Överföring: {amount} till {toAccount.AccountNumber}"));
-                    toAccount.Transactions.Add(new TransactionLog(DateTime.Now, $"Överföring: {amount} från {fromAccount.AccountNumber}"));
-                }
-                else
-                {
-                    // Display an error message if something went wrong
-                    Console.WriteLine("Nåt gick fel");
-                }
-            }
-            else
-            {
-                // Display an error message if the entered amount is invalid
-                Console.WriteLine("Ogiltigt belopp.");
-            }
         }
         private async Task Transfer(User user)
         {
@@ -371,7 +327,7 @@ namespace BankNET2024
             }
             return false;
         }
-        private void ChangeCurrency(User user)
+        private static void ChangeCurrency(User user)
         {
             var acc = user.GetAccount();
 
@@ -383,7 +339,7 @@ namespace BankNET2024
                 {
                     Console.WriteLine(currency.Key);
                 }
-                string newCurrency = Console.ReadLine().ToUpper();
+                string? newCurrency = Console.ReadLine().ToUpper();
                 if (currencyDictionary.TryGetValue(newCurrency, out decimal newExchangeRate) &&
                     currencyDictionary.TryGetValue(acc.Currency, out decimal currentExchangeRate))
                 {

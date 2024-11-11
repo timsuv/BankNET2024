@@ -63,7 +63,7 @@ namespace BankNET2024
                         Account newAccount = new SavingAccount(accountNumber, initialBalance);
                         Console.WriteLine($"Nu har ett nytt sparkonto skapats med kontonummer {accountNumber} och saldo {initialBalance}.");
                         this.Accounts.Add(newAccount);
-                    }
+                    } 
 
                 }
                 else

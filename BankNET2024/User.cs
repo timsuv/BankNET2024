@@ -113,16 +113,57 @@ namespace BankNET2024
         }
         public void TakeLoan()
         {
-            Console.WriteLine("Hur mycket vill du låna: ");
-            if ( decimal.TryParse(Console.ReadLine(), out decimal loanAmout))
+            // Check if a loan account already exists
+            if (Accounts.Any(a => a is LoanAccount))
             {
-                if(loanAmout <= Accounts.Sum(a => a.Balance) * 5)
-                {
-                    LoanAccount loanAccount = new(Guid.NewGuid().ToString(), 0, loanAmout);
-                    Accounts.Add(loanAccount);
-                }
+                Console.WriteLine("Du har redan ett lån.");
+                return;
             }
 
+            Console.WriteLine("Hur mycket vill du låna: ");
+            if (decimal.TryParse(Console.ReadLine(), out decimal loanAmount))
+            {
+                if (loanAmount <= Accounts.Sum(a => a.Balance) * 5 && loanAmount > 0)
+                {
+                    LoanAccount loanAccount = new(Guid.NewGuid().ToString(), 0, loanAmount);
+                    Accounts.Add(loanAccount);
+                    Console.WriteLine($"Lånekonto skapat med lånebelopp {loanAmount}.");
+                }
+                else
+                {
+                    Console.WriteLine("Ogiltigt lånebelopp.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Ogiltig inmatning.");
+            }
+         
+        }
+        public void PayLoan()
+        {
+            var payAcc = GetAccount();
+
+            var loanAccount = Accounts.FirstOrDefault(a => a is LoanAccount);
+            if (loanAccount != null && loanAccount is LoanAccount account)
+            {
+                Console.WriteLine("Hur mycket vill du betala: ");
+                if (decimal.TryParse(Console.ReadLine(), out decimal payment))
+                {
+                    if (payment <= payAcc.Balance)
+                    {
+                        payAcc.Balance -= payment;
+                        account.LoanAmount -= payment;
+
+                        Console.WriteLine($"Du har betalat {payment} och har nu {loanAccount.Balance} kvar att betala.");
+                    }
+                   
+                }
+            }
+            else
+            {
+                Console.WriteLine("Du har inget lån att betala.");
+            }
         }
         public override string ToString()
         {

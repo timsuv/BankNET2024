@@ -20,72 +20,22 @@ namespace BankNET2024
         public decimal LoanAmount { get; set; }
         public decimal InterestRate { get; set; }
      
-        private async Task IncreaseLoan(Account account)
+        private async Task IncreaseLoan()
         {
-            while (Balance > 0)
+            
+            while (LoanAmount > 0)
             {
-               decimal monthlyInterest = LoanAmount * InterestRate;
-                decimal monthlyPayment = LoanAmount / 12 + monthlyInterest;
+                decimal monthlyInterest = LoanAmount * InterestRate;
+                LoanAmount += monthlyInterest;
 
-
-                Transactions.Add(new TransactionLog(DateTime.Now, $"Ränta: {monthlyInterest}"));
                 await Task.Delay(2000);
-                
-                Balance -= monthlyPayment;
-                
+
+            }
+            if (LoanAmount < 0)
+            {
+                LoanAmount = 0;
             }
         }
-
-
-        //public void RequestLoan()
-        //{
-        //    if (LoanAmount <= Balance * LoanLimit)
-        //    {
-        //        Account.Balance += LoanAmount;  // Lägg till lånet i kontosaldot
-        //        Account.Transactions.Add(new TransactionLog(DateTime.Now, $"Lån: {LoanAmount}{Account.Currency}"));
-        //        Console.WriteLine($"Lånet {LoanAmount} {Account.Currency} beviljat. Nuvarande saldo: {Account.Balance} {Account.Currency}");
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("Lånet ej beviljat! Övestrider låne gräns baserat på saldo.");
-        //    }
-        //}
-
-        //public async Task PayLoan(decimal amount)
-        //{
-        //    var monthlyInterest = LoanAmount * InterestRate;
-        //    var monthlyPayment = LoanAmount / 12 + monthlyInterest;
-
-
-        //    while (LoanAmount > 0)
-        //    {
-
-        //        if (amount > monthlyPayment)
-        //        {
-        //            LoanAmount -= amount;
-        //            Account.Balance -= amount;
-        //            Account.Transactions.Add(new TransactionLog(DateTime.Now, $"Återbetalning: {amount}{Account.Currency}"));
-        //            Console.WriteLine($"Återbetalning: {amount} {Account.Currency}. Nuvarande saldo: {Account.Balance} {Account.Currency}");
-        //        }
-        //        else
-        //        {
-        //            Console.WriteLine("Återbetalning ej betald.");
-        //        }
-        //        await Task.Delay(10000);
-
-        //    }
-
-        //    //if (amount > 0)
-        //    //{
-        //    //    Account.Balance -= amount;
-        //    //    Console.WriteLine($"{amount} {Account.Currency} betald. nuvarande saldo: {Account.Balance} {Account.Currency}");
-        //    //}
-        //    //else
-        //    //{
-        //    //    Console.WriteLine("Återbetalning ej betald.");
-        //    //}
-
-
         public override string ToString()
         {
             return $"Kontonummer: {AccountNumber}, Saldo: {Balance:F} {Currency:F}, Kvar att betala: {LoanAmount:F} {Currency:F}, Ränta: {InterestRate:F}";

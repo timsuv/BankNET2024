@@ -67,7 +67,7 @@ namespace BankNET2024
                 {
                     var tempUser = _users?.FirstOrDefault(user => user.Username == userName && user.Password == password); // Get the user object
                     Console.WriteLine("Logging in....");
-                    await Task.Delay(2000);
+                    await Task.Delay(500);
                     if (tempUser is Admin) // Check if the user is an admin or user
                     {
                         AdminMenu(tempUser);
@@ -91,7 +91,7 @@ namespace BankNET2024
         private async Task UserMenu(IUser user)
         {
             var tempUser = (User)user; // Cast the user object to a User object
-            Menu menu = new(["Withdraw", "Deposit", "Min info", "Transfer", "Mina Transaktioner", "Change Currency", "Create new Accounnt", "Take a loan","Exit"], "Bank menu"); // Create a menu object
+            Menu menu = new(["Withdraw", "Deposit", "Min info", "Transfer", "Mina Transaktioner", "Change Currency", "Create new Accounnt", "Take a loan","Pay a loan","Exit"], "Bank menu"); // Create a menu object
             while (true)
             {
                 switch (menu.MenuRun()) // Run the menu
@@ -132,8 +132,13 @@ namespace BankNET2024
                         break;
                     case 7:
                         tempUser.TakeLoan();
+                        Console.ReadLine();
                         break;
                     case 8:
+                        tempUser.PayLoan();
+                        Console.ReadLine();
+                        break;
+                    case 9:
                         Environment.Exit(0);
                         break;
                     default:

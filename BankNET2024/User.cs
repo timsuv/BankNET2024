@@ -38,6 +38,41 @@ namespace BankNET2024
             }
             return foundAccount;
         }
+        public void CreateNewAccount()
+        {
+            Console.WriteLine("Vad för slags konto vill du skapa?\n1. Vanligt konto\n2. Sparkonto");
+            int.TryParse(Console.ReadLine(), out int choice);
+            if (choice != 1 && choice != 2)
+            { 
+                Console.WriteLine("Ogiltigt val. Ange 1 eller 2.");
+            }
+            else
+            {
+                Console.WriteLine("Hur mycket vill du sätta in på kontot?");
+                decimal.TryParse(Console.ReadLine(), out decimal initialBalance);
+                if (initialBalance > 0 && initialBalance < 1000000)
+                {
+                    string accountNumber = Guid.NewGuid().ToString();
+                    if (choice == 1)
+                    {
+                        Account newAccount = new Account(accountNumber, initialBalance);
+                        Console.WriteLine($"Nu har ett nytt konto skapats med kontonummer {accountNumber} och saldo {initialBalance}.");
+                        this.Accounts.Add(newAccount);
+                    }
+                    else
+                    {
+                        Account newAccount = new SavingAccount(accountNumber, initialBalance);
+                        Console.WriteLine($"Nu har ett nytt sparkonto skapats med kontonummer {accountNumber} och saldo {initialBalance}.");
+                        this.Accounts.Add(newAccount);
+                    }
+
+                }
+                else
+                {
+                    Console.WriteLine("Ogiltig mängd. Ange ett positivt belopp.");
+                }
+            }
+        }
         public void DisplayAccounts()
         {
             //visar infos om alla accounts med bara nummer och balance

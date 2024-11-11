@@ -12,7 +12,6 @@ namespace BankNET2024
         public decimal InterestRate { get; set; }
         public int Duration { get; set; }
         public Account AccountToPay { get; set; }
-        
         public Loan(decimal amount, decimal interestRate, int duration, Account accountToPay)
         {
             Amount = amount;
@@ -20,7 +19,6 @@ namespace BankNET2024
             Duration = duration;
             AccountToPay = accountToPay;
         }
-
 
     }
 }

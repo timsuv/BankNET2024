@@ -44,7 +44,7 @@ namespace BankNET2024
             Transactions.Add(new TransactionLog(DateTime.Now, $"Uttag: {amount:C2}"));
             Console.ReadLine();
         }
-        public decimal Amount()
+        private decimal Amount()
         {
             Console.WriteLine("\nAnge mängden pengar: ");
             if (decimal.TryParse(Console.ReadLine(), out decimal amount))

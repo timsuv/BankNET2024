@@ -11,7 +11,7 @@ namespace BankNET2024
 {
     internal class ManageBank
     {
-        public static List<IUser>? Users { get; set; } =
+        private static List<IUser>? _users =
             [
                 new User("Joel", "A", "O", "D", "ddd", [new Account("Acc10", 10000), new Account("Acc30", 20000)]), // Temp User
                 new User("Tim", "A", "O", "D", "ddd", [new Account("Acc20", 1000), new SavingAccount("Save10", 10000)]), // Temp User
@@ -39,35 +39,36 @@ namespace BankNET2024
             string password;
             string? userName;
 
-            while (attempts != 0)
+            while (attempts != 0) // Loop until the attempts are exhausted
             {
-                Console.Write("Skriv in användarnamn: ");
+                Console.Write("Enter username: "); // Prompt the user to enter the username
                 userName = Console.ReadLine();
 
-                Console.Write("Skriv in lösenordet: ");
-                password = string.Empty; // Återställ lösenordet för varje inmatning
+                Console.Write("Enter password: "); // Prompt the user to enter the password
+                password = string.Empty; // Reset the password for each input
 
-                await Task.Delay(1000); // Simulera en liten fördröjningsprocess
+                 // Simulate a small delay process
 
-                // Läs in tangenttryckningar utan att visa dem
+                // Read key inputs without displaying them
                 while (true)
                 {
-                    var key = Console.ReadKey(intercept: true); // Intercept: true döljer inmatningen
+                    var key = Console.ReadKey(intercept: true); // Intercept: true hides the input
 
-                    if (key.Key == ConsoleKey.Enter) // Avsluta när Enter trycks
+                    if (key.Key == ConsoleKey.Enter) // Exit when Enter is pressed
                         break;
 
-                    password += key.KeyChar; // Lägg till tecknet i lösenordet
-                    Console.Write("*"); // Visa en asterisk istället
+                    password += key.KeyChar; // Add the character to the password
+                    Console.Write("*"); // Display an asterisk instead
                 }
 
-                Console.WriteLine(); // Ny rad efter lösenordet har skrivits in
+                Console.WriteLine(); // New line after the password is entered
 
                 if (ValidLogIn(userName, password))
                 {
-                    var tempUser = Users?.FirstOrDefault(user => user.Username == userName && user.Password == password);
-
-                    if (tempUser is Admin)
+                    var tempUser = _users?.FirstOrDefault(user => user.Username == userName && user.Password == password); // Get the user object
+                    Console.WriteLine("Logging in....");
+                    await Task.Delay(2000);
+                    if (tempUser is Admin) // Check if the user is an admin or user
                     {
                         AdminMenu(tempUser);
                     }
@@ -79,26 +80,26 @@ namespace BankNET2024
                 }
                 else
                 {
-                    attempts--;
-                    Console.WriteLine($"Try again, försök kvar: {attempts}");
+                    attempts--; // Decrement the attempts
+                    Console.WriteLine($"Try again, attempts left: {attempts}");
                 }
                 if (attempts == 0)
                 {
-                    Console.WriteLine("SLUT PÅ FÖRSÖK");
+                    Console.WriteLine("OUT OF ATTEMPTS"); // Display a message when the attempts are exhausted
                     Environment.Exit(0);
                 }
             }
         }
         private async Task UserMenu(IUser user)
         {
-            var tempUser = (User)user;
-            Menu menu = new(["Withdraw", "Deposit", "Min info", "Transfer", "Mina Transaktioner", "Change Currency", "Create account","Exit"], "Bank menu");
+            var tempUser = (User)user; // Cast the user object to a User object
+            Menu menu = new(["Withdraw", "Deposit", "Min info", "Transfer", "Mina Transaktioner", "Change Currency", "Exit"], "Bank menu"); // Create a menu object
             while (true)
             {
-                switch (menu.MenuRun())
+                switch (menu.MenuRun()) // Run the menu
                 {
                     case 0:
-                        var account = tempUser.GetAccount();
+                        var account = tempUser.GetAccount(); // Get the account
                         if (account != null)
                         {
                             account.Withdraw();
@@ -122,16 +123,13 @@ namespace BankNET2024
                         Console.ReadLine();
                         break;
                     case 4:
-                        ShowTransferLog(tempUser.GetAccount());
+                        ShowTransferLog(tempUser?.GetAccount());
                         break;
                     case 5:
-                        tempUser.ChangeCurrency();
+                        ChangeCurrency(tempUser);
                         Console.ReadLine();
                         break;
                     case 6:
-                        tempUser.CreateNewAccount();
-                        break;
-                    case 7:
                         Environment.Exit(0);
                         break;
                         
@@ -142,16 +140,16 @@ namespace BankNET2024
         }
         private void AdminMenu(IUser user)
         {
-            Menu menu = new(["Show all Users", "Delete User"], "Admin menu");
-
+            var admin = (Admin)user;
+            Menu menu = new(["Show all _users", "Delete User", "Change Currency value", "Show dict"], "Admin menu");
             while (true)
             {
                 switch (menu.MenuRun())
                 {
                     case 0:
-                        if (Users != null)
+                        if (_users != null)
                         {
-                            foreach (var u in Users)
+                            foreach (var u in _users)
                             {
                                 Console.WriteLine(u);
                             }
@@ -162,6 +160,17 @@ namespace BankNET2024
                     case 1:
                         DeleteUser();
                         break;
+                    case 2:
+                        admin.ChangeCurrencyRate();
+                        Console.ReadLine();
+                        break;
+                    case 3:
+                        foreach (var u in Admin.GetCurrencyDictionary())
+                        {
+                            Console.WriteLine($"{u.Key}: {u.Value}");
+                        }
+                        Console.ReadLine();
+                        break;
                     default:
                         break;
                 }
@@ -171,11 +180,11 @@ namespace BankNET2024
         {
             Console.WriteLine("Ange användarnamn: ");
             string? userName = Console.ReadLine();
-            var userToDelete = Users?.Find(u => u.Username == userName);
+            var userToDelete = _users?.Find(u => u.Username == userName);
 
             if (userToDelete != null && userToDelete is not Admin)
             {
-                Users?.Remove(userToDelete);
+                _users?.Remove(userToDelete);
                 Console.WriteLine("Användaren togs bort.");
             }
             else
@@ -194,7 +203,7 @@ namespace BankNET2024
             string? inputToAccount = Console.ReadLine();
 
             // Find the user and account that matches the entered account number
-            var toUser = Users?.OfType<User>().FirstOrDefault(u => u.Accounts.Any(a => a.AccountNumber == inputToAccount));
+            var toUser = _users?.OfType<User>().FirstOrDefault(u => u.Accounts.Any(a => a.AccountNumber == inputToAccount));
             var toAccount = toUser?.Accounts.FirstOrDefault(a => a.AccountNumber == inputToAccount);
 
             // Prompt the user to enter the amount of money to transfer
@@ -227,7 +236,6 @@ namespace BankNET2024
                         Console.WriteLine("Något gick fel");
                     }
 
-                    
                     
                 }
                 else
@@ -274,9 +282,9 @@ namespace BankNET2024
         private void GetAllAccountNumbers()
         {
             Console.WriteLine("\nAlla kontonummer över alla användare:");
-            if (Users != null)
+            if (_users != null)
             {
-                foreach (var user in Users)
+                foreach (var user in _users)
                 {
                     if (user is User tempUser)
                     {
@@ -313,13 +321,47 @@ namespace BankNET2024
         }
         private bool ValidLogIn(string? userName, string password)
         {
-            var tempUser = Users?.Find(u => u.Username == userName);
+            var tempUser = _users?.Find(u => u.Username == userName);
             if (tempUser != null && tempUser.Password == password)
             {
                 return true;
             }
             return false;
         }
+        private static void ChangeCurrency(User user)
+        {
+            var acc = user.GetAccount();
 
+            if (acc != null)
+            {
+                Console.WriteLine("Vilken valuta vill du byta till?");
+                var currencyDictionary = Admin.GetCurrencyDictionary();
+                foreach (var currency in currencyDictionary)
+                {
+                    Console.WriteLine(currency.Key);
+                }
+                string? newCurrency = Console.ReadLine().ToUpper();
+                if (currencyDictionary.TryGetValue(newCurrency, out decimal newExchangeRate) &&
+                    currencyDictionary.TryGetValue(acc.Currency, out decimal currentExchangeRate))
+                {
+                    if (currentExchangeRate > newExchangeRate)
+                    {
+                        acc.Balance *= (currentExchangeRate / newExchangeRate);
+                    }
+                    else
+                    {
+                        acc.Balance /= (newExchangeRate / currentExchangeRate);
+                    }
+                    acc.Currency = newCurrency;
+                    Console.WriteLine($"Currency changed to {acc.Currency}. New balance: {acc.Balance:F2}  {acc.Currency:F}");
+                }
+                else
+                {
+                    Console.WriteLine("Ogiltig valuta");
+                }
+
+
+            }
+        }
     }
 }

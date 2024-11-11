@@ -23,7 +23,6 @@ namespace BankNET2024
         {
             Console.WriteLine("Can't withdraw from this account");
         }
-
         // Method to periodically increase the balance with interest
         public async Task IncreaseBalance()
         {

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Console;
 
-namespace BankApp
+namespace BankNET2024
 {
     internal class Menu(List<string> _options, string _menuTitle)
     {

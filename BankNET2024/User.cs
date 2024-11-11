@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BankNET2024
+﻿namespace BankNET2024
 {
-    public class User: IUser
+    public class User : IUser
     {
         public string Username { get; set; }
         public string Password { get; set; }
@@ -14,6 +8,7 @@ namespace BankNET2024
         public string LastName { get; set; }
         public string PhoneNumber { get; set; }
         public List<Account> Accounts { get; set; }
+        //private int _loans = 5;
 
         public User(string username, string password, string firstName, string lastName, string phoneNumber, List<Account> accounts)
         {
@@ -37,12 +32,30 @@ namespace BankNET2024
             }
             return foundAccount;
         }
+        public void ChangeCurrency()
+        {
+            Account? account = GetAccount();
+            if (account != null)
+            {
+                Console.WriteLine("Vilken valuta vill du byta till? (SEK, USD, EUR)");
+                string currency = Console.ReadLine();
+                if (currency == "SEK" || currency == "USD" || currency == "EUR")
+                {
+                    account.Currency = currency;
+                    Console.WriteLine($"Valutan har ändrats till {currency}.");
+                }
+                else
+                {
+                    Console.WriteLine("Ogiltig valuta.");
+                }
+            }
+        }
         public void CreateNewAccount()
         {
             Console.WriteLine("Vad för sorts konto vill du skapa?\n1. Vanligt konto\n2. Sparkonto");
             int.TryParse(Console.ReadLine(), out int choice);
             if (choice != 1 && choice != 2)
-            { 
+            {
                 Console.WriteLine("Ogiltigt val. Ange 1 eller 2.");
             }
             else
@@ -63,7 +76,7 @@ namespace BankNET2024
                         Account newAccount = new SavingAccount(accountNumber, initialBalance);
                         Console.WriteLine($"Nu har ett nytt sparkonto skapats med kontonummer {accountNumber} och saldo {initialBalance}.");
                         this.Accounts.Add(newAccount);
-                    } 
+                    }
 
                 }
                 else
@@ -83,45 +96,10 @@ namespace BankNET2024
                 }
             }
         }
-        public void ChangeCurrency()
-        {
-            var acc = GetAccount();
-
-            if (acc != null)
-            {
-                Console.WriteLine("Vilken valuta vill du byta till?");
-                var currencyDictionary = Admin.GetCurrencyDictionary();
-                foreach (var currency in currencyDictionary)
-                {
-                    Console.WriteLine(currency.Key);
-                }
-                string? newCurrency = Console.ReadLine().ToUpper();
-                if (currencyDictionary.TryGetValue(newCurrency, out decimal newExchangeRate) &&
-                    currencyDictionary.TryGetValue(acc.Currency, out decimal currentExchangeRate))
-                {
-                    if (currentExchangeRate > newExchangeRate)
-                    {
-                        acc.Balance *= (currentExchangeRate / newExchangeRate);
-                    }
-                    else
-                    {
-                        acc.Balance /= (newExchangeRate / currentExchangeRate);
-                    }
-                    acc.Currency = newCurrency;
-                    Console.WriteLine($"Currency changed to {acc.Currency}. New balance: {acc.Balance:F2}  {acc.Currency:F}");
-                }
-                else
-                {
-                    Console.WriteLine("Ogiltig valuta");
-                }
-
-
-            }
-        }
         public override string ToString()
         {
-           return $"Användarnamn: {Username}, Lösenord: ****, Förnamn: {FirstName}, Efternamn: {LastName}, " +
-           $"Telefonnummer: {PhoneNumber}";
+           return $"Username: {Username}, Password: ****, FirstName: {FirstName}, LastName: {LastName}, " +
+           $"PhoneNumber: {PhoneNumber}";
         }
     }
 }

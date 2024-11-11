@@ -12,9 +12,9 @@ namespace BankNET2024
     {
         private static List<IUser>? _users =
         [
-                new User("Joel", "A", "O", "D", "ddd", [new Account("Acc10", 10000), new Account("Acc30", 20000)]), // Temp User
-                new User("Tim", "A", "O", "D", "ddd", [new Account("Acc20", 1000), new SavingAccount("Save10", 10000)]), // Temp User
-                new Admin("Ossy", "C", "Ossy", "A") // Admin
+                new User("User1", "1", "Sussie", "Ekeberg", "0761772149", [new Account("Acc10", 10000), new Account("Acc30", 20000)]), // Temp User
+                new User("User2", "2", "Lars", "Larsson", "0731235647", [new Account("Acc20", 1000), new SavingAccount("Save10", 10000)]), // Temp User
+                new Admin("Admin", "3", "Ossy", "A") // Admin
         ];
         public ManageBank()
         {
@@ -40,7 +40,7 @@ namespace BankNET2024
 
             while (attempts != 0) // Loop until the attempts are exhausted
             {
-                Console.Write("Enter username: "); // Prompt the user to enter the username
+                Console.Write("Enter use: "); // Prompt the user to enter the username
                 userName = Console.ReadLine();
 
                 Console.Write("Enter password: "); // Prompt the user to enter the password

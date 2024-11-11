@@ -40,7 +40,7 @@ namespace BankNET2024
         }
         public void CreateNewAccount()
         {
-            Console.WriteLine("Vad för slags konto vill du skapa?\n1. Vanligt konto\n2. Sparkonto");
+            Console.WriteLine("Vad för sorts konto vill du skapa?\n1. Vanligt konto\n2. Sparkonto");
             int.TryParse(Console.ReadLine(), out int choice);
             if (choice != 1 && choice != 2)
             { 
@@ -86,8 +86,8 @@ namespace BankNET2024
         }
         public override string ToString()
         {
-           return $"Username: {Username}, Password: ****, FirstName: {FirstName}, LastName: {LastName}, " +
-           $"PhoneNumber: {PhoneNumber}";
+           return $"Användarnamn: {Username}, Lösenord: ****, Förnamn: {FirstName}, Efternamn: {LastName}, " +
+           $"Telefonnummer: {PhoneNumber}";
         }
     }
 }

@@ -21,7 +21,7 @@ namespace BankNET2024
         // Override the Withdraw method to prevent withdrawals from the savings account
         public override void Withdraw()
         {
-            Console.WriteLine("Can't withdraw from this account");
+            Console.WriteLine("Du kan inte ta ut från sparkonto.");
         }
 
         // Method to periodically increase the balance with interest
@@ -36,7 +36,7 @@ namespace BankNET2024
                 Balance += intrest;
 
                 // Log the interest addition transaction
-                Transactions.Add(new TransactionLog(DateTime.Now, $"Interest added: {intrest}"));
+                Transactions.Add(new TransactionLog(DateTime.Now, $"Ränta: {intrest}"));
 
                 // Wait for 10 seconds before adding interest again
                 await Task.Delay(10000);

@@ -41,7 +41,7 @@ namespace BankNET2024
 
             while (attempts != 0) // Loop until the attempts are exhausted
             {
-                Console.Write("Enter username: "); // Prompt the user to enter the username
+                Console.Write("Enter username : "); // Prompt the user to enter the username
                 userName = Console.ReadLine();
 
                 Console.Write("Enter password: "); // Prompt the user to enter the password

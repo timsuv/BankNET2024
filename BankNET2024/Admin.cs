@@ -58,11 +58,11 @@ namespace BankNET2024
                 if (_currencyDictionary.ContainsKey(currency))
                 {
                     _currencyDictionary[currency] = rate;
-                    Console.WriteLine($"The exchange rate for {currency} has been updated to {rate}.");
+                    Console.WriteLine($"Växelkursen för {currency} har ändrats till {rate}.");
                 }
                 else
                 {
-                    Console.WriteLine($"Currency '{currency}' not found in the currency dictionary.");
+                    Console.WriteLine($"Valutan'{currency}' finns inte bland valutorna.");
                 }
             }
             else
@@ -74,7 +74,7 @@ namespace BankNET2024
 
         public override string ToString()
         {
-            return $"Admin Info: Username: {Username}, First Name: {FirstName}, Last Name: {LastName}, Employee ID: {EmployeeID}";
+            return $"Admin Info: Användarnamn: {Username}, Förnamn: {FirstName}, Efternamn: {LastName}, Employee ID: {EmployeeID}";
         }
     }
 }

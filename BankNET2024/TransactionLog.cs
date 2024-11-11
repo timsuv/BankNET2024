@@ -22,7 +22,7 @@ namespace BankNET2024
         }
         public override string ToString()
         {
-            return $"Date: {TransferTime}, Description: {Log}";
+            return $"Datum: {TransferTime}, Beskrivning: {Log}";
         }
 
     }

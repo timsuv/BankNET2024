@@ -52,7 +52,7 @@ namespace BankNET2024
         }
         public override string ToString()
         {
-            return $"Account number: {AccountNumber}, BAlance {Balance:F} {Currency:F}";
+            return $"Kontonummer: {AccountNumber}, Saldo: {Balance:F} {Currency:F}";
         }
        
         

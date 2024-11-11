@@ -29,8 +29,8 @@ namespace BankNET2024
             if (amount > 0)
             {
                 Balance += amount;
-                Console.WriteLine($"Mängden pengar inlagd: {amount:C2} på {AccountNumber}") ;
-                Transactions.Add(new TransactionLog(DateTime.Now, $"Insättning: {amount:C2}"));
+                Console.WriteLine($"Mängden pengar inlagd: {amount} {Currency} på {AccountNumber}") ;
+                Transactions.Add(new TransactionLog(DateTime.Now, $"Insättning: {amount} {Currency}"));
                 Console.ReadLine();
             }
         }

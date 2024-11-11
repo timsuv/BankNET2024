@@ -34,7 +34,7 @@ namespace BankNET2024
             Balance -= amount;
 
             Console.WriteLine($"Mängden pengar uttagen: {amount:C2} från {AccountNumber}");
-            Transactions.Add(new TransactionLog(DateTime.Now, $"Uttag: {amount:C2}"));
+            Transactions.Add(new TransactionLog(DateTime.Now, $"Uttag: {amount}{Currency}"));
             Console.ReadLine();
         }
         private decimal Amount()

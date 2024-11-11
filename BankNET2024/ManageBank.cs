@@ -131,15 +131,11 @@ namespace BankNET2024
                         tempUser.CreateNewAccount();
                         break;
                     case 7:
-                        //tempUser.TakeLoan();
+                        tempUser.TakeLoan();
                         break;
                     case 8:
                         Environment.Exit(0);
                         break;
-                    case 7:
-                        
-
-                        
                     default:
                         break;
                 }
@@ -269,14 +265,7 @@ namespace BankNET2024
                 {
                     // Omvandla beloppet från källkontots valuta till målkontots valuta
                     decimal convertedAmount;
-                    if (fromExchangeRate > toExchangeRate)
-                    {
-                        convertedAmount = amount * (fromExchangeRate / toExchangeRate);
-                    }
-                    else
-                    {
-                        convertedAmount = amount / (toExchangeRate / fromExchangeRate);
-                    }
+                    convertedAmount = amount * (fromExchangeRate / toExchangeRate);
                     return convertedAmount;
                 }
             }
@@ -326,7 +315,7 @@ namespace BankNET2024
             }
             Console.ReadKey();
         }
-        private bool ValidLogIn(string? userName, string password)
+        private static bool ValidLogIn(string? userName, string password)
         {
             var tempUser = _users?.Find(u => u.Username == userName);
             if (tempUser != null && tempUser.Password == password)

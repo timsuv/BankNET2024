@@ -55,17 +55,16 @@ namespace BankNET2024
                     string accountNumber = Guid.NewGuid().ToString(); //Använder guid för att skapa ett unikt kontonummer
                     if (choice == 1) //Ifall användaren valt vanligt konto
                     {
-                        Account newAccount = new Account(accountNumber, initialBalance);
+                        Account newAccount = new(accountNumber, initialBalance);
                         Console.WriteLine($"Nu har ett nytt konto skapats med kontonummer {accountNumber} och saldo {initialBalance}.");
-                        this.Accounts.Add(newAccount);//Lägger till kontot i kontolistan i User
+                        Accounts.Add(newAccount);//Lägger till kontot i kontolistan i User
                     }
                     else//Annars skapas ett sparkonto
                     {
                         Account newAccount = new SavingAccount(accountNumber, initialBalance);
                         Console.WriteLine($"Nu har ett nytt sparkonto skapats med kontonummer {accountNumber} och saldo {initialBalance}.");
-                        this.Accounts.Add(newAccount);
+                        Accounts.Add(newAccount);
                     } 
-
                 }
                 else
                 {
@@ -111,6 +110,19 @@ namespace BankNET2024
 
 
             }
+        }
+        public void TakeLoan()
+        {
+            Console.WriteLine("Hur mycket vill du låna: ");
+            if ( decimal.TryParse(Console.ReadLine(), out decimal loanAmout))
+            {
+                if(loanAmout <= Accounts.Sum(a => a.Balance) * 5)
+                {
+                    LoanAccount loanAccount = new(Guid.NewGuid().ToString(), 0, loanAmout);
+                    Accounts.Add(loanAccount);
+                }
+            }
+
         }
         public override string ToString()
         {

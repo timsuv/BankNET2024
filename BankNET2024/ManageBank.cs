@@ -135,6 +135,9 @@ namespace BankNET2024
                     case 7:
                         Environment.Exit(0);
                         break;
+                    case 7:
+                        
+
                         
                     default:
                         break;

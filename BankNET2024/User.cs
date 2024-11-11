@@ -27,6 +27,7 @@ namespace BankNET2024
         }
         public Account? GetAccount()
         {
+            DisplayAccounts();
             Console.WriteLine("Vilket konto: ");
             string? account = Console.ReadLine();
 
@@ -90,8 +91,8 @@ namespace BankNET2024
             if (acc != null)
             {
                 Console.WriteLine("Vilken valuta vill du byta till?");
-                var currencyDictionary = Admin.GetCurrencyDictionary();
-                foreach (var currency in currencyDictionary)
+                var currencyDictionary = Admin.GetCurrencyDictionary(); // hämtar valutorna från Admin
+                foreach (var currency in currencyDictionary) // skriver ut valutorna
                 {
                     Console.WriteLine(currency.Key);
                 }
@@ -99,16 +100,9 @@ namespace BankNET2024
                 if (currencyDictionary.TryGetValue(newCurrency, out decimal newExchangeRate) &&
                     currencyDictionary.TryGetValue(acc.Currency, out decimal currentExchangeRate))
                 {
-                    if (currentExchangeRate > newExchangeRate)
-                    {
-                        acc.Balance *= (currentExchangeRate / newExchangeRate);
-                    }
-                    else
-                    {
-                        acc.Balance /= (newExchangeRate / currentExchangeRate);
-                    }
+                    acc.Balance *= (currentExchangeRate / newExchangeRate);
                     acc.Currency = newCurrency;
-                    Console.WriteLine($"Currency changed to {acc.Currency}. New balance: {acc.Balance:F2}  {acc.Currency:F}");
+                    Console.WriteLine($"Currency changed to {acc.Currency}. New balance: {acc.Balance:F2}  {acc.Currency:F2}");
                 }
                 else
                 {

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace BankNET2024
 {
+    // Lägg till utloggning
     internal class ManageBank
     {
         private static List<IUser>? _users =
@@ -82,12 +83,10 @@ namespace BankNET2024
                     attempts--; // Decrement the attempts
                     Console.WriteLine($"Try again, attempts left: {attempts}");
                 }
-                if (attempts == 0)
-                {
-                    Console.WriteLine("OUT OF ATTEMPTS"); // Display a message when the attempts are exhausted
-                    Environment.Exit(0);
-                }
+
             }
+            Console.WriteLine("OUT OF ATTEMPTS"); // Display a message when the attempts are exhausted
+            Environment.Exit(0);
         }
         private async Task UserMenu(IUser user)
         {
@@ -131,8 +130,10 @@ namespace BankNET2024
                     case 6:
                         tempUser.CreateNewAccount();
                         break;
-
                     case 7:
+                        //tempUser.TakeLoan();
+                        break;
+                    case 8:
                         Environment.Exit(0);
                         break;
                         

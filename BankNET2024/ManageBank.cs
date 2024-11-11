@@ -92,7 +92,7 @@ namespace BankNET2024
         private async Task UserMenu(IUser user)
         {
             var tempUser = (User)user; // Cast the user object to a User object
-            Menu menu = new(["Withdraw", "Deposit", "Min info", "Transfer", "Mina Transaktioner", "Change Currency", "Create new Accounnt","Exit"], "Bank menu"); // Create a menu object
+            Menu menu = new(["Withdraw", "Deposit", "Min info", "Transfer", "Mina Transaktioner", "Change Currency", "Create new Accounnt", "Take a loan","Exit"], "Bank menu"); // Create a menu object
             while (true)
             {
                 switch (menu.MenuRun()) // Run the menu

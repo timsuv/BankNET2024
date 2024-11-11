@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BankNET2024
 {
-    internal class Loan
+    public class Loan
     {
         public decimal Amount { get; set; }
         public decimal InterestRate { get; set; }

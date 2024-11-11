@@ -14,7 +14,6 @@ namespace BankNET2024
         public string LastName { get; set; }
         public string PhoneNumber { get; set; }
         public List<Account> Accounts { get; set; }
-        //private int _loans = 5;
 
         public User(string username, string password, string firstName, string lastName, string phoneNumber, List<Account> accounts)
         {
@@ -64,7 +63,7 @@ namespace BankNET2024
                         Account newAccount = new SavingAccount(accountNumber, initialBalance);
                         Console.WriteLine($"Nu har ett nytt sparkonto skapats med kontonummer {accountNumber} och saldo {initialBalance}.");
                         this.Accounts.Add(newAccount);
-                    }
+                    } 
 
                 }
                 else
@@ -82,6 +81,41 @@ namespace BankNET2024
                 {
                     Console.WriteLine(account);
                 }
+            }
+        }
+        public void ChangeCurrency()
+        {
+            var acc = GetAccount();
+
+            if (acc != null)
+            {
+                Console.WriteLine("Vilken valuta vill du byta till?");
+                var currencyDictionary = Admin.GetCurrencyDictionary();
+                foreach (var currency in currencyDictionary)
+                {
+                    Console.WriteLine(currency.Key);
+                }
+                string? newCurrency = Console.ReadLine().ToUpper();
+                if (currencyDictionary.TryGetValue(newCurrency, out decimal newExchangeRate) &&
+                    currencyDictionary.TryGetValue(acc.Currency, out decimal currentExchangeRate))
+                {
+                    if (currentExchangeRate > newExchangeRate)
+                    {
+                        acc.Balance *= (currentExchangeRate / newExchangeRate);
+                    }
+                    else
+                    {
+                        acc.Balance /= (newExchangeRate / currentExchangeRate);
+                    }
+                    acc.Currency = newCurrency;
+                    Console.WriteLine($"Currency changed to {acc.Currency}. New balance: {acc.Balance:F2}  {acc.Currency:F}");
+                }
+                else
+                {
+                    Console.WriteLine("Ogiltig valuta");
+                }
+
+
             }
         }
         public override string ToString()

@@ -1,5 +1,4 @@
-﻿using BankApp;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata;
@@ -12,11 +11,11 @@ namespace BankNET2024
     internal class ManageBank
     {
         private static List<IUser>? _users =
-            [
+        [
                 new User("Joel", "A", "O", "D", "ddd", [new Account("Acc10", 10000), new Account("Acc30", 20000)]), // Temp User
                 new User("Tim", "A", "O", "D", "ddd", [new Account("Acc20", 1000), new SavingAccount("Save10", 10000)]), // Temp User
                 new Admin("Ossy", "C", "Ossy", "A") // Admin
-            ];
+        ];
         public ManageBank()
         {
             string bankArt = @"
@@ -93,7 +92,7 @@ namespace BankNET2024
         private async Task UserMenu(IUser user)
         {
             var tempUser = (User)user; // Cast the user object to a User object
-            Menu menu = new(["Withdraw", "Deposit", "Min info", "Transfer", "Mina Transaktioner", "Change Currency", "Exit"], "Bank menu"); // Create a menu object
+            Menu menu = new(["Withdraw", "Deposit", "Min info", "Transfer", "Mina Transaktioner", "Change Currency", "Create new Accounnt","Exit"], "Bank menu"); // Create a menu object
             while (true)
             {
                 switch (menu.MenuRun()) // Run the menu
@@ -126,10 +125,14 @@ namespace BankNET2024
                         ShowTransferLog(tempUser?.GetAccount());
                         break;
                     case 5:
-                        ChangeCurrency(tempUser);
+                        tempUser.ChangeCurrency();
                         Console.ReadLine();
                         break;
                     case 6:
+                        tempUser.CreateNewAccount();
+                        break;
+
+                    case 7:
                         Environment.Exit(0);
                         break;
                         
@@ -328,40 +331,6 @@ namespace BankNET2024
             }
             return false;
         }
-        private static void ChangeCurrency(User user)
-        {
-            var acc = user.GetAccount();
-
-            if (acc != null)
-            {
-                Console.WriteLine("Vilken valuta vill du byta till?");
-                var currencyDictionary = Admin.GetCurrencyDictionary();
-                foreach (var currency in currencyDictionary)
-                {
-                    Console.WriteLine(currency.Key);
-                }
-                string? newCurrency = Console.ReadLine().ToUpper();
-                if (currencyDictionary.TryGetValue(newCurrency, out decimal newExchangeRate) &&
-                    currencyDictionary.TryGetValue(acc.Currency, out decimal currentExchangeRate))
-                {
-                    if (currentExchangeRate > newExchangeRate)
-                    {
-                        acc.Balance *= (currentExchangeRate / newExchangeRate);
-                    }
-                    else
-                    {
-                        acc.Balance /= (newExchangeRate / currentExchangeRate);
-                    }
-                    acc.Currency = newCurrency;
-                    Console.WriteLine($"Currency changed to {acc.Currency}. New balance: {acc.Balance:F2}  {acc.Currency:F}");
-                }
-                else
-                {
-                    Console.WriteLine("Ogiltig valuta");
-                }
-
-
-            }
-        }
+        
     }
 }

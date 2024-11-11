@@ -23,7 +23,6 @@ namespace BankNET2024
         {
             Console.WriteLine("Du kan inte ta ut från sparkonto.");
         }
-
         // Method to periodically increase the balance with interest
         public async Task IncreaseBalance()
         {

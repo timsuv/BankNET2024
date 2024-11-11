@@ -1,6 +1,12 @@
-﻿namespace BankNET2024
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BankNET2024
 {
-    public class User : IUser
+    public class User: IUser
     {
         public string Username { get; set; }
         public string Password { get; set; }
@@ -8,7 +14,6 @@
         public string LastName { get; set; }
         public string PhoneNumber { get; set; }
         public List<Account> Accounts { get; set; }
-        //private int _loans = 5;
 
         public User(string username, string password, string firstName, string lastName, string phoneNumber, List<Account> accounts)
         {
@@ -22,6 +27,7 @@
         }
         public Account? GetAccount()
         {
+            DisplayAccounts();
             Console.WriteLine("Vilket konto: ");
             string? account = Console.ReadLine();
 
@@ -32,56 +38,38 @@
             }
             return foundAccount;
         }
-        public void ChangeCurrency()
-        {
-            Account? account = GetAccount();
-            if (account != null)
-            {
-                Console.WriteLine("Vilken valuta vill du byta till? (SEK, USD, EUR)");
-                string currency = Console.ReadLine();
-                if (currency == "SEK" || currency == "USD" || currency == "EUR")
-                {
-                    account.Currency = currency;
-                    Console.WriteLine($"Valutan har ändrats till {currency}.");
-                }
-                else
-                {
-                    Console.WriteLine("Ogiltig valuta.");
-                }
-            }
-        }
         public void CreateNewAccount()
         {
             Console.WriteLine("Vad för sorts konto vill du skapa?\n1. Vanligt konto\n2. Sparkonto");
             int.TryParse(Console.ReadLine(), out int choice);
-            if (choice != 1 && choice != 2)
-            {
+            if (choice != 1 && choice != 2) //Kollar så att användaren valt något av alternativen
+            { 
                 Console.WriteLine("Ogiltigt val. Ange 1 eller 2.");
             }
             else
             {
                 Console.WriteLine("Hur mycket vill du sätta in på kontot?");
                 decimal.TryParse(Console.ReadLine(), out decimal initialBalance);
-                if (initialBalance > 0 && initialBalance < 1000000)
+                if (initialBalance > 0 && initialBalance < 1000000) //Sätter en maxgräns på insättningsbeloppet
                 {
-                    string accountNumber = Guid.NewGuid().ToString();
-                    if (choice == 1)
+                    string accountNumber = Guid.NewGuid().ToString(); //Använder guid för att skapa ett unikt kontonummer
+                    if (choice == 1) //Ifall användaren valt vanligt konto
                     {
                         Account newAccount = new Account(accountNumber, initialBalance);
                         Console.WriteLine($"Nu har ett nytt konto skapats med kontonummer {accountNumber} och saldo {initialBalance}.");
-                        this.Accounts.Add(newAccount);
+                        this.Accounts.Add(newAccount);//Lägger till kontot i kontolistan i User
                     }
-                    else
+                    else//Annars skapas ett sparkonto
                     {
                         Account newAccount = new SavingAccount(accountNumber, initialBalance);
                         Console.WriteLine($"Nu har ett nytt sparkonto skapats med kontonummer {accountNumber} och saldo {initialBalance}.");
                         this.Accounts.Add(newAccount);
-                    }
+                    } 
 
                 }
                 else
                 {
-                    Console.WriteLine("Ogiltig mängd. Ange ett positivt belopp.");
+                    Console.WriteLine("Ogiltigt belopp. Insättningen måste vara mellan 0 och 1 000 000.");
                 }
             }
         }
@@ -96,10 +84,38 @@
                 }
             }
         }
+        public void ChangeCurrency()
+        {
+            var acc = GetAccount();
+
+            if (acc != null)
+            {
+                Console.WriteLine("Vilken valuta vill du byta till?");
+                var currencyDictionary = Admin.GetCurrencyDictionary(); // hämtar valutorna från Admin
+                foreach (var currency in currencyDictionary) // skriver ut valutorna
+                {
+                    Console.WriteLine(currency.Key);
+                }
+                string? newCurrency = Console.ReadLine().ToUpper();
+                if (currencyDictionary.TryGetValue(newCurrency, out decimal newExchangeRate) &&
+                    currencyDictionary.TryGetValue(acc.Currency, out decimal currentExchangeRate))
+                {
+                    acc.Balance *= (currentExchangeRate / newExchangeRate);
+                    acc.Currency = newCurrency;
+                    Console.WriteLine($"Currency changed to {acc.Currency}. New balance: {acc.Balance:F2}  {acc.Currency:F2}");
+                }
+                else
+                {
+                    Console.WriteLine("Ogiltig valuta");
+                }
+
+
+            }
+        }
         public override string ToString()
         {
-           return $"Username: {Username}, Password: ****, FirstName: {FirstName}, LastName: {LastName}, " +
-           $"PhoneNumber: {PhoneNumber}";
+           return $"Användarnamn: {Username}, Lösenord: ****, Förnamn: {FirstName}, Efternamn: {LastName}, " +
+           $"Telefonnummer: {PhoneNumber}";
         }
     }
 }

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace BankNET2024
 {
+    // Lägg till utloggning
     internal class ManageBank
     {
         private static List<IUser>? _users =
@@ -82,17 +83,15 @@ namespace BankNET2024
                     attempts--; // Decrement the attempts
                     Console.WriteLine($"Try again, attempts left: {attempts}");
                 }
-                if (attempts == 0)
-                {
-                    Console.WriteLine("OUT OF ATTEMPTS"); // Display a message when the attempts are exhausted
-                    Environment.Exit(0);
-                }
+
             }
+            Console.WriteLine("OUT OF ATTEMPTS"); // Display a message when the attempts are exhausted
+            Environment.Exit(0);
         }
         private async Task UserMenu(IUser user)
         {
             var tempUser = (User)user; // Cast the user object to a User object
-            Menu menu = new(["Withdraw", "Deposit", "Min info", "Transfer", "Mina Transaktioner", "Change Currency", "Create new Accounnt","Exit"], "Bank menu"); // Create a menu object
+            Menu menu = new(["Withdraw", "Deposit", "Min info", "Transfer", "Mina Transaktioner", "Change Currency", "Create new Accounnt", "Take a loan","Exit"], "Bank menu"); // Create a menu object
             while (true)
             {
                 switch (menu.MenuRun()) // Run the menu
@@ -131,10 +130,15 @@ namespace BankNET2024
                     case 6:
                         tempUser.CreateNewAccount();
                         break;
-
                     case 7:
+                        //tempUser.TakeLoan();
+                        break;
+                    case 8:
                         Environment.Exit(0);
                         break;
+                    case 7:
+                        
+
                         
                     default:
                         break;

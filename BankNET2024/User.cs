@@ -41,7 +41,7 @@ namespace BankNET2024
         {
             Console.WriteLine("Vad för sorts konto vill du skapa?\n1. Vanligt konto\n2. Sparkonto");
             int.TryParse(Console.ReadLine(), out int choice);
-            if (choice != 1 && choice != 2)
+            if (choice != 1 && choice != 2) //Kollar så att användaren valt något av alternativen
             { 
                 Console.WriteLine("Ogiltigt val. Ange 1 eller 2.");
             }
@@ -49,16 +49,16 @@ namespace BankNET2024
             {
                 Console.WriteLine("Hur mycket vill du sätta in på kontot?");
                 decimal.TryParse(Console.ReadLine(), out decimal initialBalance);
-                if (initialBalance > 0 && initialBalance < 1000000)
+                if (initialBalance > 0 && initialBalance < 1000000) //Sätter en maxgräns på insättningsbeloppet
                 {
-                    string accountNumber = Guid.NewGuid().ToString();
-                    if (choice == 1)
+                    string accountNumber = Guid.NewGuid().ToString(); //Använder guid för att skapa ett unikt kontonummer
+                    if (choice == 1) //Ifall användaren valt vanligt konto
                     {
                         Account newAccount = new Account(accountNumber, initialBalance);
                         Console.WriteLine($"Nu har ett nytt konto skapats med kontonummer {accountNumber} och saldo {initialBalance}.");
-                        this.Accounts.Add(newAccount);
+                        this.Accounts.Add(newAccount);//Lägger till kontot i kontolistan i User
                     }
-                    else
+                    else//Annars skapas ett sparkonto
                     {
                         Account newAccount = new SavingAccount(accountNumber, initialBalance);
                         Console.WriteLine($"Nu har ett nytt sparkonto skapats med kontonummer {accountNumber} och saldo {initialBalance}.");
@@ -68,7 +68,7 @@ namespace BankNET2024
                 }
                 else
                 {
-                    Console.WriteLine("Ogiltig mängd. Ange ett positivt belopp.");
+                    Console.WriteLine("Ogiltigt belopp. Insättningen måste vara mellan 0 och 1 000 000.");
                 }
             }
         }

@@ -51,7 +51,7 @@ namespace BankNET2024
         public void ChangeCurrencyRate()
         {
             Console.WriteLine("Vilken valuta vill du ändra värdet på?");
-            string currency = Console.ReadLine().ToUpper();
+            string currency = Console.ReadLine().ToUpper();    
             Console.WriteLine("Ange det nya värdet: ");
             if (decimal.TryParse(Console.ReadLine(), out decimal rate))
             {

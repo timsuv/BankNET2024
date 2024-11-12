@@ -101,7 +101,7 @@ namespace BankNET2024
                 {
                     acc.Balance *= (currentExchangeRate / newExchangeRate);
                     acc.Currency = newCurrency;
-                    Console.WriteLine($"Currency changed to {acc.Currency}. New balance: {acc.Balance:F2}  {acc.Currency:F2}");
+                    Console.WriteLine($"Valuta ändrad till {acc.Currency}. Nytt Saldo: {acc.Balance:F2}  {acc.Currency:F2}");
                 }
                 else
                 {

@@ -82,3 +82,10 @@ Beroende på om användaren är en vanlig User eller en Admin, presenteras olika
 User kan skapa konton som LoanAccount och SavingAccount och hantera sina konton genom metoder som insättning, uttag, och överföringar.
 Alla transaktioner (t.ex. uttag, insättningar, och överföringar) loggas genom TransactionLog.
 Admin kan hantera och ta bort användare samt ändra valutakurser genom menyn.
+
+Projektet gjort av Ossy, Tim, Axel, Sami, Joshua
+Exemple på användare
+AnvändarNamn : User1
+lösenord: 1
+AnvändarNamn: Admin
+Lösenord: 3

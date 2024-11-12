@@ -32,7 +32,7 @@ namespace BankNET2024
             Console.WriteLine("\nAnge vilket konto du vill hitta: ");
             string? account = Console.ReadLine();
 
-            var foundAccount = Accounts.FirstOrDefault(a => a.AccountNumber == account);
+            var foundAccount = Accounts.FirstOrDefault(a => a.AccountNumber.ToLower() == account.ToLower());
             if (foundAccount == null)
             {
                 Console.WriteLine("Konto hittades inte.");

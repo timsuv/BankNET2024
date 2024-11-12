@@ -117,6 +117,7 @@ namespace BankNET2024
                         if (account != null)
                         {
                             account.Withdraw();
+                            Console.ReadLine();
                         }
                         else
                         {
@@ -126,6 +127,7 @@ namespace BankNET2024
                     case 1:
                         var tempAcc = tempUser.GetAccount();
                         tempAcc?.Deposit();
+                        Console.ReadLine();
                         break;
                     case 2:
                         Console.WriteLine(tempUser);

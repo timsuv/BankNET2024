@@ -154,8 +154,6 @@ namespace BankNET2024
         }
         public void PayLoan()
         {
-            
-
             var loanAccount = Accounts.FirstOrDefault(a => a is LoanAccount);
             if (loanAccount != null && loanAccount is LoanAccount account)
             {
@@ -169,8 +167,10 @@ namespace BankNET2024
                         {
                             payAcc.Balance -= payment;
                             account.LoanAmount -= payment;
-
-                            Console.WriteLine(
+                            if(account.LoanAmount == 0)
+                                Console.WriteLine("Du har betalat av hela ditt lån");
+                            else
+                                Console.WriteLine(
                                 $"Du har betalat {payment} och har nu {account.LoanAmount} kvar att betala.");
                         }
                         else if (payment > payAcc.Balance)

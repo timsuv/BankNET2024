@@ -9,17 +9,12 @@ using System.Transactions;
 
 namespace BankNET2024
 {
-    public class Account
+    public class Account(string accountNumber, decimal balance, string currency = "SEK")
     {
-        public Account(string accountNumber, decimal balance)
-        {
-            AccountNumber = accountNumber;
-            Balance = balance;
-            Transactions = [];
-        }
-        public string AccountNumber { get; set; }
-        public decimal Balance { get; set; }
-        public List<TransactionLog> Transactions { get; set; }
+        public string AccountNumber { get; set; } = accountNumber;
+        public decimal Balance { get; set; } = balance;
+        public string Currency { get; set; } = currency;
+        public List<TransactionLog> Transactions { get; set; } = [];
         public void Deposit()
         {
             decimal amount = Amount();
@@ -27,22 +22,22 @@ namespace BankNET2024
             if (amount > 0)
             {
                 Balance += amount;
-                Console.WriteLine($"Mängden pengar inlagd: {amount:C2} på {AccountNumber}") ;
-                Transactions.Add(new TransactionLog(DateTime.Now, $"Insättning: {amount:C2}"));
+                Console.WriteLine($"Mängden pengar inlagd: {amount:F} {Currency} på {AccountNumber}") ;
+                Transactions.Add(new TransactionLog(DateTime.Now, $"Insättning: {amount}"));
                 Console.ReadLine();
             }
         }
-        public void Withdraw()
+        public virtual void Withdraw()
         {
             decimal amount = Amount();
 
             Balance -= amount;
 
-            Console.WriteLine($"Mängden pengar uttagen: {amount:C2} från {AccountNumber}");
-            Transactions.Add(new TransactionLog(DateTime.Now, $"Uttag: {amount:C2}"));
+            Console.WriteLine($"Mängden pengar uttagen: {amount:F} {Currency} från {AccountNumber}");
+            Transactions.Add(new TransactionLog(DateTime.Now, $"Uttag: {amount}{Currency}"));
             Console.ReadLine();
         }
-        public decimal Amount()
+        private decimal Amount()
         {
             Console.WriteLine("\nAnge mängden pengar: ");
             if (decimal.TryParse(Console.ReadLine(), out decimal amount))
@@ -57,7 +52,9 @@ namespace BankNET2024
         }
         public override string ToString()
         {
-            return $"Account number: {AccountNumber}, Balance {Balance}";
+            return $"Kontonummer: {AccountNumber}, Saldo: {Balance:F} {Currency}";
         }
+       
+        
     }
 }

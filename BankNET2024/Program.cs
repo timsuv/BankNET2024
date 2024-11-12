@@ -4,10 +4,9 @@
     {
         static async Task Main(string[] args)
         {
-            ManageBank manageBank = new();
+            ManageBank manageBank = new(); // Create a new instance of the ManageBank class
 
-            await manageBank.LogIn();
-        
+            await manageBank.LogIn(); // Call the LogIn method of the ManageBank class
         }
     }
 }

@@ -1,9 +1,9 @@
-﻿using BankApp;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,13 +11,13 @@ namespace BankNET2024
 {
     internal class ManageBank
     {
-        public static List<IUser>? Users { get; set; } =
-            [
-                new User("Joel", "A", "O", "D", "ddd", [new Account("Acc10", 10000), new Account("Acc30", 20000)]), // Temp User
-                new User("Tim", "A", "O", "D", "ddd", [new Account("Acc20", 1000), new SavingAccount("Save001", 10000)]), // Temp User
-                new Admin("Ossy", "C", "Ossy", "A") // Admin
-            ];
-        public ManageBank()
+        private static List<IUser>? _users =
+        [
+                new User("User1", "1", "Sussie", "Ekeberg", "0761772149", [new Account("Acc10", 10000), new Account("Acc30", 20000)]), // Temp User
+                new User("User2", "2", "Lars", "Larsson", "0731235647", [new Account("Acc20", 1000), new SavingAccount("Save10", 10000)]), // Temp User
+                new Admin("Admin", "3", "Ossy", "A") // Admin
+        ];
+        public void Bankart()
         {
             string bankArt = @"
     ███▄▄▄▄      ▄████████     ███     ▀█████████▄     ▄████████ ███▄▄▄▄      ▄█   ▄█▄ 
@@ -33,43 +33,57 @@ namespace BankNET2024
 
             Console.WriteLine(bankArt);
         }
+        public ManageBank()
+        {
+            Bankart();
+        }
+        static string MaskInput()
+        {
+            SecureString password = new SecureString();
+            ConsoleKeyInfo key;
+            do
+            {
+                key = Console.ReadKey(true);
+                if (!char.IsControl(key.KeyChar))
+                {
+                    password.AppendChar(key.KeyChar);
+                    Console.Write("*");
+                }
+                else if (key.Key == ConsoleKey.Backspace && password.Length > 0)
+                {
+                    password.RemoveAt(password.Length - 1);
+                    Console.Write("\b \b");
+                }
+            } while (key.Key != ConsoleKey.Enter);
+            return new System.Net.NetworkCredential(string.Empty, password).Password;
+
+        }
         public async Task LogIn()
         {
             var attempts = 3;
-            string password;
             string? userName;
 
-            while (attempts != 0)
+            while (attempts != 0) // Loop until the attempts are exhausted
             {
-                Console.Write("Skriv in användarnamn: ");
+                Console.Write("Ange användarnamn: "); // Prompt the user to enter the username
                 userName = Console.ReadLine();
 
-                Console.Write("Skriv in lösenordet: ");
-                password = string.Empty; // Återställ lösenordet för varje inmatning
+                Console.Write("Ange lösenordet: "); // Prompt the user to enter the password
+                string password = MaskInput();
 
-                await Task.Delay(1000); // Simulera en liten fördröjningsprocess
 
-                // Läs in tangenttryckningar utan att visa dem
-                while (true)
-                {
-                    var key = Console.ReadKey(intercept: true); // Intercept: true döljer inmatningen
 
-                    if (key.Key == ConsoleKey.Enter) // Avsluta när Enter trycks
-                        break;
-
-                    password += key.KeyChar; // Lägg till tecknet i lösenordet
-                    Console.Write("*"); // Visa en asterisk istället
-                }
-
-                Console.WriteLine(); // Ny rad efter lösenordet har skrivits in
+                Console.WriteLine(); // New line after the password is entered
 
                 if (ValidLogIn(userName, password))
                 {
-                    var tempUser = Users?.FirstOrDefault(user => user.Username == userName && user.Password == password);
 
-                    if (tempUser is Admin)
+                    var tempUser = _users?.FirstOrDefault(user => user.Username == userName && user.Password == password); // Get the user object
+                    Console.WriteLine("Loggning pågår ....");
+                    await Task.Delay(2000);
+                    if (tempUser is Admin) // Check if the user is an admin or user
                     {
-                        AdminMenu(tempUser);
+                        await AdminMenu(tempUser);
                     }
                     else if (tempUser is User)
                     {
@@ -79,26 +93,27 @@ namespace BankNET2024
                 }
                 else
                 {
-                    attempts--;
-                    Console.WriteLine($"Try again, försök kvar: {attempts}");
+                    Console.Clear();
+                    Bankart();
+                    attempts--; // Decrement the attempts
+                    Console.WriteLine($"Försök igen, försök kvar: {attempts}");
                 }
-                if (attempts == 0)
-                {
-                    Console.WriteLine("SLUT PÅ FÖRSÖK");
-                    Environment.Exit(0);
-                }
+
             }
+            Console.WriteLine("INGA FÖRSÖK KVAR"); // Display a message when the attempts are exhausted
+            Environment.Exit(0);
         }
+
         private async Task UserMenu(IUser user)
         {
-            var tempUser = (User)user;
-            Menu menu = new(["Withdraw", "Deposit", "Min info", "Transfer", "Mina Transaktioner","Skapa en konto med utländsk valuta", "Exit"], "Bank menu");
+            var tempUser = (User)user; // Cast the user object to a User object
+            Menu menu = new(["Uttag", "Insättning", "Min info", "Överförning", "Mina Transaktioner", "Byta valuta", "Skapa ny konto", "Ta ett lån", "Betala lånet", "Logga ut", "Avsluta"], "Bank meny"); // Create a menu object
             while (true)
             {
-                switch (menu.MenuRun())
+                switch (menu.MenuRun()) // Run the menu
                 {
                     case 0:
-                        var account = tempUser.GetAccount();
+                        var account = tempUser.GetAccount(); // Get the account
                         if (account != null)
                         {
                             account.Withdraw();
@@ -110,10 +125,7 @@ namespace BankNET2024
                         break;
                     case 1:
                         var tempAcc = tempUser.GetAccount();
-                        if (tempAcc != null)
-                        {
-                            tempAcc.Deposit();
-                        }
+                        tempAcc?.Deposit();
                         break;
                     case 2:
                         Console.WriteLine(tempUser);
@@ -125,13 +137,26 @@ namespace BankNET2024
                         Console.ReadLine();
                         break;
                     case 4:
-                        ShowTransferLog(tempUser.GetAccount());
+                        ShowTransferLog(tempUser?.GetAccount());
                         break;
                     case 5:
-                        CreateAccountCurrency(tempUser);
+                        tempUser.ChangeCurrency();
                         Console.ReadLine();
                         break;
                     case 6:
+                        tempUser.CreateNewAccount();
+                        break;
+                    case 7:
+                        tempUser.TakeLoan();
+                        Console.ReadLine();
+                        break;
+                    case 8:
+                        tempUser.PayLoan();
+                        break;
+                    case 9:
+                        await LogOut(user);
+                        break;
+                    case 10:
                         Environment.Exit(0);
                         break;
                     default:
@@ -139,18 +164,18 @@ namespace BankNET2024
                 }
             }
         }
-        private void AdminMenu(IUser user)
+        private async Task AdminMenu(IUser user)
         {
-            Menu menu = new(["Show all Users", "Delete User"], "Admin menu");
-
+            var admin = (Admin)user;
+            Menu menu = new(["Visa alla användrare", "Radera enn användare", "Byta valutas värde", "Visa alla valutor", "Logga ut"], "Admin meny");
             while (true)
             {
                 switch (menu.MenuRun())
                 {
                     case 0:
-                        if (Users != null)
+                        if (_users != null)
                         {
-                            foreach (var u in Users)
+                            foreach (var u in _users)
                             {
                                 Console.WriteLine(u);
                             }
@@ -161,6 +186,21 @@ namespace BankNET2024
                     case 1:
                         DeleteUser();
                         break;
+                    case 2:
+                        admin.ChangeCurrencyRate();
+                        Console.ReadLine();
+                        break;
+                    case 3:
+                        foreach (var u in Admin.GetCurrencyDictionary())
+                        {
+                            Console.WriteLine($"{u.Key}: {u.Value}");
+                        }
+                        Console.ReadLine();
+                        break;
+                    case 4:
+                        await LogOut(admin);
+                        return;
+
                     default:
                         break;
                 }
@@ -170,11 +210,11 @@ namespace BankNET2024
         {
             Console.WriteLine("Ange användarnamn: ");
             string? userName = Console.ReadLine();
-            var userToDelete = Users?.Find(u => u.Username == userName);
+            var userToDelete = _users?.Find(u => u.Username == userName);
 
             if (userToDelete != null && userToDelete is not Admin)
             {
-                Users?.Remove(userToDelete);
+                _users?.Remove(userToDelete);
                 Console.WriteLine("Användaren togs bort.");
             }
             else
@@ -189,37 +229,49 @@ namespace BankNET2024
             var fromAccount = user.GetAccount();
 
             // Prompt the user to enter the account number to which the money will be transferred
-            Console.WriteLine("Till vilket konto: ");
+            Console.WriteLine("Ange kontot du vill skicka pengarna till: ");
             string? inputToAccount = Console.ReadLine();
 
             // Find the user and account that matches the entered account number
-            var toUser = Users?.OfType<User>().FirstOrDefault(u => u.Accounts.Any(a => a.AccountNumber == inputToAccount));
+            var toUser = _users?.OfType<User>().FirstOrDefault(u => u.Accounts.Any(a => a.AccountNumber == inputToAccount));
             var toAccount = toUser?.Accounts.FirstOrDefault(a => a.AccountNumber == inputToAccount);
 
             // Prompt the user to enter the amount of money to transfer
-            Console.WriteLine("Hur mycket pengar: ");
+            Console.WriteLine("Ange summan du vill skicka: ");
             if (decimal.TryParse(Console.ReadLine(), out decimal amount))
             {
-                // Check if the destination account exists and if the amount is less than the balance of the destination account
-                if (toAccount != null && amount < toAccount.Balance)
+                // Check if the destination account exists and if the amount is less than the balance of the source account
+                if (toAccount != null && fromAccount != null && amount <= fromAccount.Balance)
                 {
-                    toAccount.Balance += amount;
+                    // Convert the amount to the destination account's currency
+                    decimal convertedAmount = ChangeTransferAmount(amount, fromAccount, toAccount);
+
+                    // Perform the transfer
+                    toAccount.Balance += convertedAmount;
                     fromAccount.Balance -= amount;
+                    if (convertedAmount != 0)
+                    {
+                        Console.WriteLine($"Omvandlad summa {convertedAmount}");
+                        Console.WriteLine("Skickar...");
+                        await Task.Delay(1000); // Simulate a delay
+                                                // Log the transfer details
+                        Console.WriteLine($"Pengarna skickades från {fromAccount.AccountNumber}, Ny balans: {fromAccount.Balance:F} {fromAccount.Currency} till {toAccount.AccountNumber}\n");
 
-                    Console.WriteLine("Skickar...");
-                    await Task.Delay(1000); // Simulate a delay
+                        // Add transaction logs to both accounts
+                        fromAccount.Transactions.Add(new TransactionLog(DateTime.Now, $"Överföring: {amount:F} {fromAccount.Currency} till {toAccount.AccountNumber}"));
+                        toAccount.Transactions.Add(new TransactionLog(DateTime.Now, $"Överföring: {convertedAmount:F} {toAccount.Currency} från {fromAccount.AccountNumber}"));
+                    }
+                    else
+                    {
+                        Console.WriteLine("Något gick fel");
+                    }
 
-                    // Log the transfer details
-                    Console.WriteLine($"Pengarna skickdes från {fromAccount.AccountNumber} ny balans; {fromAccount.Balance} till {toAccount.AccountNumber} ny balans {toAccount.Balance}\n");
-
-                    // Add transaction logs to both accounts
-                    fromAccount.Transactions.Add(new TransactionLog(DateTime.Now, $"Överföring: {amount} till {toAccount.AccountNumber}"));
-                    toAccount.Transactions.Add(new TransactionLog(DateTime.Now, $"Överföring: {amount} från {fromAccount.AccountNumber}"));
+                    
                 }
                 else
                 {
                     // Display an error message if something went wrong
-                    Console.WriteLine("Nåt gick fel");
+                    Console.WriteLine("Något gick fel");
                 }
             }
             else
@@ -228,66 +280,61 @@ namespace BankNET2024
                 Console.WriteLine("Ogiltigt belopp.");
             }
         }
+        private decimal ChangeTransferAmount(decimal amount, Account fromAccount, Account toAccount)
+        {
+            var currencyDictionary = Admin.GetCurrencyDictionary();
+
+            try 
+            {
+                // Kontrollera om valutorna finns i valutadictionaryn
+                if (currencyDictionary.TryGetValue(fromAccount.Currency, out decimal fromExchangeRate) &&
+                currencyDictionary.TryGetValue(toAccount.Currency, out decimal toExchangeRate))
+                {
+                    // Omvandla beloppet från källkontots valuta till målkontots valuta
+                    decimal convertedAmount;
+                    if (fromExchangeRate > toExchangeRate)
+                    {
+                        convertedAmount = amount * (fromExchangeRate / toExchangeRate);
+                    }
+                    else
+                    {
+                        convertedAmount = amount / (toExchangeRate / fromExchangeRate);
+                    }
+                    return convertedAmount;
+                }
+            }
+            catch (Exception ex) 
+            {
+                Console.WriteLine($"Något gick fel {ex.Message}");
+            }
+            return 0;
+        }
         private void GetAllAccountNumbers()
         {
             Console.WriteLine("\nAlla kontonummer över alla användare:");
-            if (Users != null)
+            if (_users != null)
             {
-                foreach (var user in Users)
+                foreach (var user in _users)
                 {
                     if (user is User tempUser)
                     {
                         foreach (var account in tempUser.Accounts)
                         {
-                            Console.WriteLine($"Användare: {tempUser.Username}, Kontonummer: {account.AccountNumber}, Amount {account.Balance}");
+                            Console.WriteLine($"Användare: {tempUser.Username}, Kontonummer: {account.AccountNumber}, Belopp {account.Balance}");
                         }
                     }
                 }
             }
         }
-        public void CreateAccountCurrency(User user)
+
+        private static void ShowTransferLog(Account account)
         {
-            Console.WriteLine("Välj valutan du skulle ville ha på ditt nya konton");
-
-            int i = 1;
-            foreach (Currency currency in Enum.GetValues(typeof(Currency)))
+            if (account != null)
             {
-                Console.WriteLine($"{i}. {currency}");
-                i++;
-            }
-
-            Console.Write("Skriv in numret för den valuta du vill välja: ");
-            if (int.TryParse(Console.ReadLine(), out int choice) && choice > 0 && choice <= Enum.GetValues(typeof(Currency)).Length)
-            {
-                Currency selectedCurrency = (Currency)(choice - 1); 
-
-                Console.WriteLine("Vilken summa vill du ha?");
-                if (decimal.TryParse(Console.ReadLine(), out decimal amount))
+                Console.WriteLine($"Visar transaktionshistorik för konto {account.AccountNumber}");
+                if (account.Transactions != null && account.Transactions.Count > 0)
                 {
-                    ForeignAccount foreignAccount = new ForeignAccount("For", amount, selectedCurrency);
-                    Console.WriteLine($"Ditt nya konto har skapats med valutan {selectedCurrency} och summan {amount:C2}.");
-                    user.Accounts.Add(new Account("For", amount));
-                    
-                }
-                else
-                {
-                    Console.WriteLine("Felaktig inmatning. Försök igen.");
-                }
-            }
-            else
-            {
-                Console.WriteLine("Ogiltigt val. Försök igen.");
-            }
-
-        }
-        private static void ShowTransferLog(Account account1)
-        {
-            if (account1 != null)
-            {
-                Console.WriteLine($"Visar transaktionshistorik för konto {account1.AccountNumber}");
-                if (account1.Transactions != null && account1.Transactions.Count > 0)
-                {
-                    foreach (var transaction in account1.Transactions)
+                    foreach (var transaction in account.Transactions)
                     {
                         transaction.DisplayTransactionHistory();
                     }
@@ -305,14 +352,24 @@ namespace BankNET2024
         }
         private bool ValidLogIn(string? userName, string password)
         {
-            var tempUser = Users?.Find(u => u.Username == userName);
+            var tempUser = _users?.Find(u => u.Username == userName);
             if (tempUser != null && tempUser.Password == password)
             {
                 return true;
             }
             return false;
         }
+        public async Task LogOut(IUser? user)
+        {
+            Console.WriteLine("Loggar ut...");
+            await Task.Delay(2000);
+            Console.Clear();
+            Bankart();
+            user = null;
 
+
+            await LogIn();
+        }
 
     }
 }

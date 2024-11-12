@@ -19,10 +19,10 @@ namespace BankNET2024
         }
         public decimal LoanAmount { get; set; }
         public decimal InterestRate { get; set; }
-     
+
         private async Task IncreaseLoan()
         {
-            
+
             while (LoanAmount > 0)
             {
                 decimal monthlyInterest = LoanAmount * InterestRate;

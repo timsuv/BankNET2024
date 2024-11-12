@@ -114,8 +114,11 @@ namespace BankNET2024
         }
         public void TakeLoan()
         {
-            // Check if a loan account already exists
-            if (Accounts.Any(a => a is LoanAccount))
+            // Find an existing loan account, if any
+            var existingLoanAccount = Accounts.OfType<LoanAccount>().FirstOrDefault();
+
+            // Check if a loan account already exists and has a non-zero loan amount
+            if (existingLoanAccount != null && existingLoanAccount.LoanAmount > 0)
             {
                 Console.WriteLine("Du har redan ett lån.");
                 return;
@@ -139,8 +142,8 @@ namespace BankNET2024
             {
                 Console.WriteLine("Ogiltig inmatning.");
             }
-         
         }
+
         public void PayLoan()
         {
             var payAcc = GetAccount();

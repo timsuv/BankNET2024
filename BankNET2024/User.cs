@@ -117,21 +117,31 @@ namespace BankNET2024
             // Find an existing loan account, if any
             var existingLoanAccount = Accounts.OfType<LoanAccount>().FirstOrDefault();
 
-            // Check if a loan account already exists and has a non-zero loan amount
-            if (existingLoanAccount != null && existingLoanAccount.LoanAmount > 0)
-            {
-                Console.WriteLine("Du har redan ett lån.");
-                return;
-            }
-
             Console.WriteLine("Hur mycket vill du låna: ");
             if (decimal.TryParse(Console.ReadLine(), out decimal loanAmount))
             {
                 if (loanAmount <= Accounts.Sum(a => a.Balance) * 5 && loanAmount > 0)
                 {
-                    LoanAccount loanAccount = new(Guid.NewGuid().ToString(), 0, loanAmount);
-                    Accounts.Add(loanAccount);
-                    Console.WriteLine($"Lånekonto skapat med lånebelopp {loanAmount}.");
+                    if (existingLoanAccount != null)
+                    {
+                        // If an existing loan account is found and the loan amount is 0, update it
+                        if (existingLoanAccount.LoanAmount == 0)
+                        {
+                            existingLoanAccount.LoanAmount = loanAmount;
+                            Console.WriteLine($"Befintligt lånekonto uppdaterat med lånebelopp {loanAmount}.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Du har redan ett lån som inte är betalt.");
+                        }
+                    }
+                    else
+                    {
+                        // Create a new loan account if none exists
+                        LoanAccount newLoanAccount = new(Guid.NewGuid().ToString(), 0, loanAmount);
+                        Accounts.Add(newLoanAccount);
+                        Console.WriteLine($"Nytt lånekonto skapat med lånebelopp {loanAmount}.");
+                    }
                 }
                 else
                 {
@@ -143,6 +153,7 @@ namespace BankNET2024
                 Console.WriteLine("Ogiltig inmatning.");
             }
         }
+
 
         public void PayLoan()
         {

@@ -155,7 +155,7 @@ namespace BankNET2024
         public void PayLoan()
         {
             var loanAccount = Accounts.FirstOrDefault(a => a is LoanAccount);
-            if (loanAccount != null && loanAccount is LoanAccount account)
+            if (loanAccount != null && loanAccount is LoanAccount account && account.LoanAmount > 0)
             {
                 var payAcc = GetAccount();
                 if (payAcc != null)
@@ -167,11 +167,10 @@ namespace BankNET2024
                         {
                             payAcc.Balance -= payment;
                             account.LoanAmount -= payment;
-                            if(account.LoanAmount == 0)
+                            if (account.LoanAmount == 0)
                                 Console.WriteLine("Du har betalat av hela ditt lån");
                             else
-                                Console.WriteLine(
-                                $"Du har betalat {payment} och har nu {account.LoanAmount} kvar att betala.");
+                                Console.WriteLine($"Du har betalat {payment} och har nu {account.LoanAmount} kvar att betala.");
                         }
                         else if (payment > payAcc.Balance)
                         {
@@ -185,12 +184,13 @@ namespace BankNET2024
                         Console.ReadKey();
                     }
                 }
-                else
-                {
-                    Console.WriteLine("Du har inget lån att betala.");
-                }
+            }
+            else
+            {
+                Console.WriteLine("Du har inget lån att betala.");
             }
         }
+
         public override string ToString()
         {
            return $"Förnamn: {FirstName}, Efternamn: {LastName}, " +

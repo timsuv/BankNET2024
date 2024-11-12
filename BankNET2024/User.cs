@@ -101,7 +101,7 @@ namespace BankNET2024
                 {
                     acc.Balance *= (currentExchangeRate / newExchangeRate);
                     acc.Currency = newCurrency;
-                    Console.WriteLine($"Valuta ändrad till {acc.Currency}. Nytt Saldo: {acc.Balance:F2}  {acc.Currency:F2}");
+                    Console.WriteLine($"Currency changed to {acc.Currency}. New balance: {acc.Balance:F2}  {acc.Currency:F2}");
                 }
                 else
                 {
@@ -113,65 +113,49 @@ namespace BankNET2024
         }
         public void TakeLoan()
         {
-            // Check if a loan account already exists
-            if (Accounts.Any(a => a is LoanAccount))
-            {
-                Console.WriteLine("Du har redan ett lån.");
-                return;
-            }
-
             Console.WriteLine("Hur mycket vill du låna: ");
             if (decimal.TryParse(Console.ReadLine(), out decimal loanAmount))
             {
-                if (loanAmount <= Accounts.Sum(a => a.Balance) * 5 && loanAmount > 0)
+                if (loanAmount <= Accounts.Sum(a => a.Balance) * 5)
                 {
-                    LoanAccount loanAccount = new(Guid.NewGuid().ToString(), 0, loanAmount);
-                    Accounts.Add(loanAccount);
-                    Console.WriteLine($"Lånekonto skapat med lånebelopp {loanAmount}.");
+                    Console.WriteLine("Ange kontonummer som ska betala av lånet:");
+                    string? accountNumber = Console.ReadLine();
+
+                    var account = Accounts.FirstOrDefault(a => a.AccountNumber == accountNumber);
+                    if (account != null)
+                    {
+                        account.Balance += loanAmount;
+                        Console.WriteLine($"Lånet på {loanAmount} har lagts till på konto {account.AccountNumber}. Ny balans: {account.Balance}");
+                        account.Transactions.Add(new TransactionLog(DateTime.Now, $"Lån: {loanAmount} {account.Currency}"));
+                    }
+                    else
+                    {
+                        Console.WriteLine("Kontot hittades inte.");
+                    }
                 }
                 else
                 {
-                    Console.WriteLine("Ogiltigt lånebelopp.");
+                    Console.WriteLine("Lånebeloppet överstiger den tillåtna gränsen.");
                 }
             }
             else
             {
-                Console.WriteLine("Ogiltig inmatning.");
+                Console.WriteLine("Ogiltigt belopp.");
             }
-         
+            Console.ReadLine(); // Wait for user input before returning to the menu
         }
-        public void PayLoan()
-        {
-            var payAcc = GetAccount();
 
-            var loanAccount = Accounts.FirstOrDefault(a => a is LoanAccount);
-            if (loanAccount != null && loanAccount is LoanAccount account)
-            {
-                Console.WriteLine("Hur mycket vill du betala: ");
-                if (decimal.TryParse(Console.ReadLine(), out decimal payment))
-                {
-                    if (payment <= payAcc.Balance)
-                    {
-                        payAcc.Balance -= payment;
-                        account.LoanAmount -= payment;
-
-                        Console.WriteLine($"Du har betalat {payment} och har nu {account.LoanAmount} kvar att betala.");
-                  
-                        
-                    }
-                   
-                }
-            }
-            else
-            {
-                Console.WriteLine("Du har inget lån att betala.");
-            }
-            
-        }
         public override string ToString()
         {
-           return $"Användarnamn: {Username}, Lösenord: ****, Förnamn: {FirstName}, Efternamn: {LastName}, " +
-           $"Telefonnummer: {PhoneNumber}";
+            var accountInfo = new StringBuilder();
+            accountInfo.AppendLine($"Användarnamn: {Username}, Lösenord: ****, Förnamn: {FirstName}, Efternamn: {LastName}, Telefonnummer: {PhoneNumber}");
+            accountInfo.AppendLine("Konton:");
+            foreach (var account in Accounts)
+            {
+                accountInfo.AppendLine(account.ToString());
+            }
+            return accountInfo.ToString();
         }
+
     }
 }

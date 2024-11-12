@@ -40,10 +40,10 @@ namespace BankNET2024
 
             while (attempts != 0) // Loop until the attempts are exhausted
             {
-                Console.Write("Enter use: "); // Prompt the user to enter the username
+                Console.Write("Ange Inlogg: "); // Prompt the user to enter the username
                 userName = Console.ReadLine();
 
-                Console.Write("Enter password: "); // Prompt the user to enter the password
+                Console.Write("Ange Lösenord: "); // Prompt the user to enter the password
                 password = string.Empty; // Reset the password for each input
 
                  // Simulate a small delay process
@@ -65,7 +65,7 @@ namespace BankNET2024
                 if (ValidLogIn(userName, password))
                 {
                     var tempUser = _users?.FirstOrDefault(user => user.Username == userName && user.Password == password); // Get the user object
-                    Console.WriteLine("Logging in....");
+                    Console.WriteLine("Loggar in....");
                     await Task.Delay(2000);
                     if (tempUser is Admin) // Check if the user is an admin or user
                     {
@@ -80,11 +80,11 @@ namespace BankNET2024
                 else
                 {
                     attempts--; // Decrement the attempts
-                    Console.WriteLine($"Try again, attempts left: {attempts}");
+                    Console.WriteLine($"Försök igen, försök kvar: {attempts}");
                 }
                 if (attempts == 0)
                 {
-                    Console.WriteLine("OUT OF ATTEMPTS"); // Display a message when the attempts are exhausted
+                    Console.WriteLine("INGA FLER FÖRSÖK"); // Display a message when the attempts are exhausted
                     Environment.Exit(0);
                 }
             }
@@ -94,7 +94,7 @@ namespace BankNET2024
             var tempUser = (User)user; // Cast the user object to a User object
             
             
-            Menu menu = new(["Withdraw", "Deposit", "Min info", "Transfer", "Mina Transaktioner", "Change Currency", "Create new Accounnt","Exit"], "Bank menu"); // Create a menu object
+            Menu menu = new(["Uttag", "Insättning", "Min info", "Överföring", "Mina Transaktioner", "Valuta växling", "Skapa nytt konto","Exit"], "Bank menu"); // Create a menu object
             while (true)
             {
                 switch (menu.MenuRun()) // Run the menu
@@ -150,7 +150,7 @@ namespace BankNET2024
         private void AdminMenu(IUser user)
         {
             var admin = (Admin)user;
-            Menu menu = new(["Show all _users", "Delete User", "Change Currency value", "Show dict"], "Admin menu");
+            Menu menu = new(["Visa alla användare", "Radera användare", "Ändra valutakurs", "Visa valuta"], "Admin menu");
             while (true)
             {
                 switch (menu.MenuRun())
@@ -299,7 +299,7 @@ namespace BankNET2024
                     {
                         foreach (var account in tempUser.Accounts)
                         {
-                            Console.WriteLine($"Användare: {tempUser.Username}, Kontonummer: {account.AccountNumber}, Amount {account.Balance}");
+                            Console.WriteLine($"Användare: {tempUser.Username}, Kontonummer: {account.AccountNumber}, Belopp {account.Balance}");
                         }
                     }
                 }

@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace BankNET2024
 {
-    // Lägg till utloggning
     internal class ManageBank
     {
         private static List<IUser>? _users =
@@ -67,7 +66,7 @@ namespace BankNET2024
                 {
                     var tempUser = _users?.FirstOrDefault(user => user.Username == userName && user.Password == password); // Get the user object
                     Console.WriteLine("Logging in....");
-                    await Task.Delay(500);
+                    await Task.Delay(2000);
                     if (tempUser is Admin) // Check if the user is an admin or user
                     {
                         AdminMenu(tempUser);
@@ -83,15 +82,19 @@ namespace BankNET2024
                     attempts--; // Decrement the attempts
                     Console.WriteLine($"Try again, attempts left: {attempts}");
                 }
-
+                if (attempts == 0)
+                {
+                    Console.WriteLine("OUT OF ATTEMPTS"); // Display a message when the attempts are exhausted
+                    Environment.Exit(0);
+                }
             }
-            Console.WriteLine("OUT OF ATTEMPTS"); // Display a message when the attempts are exhausted
-            Environment.Exit(0);
         }
         private async Task UserMenu(IUser user)
         {
             var tempUser = (User)user; // Cast the user object to a User object
-            Menu menu = new(["Withdraw", "Deposit", "Min info", "Transfer", "Mina Transaktioner", "Change Currency", "Create new Accounnt", "Take a loan","Pay a loan","Exit"], "Bank menu"); // Create a menu object
+            
+            
+            Menu menu = new(["Withdraw", "Deposit", "Min info", "Transfer", "Mina Transaktioner", "Change Currency", "Create new Accounnt","Exit"], "Bank menu"); // Create a menu object
             while (true)
             {
                 switch (menu.MenuRun()) // Run the menu
@@ -131,16 +134,14 @@ namespace BankNET2024
                         tempUser.CreateNewAccount();
                         break;
                     case 7:
-                        tempUser.TakeLoan();
-                        Console.ReadLine();
+                        Loan loan = new();
                         break;
                     case 8:
-                        tempUser.PayLoan();
-                        Console.ReadLine();
-                        break;
-                    case 9:
                         Environment.Exit(0);
                         break;
+                        
+
+                        
                     default:
                         break;
                 }
@@ -270,7 +271,14 @@ namespace BankNET2024
                 {
                     // Omvandla beloppet från källkontots valuta till målkontots valuta
                     decimal convertedAmount;
-                    convertedAmount = amount * (fromExchangeRate / toExchangeRate);
+                    if (fromExchangeRate > toExchangeRate)
+                    {
+                        convertedAmount = amount * (fromExchangeRate / toExchangeRate);
+                    }
+                    else
+                    {
+                        convertedAmount = amount / (toExchangeRate / fromExchangeRate);
+                    }
                     return convertedAmount;
                 }
             }
@@ -320,7 +328,7 @@ namespace BankNET2024
             }
             Console.ReadKey();
         }
-        private static bool ValidLogIn(string? userName, string password)
+        private bool ValidLogIn(string? userName, string password)
         {
             var tempUser = _users?.Find(u => u.Username == userName);
             if (tempUser != null && tempUser.Password == password)

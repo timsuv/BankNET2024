@@ -156,6 +156,8 @@ namespace BankNET2024
                         account.LoanAmount -= payment;
 
                         Console.WriteLine($"Du har betalat {payment} och har nu {account.LoanAmount} kvar att betala.");
+                  
+                        
                     }
                    
                 }
@@ -164,6 +166,7 @@ namespace BankNET2024
             {
                 Console.WriteLine("Du har inget lån att betala.");
             }
+            
         }
         public override string ToString()
         {

@@ -18,19 +18,7 @@ namespace BankNET2024
         ];
         public ManageBank()
         {
-            string bankArt = @"
-    ███▄▄▄▄      ▄████████     ███     ▀█████████▄     ▄████████ ███▄▄▄▄      ▄█   ▄█▄ 
-    ███▀▀▀██▄   ███    ███ ▀█████████▄   ███    ███   ███    ███ ███▀▀▀██▄   ███ ▄███▀ 
-    ███   ███   ███    █▀     ▀███▀▀██   ███    ███   ███    ███ ███   ███   ███▐██▀   
-    ███   ███  ▄███▄▄▄         ███   ▀  ▄███▄▄▄██▀    ███    ███ ███   ███  ▄█████▀    
-    ███   ███ ▀▀███▀▀▀         ███     ▀▀███▀▀▀██▄  ▀███████████ ███   ███ ▀▀█████▄    
-    ███   ███   ███    █▄      ███       ███    ██▄   ███    ███ ███   ███   ███▐██▄   
-    ███   ███   ███    ███     ███       ███    ███   ███    ███ ███   ███   ███ ▀███▄ 
-     ▀█   █▀    ██████████    ▄████▀   ▄█████████▀    ███    █▀   ▀█   █▀    ███   ▀█▀ 
-                                                                             ▀         
-    ";
-
-            Console.WriteLine(bankArt);
+            Console.WriteLine(BankArt());
         }
         public async Task LogIn()
         {
@@ -45,9 +33,6 @@ namespace BankNET2024
 
                 Console.Write("Ange Lösenord: "); // Prompt the user to enter the password
                 password = string.Empty; // Reset the password for each input
-
-                 // Simulate a small delay process
-
                 // Read key inputs without displaying them
                 while (true)
                 {
@@ -94,7 +79,7 @@ namespace BankNET2024
             var tempUser = (User)user; // Cast the user object to a User object
             
             
-            Menu menu = new(["Uttag", "Insättning", "Min info", "Överföring", "Mina Transaktioner", "Valuta växling", "Skapa nytt konto","Exit"], "Bank menu"); // Create a menu object
+            Menu menu = new(["Uttag", "Insättning", "Min info", "Överföring", "Mina Transaktioner", "Valuta växling", "Skapa nytt konto", "Ta lån", "Betala lån","Exit", "Log out"], "Bank menu"); // Create a menu object
             while (true)
             {
                 switch (menu.MenuRun()) // Run the menu
@@ -134,23 +119,26 @@ namespace BankNET2024
                         tempUser.CreateNewAccount();
                         break;
                     case 7:
-                        Loan loan = new();
+                        tempUser.TakeLoan();
                         break;
                     case 8:
+                        tempUser.PayLoan();
+                        break;
+                    case 9:
                         Environment.Exit(0);
                         break;
-                        
-
-                        
+                    case 10:
+                        await LogOut(user);
+                        break;
                     default:
                         break;
                 }
             }
         }
-        private void AdminMenu(IUser user)
+        private async Task AdminMenu(IUser user)
         {
             var admin = (Admin)user;
-            Menu menu = new(["Visa alla användare", "Radera användare", "Ändra valutakurs", "Visa valuta"], "Admin menu");
+            Menu menu = new(["Visa alla användare", "Radera användare", "Ändra valutakurs", "Visa valuta", "Log out"], "Admin menu");
             while (true)
             {
                 switch (menu.MenuRun())
@@ -179,6 +167,9 @@ namespace BankNET2024
                             Console.WriteLine($"{u.Key}: {u.Value}");
                         }
                         Console.ReadLine();
+                        break;
+                    case 4:
+                        await LogOut(user);
                         break;
                     default:
                         break;
@@ -337,6 +328,32 @@ namespace BankNET2024
             }
             return false;
         }
-        
+        public async Task LogOut(IUser? user)
+        {
+            Console.WriteLine("Logging out...");
+            await Task.Delay(2000);
+            Console.Clear();
+
+            Console.WriteLine(BankArt());
+            user = null;
+
+
+            await LogIn();
+        }
+        private string BankArt()
+        {
+            string bankArt = @"
+    ███▄▄▄▄      ▄████████     ███     ▀█████████▄     ▄████████ ███▄▄▄▄      ▄█   ▄█▄ 
+    ███▀▀▀██▄   ███    ███ ▀█████████▄   ███    ███   ███    ███ ███▀▀▀██▄   ███ ▄███▀ 
+    ███   ███   ███    █▀     ▀███▀▀██   ███    ███   ███    ███ ███   ███   ███▐██▀   
+    ███   ███  ▄███▄▄▄         ███   ▀  ▄███▄▄▄██▀    ███    ███ ███   ███  ▄█████▀    
+    ███   ███ ▀▀███▀▀▀         ███     ▀▀███▀▀▀██▄  ▀███████████ ███   ███ ▀▀█████▄    
+    ███   ███   ███    █▄      ███       ███    ██▄   ███    ███ ███   ███   ███▐██▄   
+    ███   ███   ███    ███     ███       ███    ███   ███    ███ ███   ███   ███ ▀███▄ 
+     ▀█   █▀    ██████████    ▄████▀   ▄█████████▀    ███    █▀   ▀█   █▀    ███   ▀█▀ 
+                                                                             ▀         
+    ";
+            return bankArt;
+        }
     }
 }

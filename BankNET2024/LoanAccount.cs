@@ -25,10 +25,9 @@ namespace BankNET2024
             
             while (LoanAmount > 0)
             {
+                await Task.Delay(30000);
                 decimal monthlyInterest = LoanAmount * InterestRate;
                 LoanAmount += monthlyInterest;
-
-                await Task.Delay(10000);
 
             }
             if (LoanAmount < 0)

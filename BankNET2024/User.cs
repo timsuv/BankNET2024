@@ -193,7 +193,7 @@ namespace BankNET2024
         }
         public override string ToString()
         {
-           return $"Användarnamn: {Username}, Lösenord: ****, Förnamn: {FirstName}, Efternamn: {LastName}, " +
+           return $"Förnamn: {FirstName}, Efternamn: {LastName}, " +
            $"Telefonnummer: {PhoneNumber}";
         }
     }

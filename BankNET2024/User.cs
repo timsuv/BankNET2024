@@ -28,7 +28,7 @@ namespace BankNET2024
         public Account? GetAccount()
         {
             DisplayAccounts();
-            Console.WriteLine("Vilket konto: ");
+            Console.WriteLine("Ange vilket konto du vill hitta: ");
             string? account = Console.ReadLine();
 
             var foundAccount = Accounts.FirstOrDefault(a => a.AccountNumber == account);

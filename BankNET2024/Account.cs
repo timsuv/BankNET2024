@@ -22,7 +22,7 @@ namespace BankNET2024
             if (amount > 0)
             {
                 Balance += amount;
-                Console.WriteLine($"Mängden pengar inlagd: {amount} på {AccountNumber}") ;
+                Console.WriteLine($"Mängden pengar inlagd: {amount:F} {Currency} på {AccountNumber}") ;
                 Transactions.Add(new TransactionLog(DateTime.Now, $"Insättning: {amount}"));
                 Console.ReadLine();
             }
@@ -33,7 +33,7 @@ namespace BankNET2024
 
             Balance -= amount;
 
-            Console.WriteLine($"Mängden pengar uttagen: {amount:C2} från {AccountNumber}");
+            Console.WriteLine($"Mängden pengar uttagen: {amount:F} {Currency} från {AccountNumber}");
             Transactions.Add(new TransactionLog(DateTime.Now, $"Uttag: {amount}{Currency}"));
             Console.ReadLine();
         }
@@ -52,7 +52,7 @@ namespace BankNET2024
         }
         public override string ToString()
         {
-            return $"Kontonummer: {AccountNumber}, Saldo: {Balance:F} {Currency:F}";
+            return $"Kontonummer: {AccountNumber}, Saldo: {Balance:F} {Currency}";
         }
        
         

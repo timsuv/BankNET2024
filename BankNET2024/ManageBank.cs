@@ -37,7 +37,7 @@ namespace BankNET2024
         {
             Bankart();
         }
-        static string maskInput()
+        static string MaskInput()
         {
             SecureString password = new SecureString();
             ConsoleKeyInfo key;
@@ -65,14 +65,12 @@ namespace BankNET2024
 
             while (attempts != 0) // Loop until the attempts are exhausted
             {
-                Console.Write("Enter use: "); // Prompt the user to enter the username
+                Console.Write("Ange användarnamn: "); // Prompt the user to enter the username
                 userName = Console.ReadLine();
 
-                Console.Write("Enter password: "); // Prompt the user to enter the password
-                string password = maskInput();
-                // Simulate a small delay process
+                Console.Write("Ange lösenordet: "); // Prompt the user to enter the password
+                string password = MaskInput();
 
-                // Read key inputs without displaying them
 
 
                 Console.WriteLine(); // New line after the password is entered
@@ -81,7 +79,7 @@ namespace BankNET2024
                 {
 
                     var tempUser = _users?.FirstOrDefault(user => user.Username == userName && user.Password == password); // Get the user object
-                    Console.WriteLine("Logging in....");
+                    Console.WriteLine("Loggning pågår ....");
                     await Task.Delay(2000);
                     if (tempUser is Admin) // Check if the user is an admin or user
                     {
@@ -98,18 +96,18 @@ namespace BankNET2024
                     Console.Clear();
                     Bankart();
                     attempts--; // Decrement the attempts
-                    Console.WriteLine($"Try again, attempts left: {attempts}");
+                    Console.WriteLine($"Försök igen, försök kvar: {attempts}");
                 }
 
             }
-            Console.WriteLine("OUT OF ATTEMPTS"); // Display a message when the attempts are exhausted
+            Console.WriteLine("INGA FÖRSÖK KVAR"); // Display a message when the attempts are exhausted
             Environment.Exit(0);
         }
 
         private async Task UserMenu(IUser user)
         {
             var tempUser = (User)user; // Cast the user object to a User object
-            Menu menu = new(["Withdraw", "Deposit", "Min info", "Transfer", "Mina Transaktioner", "Change Currency", "Create new Accounnt", "Take a loan", "Betala lånet", "Logga ut", "Exit"], "Bank menu"); // Create a menu object
+            Menu menu = new(["Uttag", "Insättning", "Min info", "Överförning", "Mina Transaktioner", "Byta valuta", "Skapa ny konto", "Ta ett lån", "Betala lånet", "Logga ut", "Avsluta"], "Bank meny"); // Create a menu object
             while (true)
             {
                 switch (menu.MenuRun()) // Run the menu
@@ -169,7 +167,7 @@ namespace BankNET2024
         private async Task AdminMenu(IUser user)
         {
             var admin = (Admin)user;
-            Menu menu = new(["Show all _users", "Delete User", "Change Currency value", "Show dict", "Logga ut"], "Admin menu");
+            Menu menu = new(["Visa alla användrare", "Radera enn användare", "Byta valutas värde", "Visa alla valutor", "Logga ut"], "Admin meny");
             while (true)
             {
                 switch (menu.MenuRun())
@@ -231,7 +229,7 @@ namespace BankNET2024
             var fromAccount = user.GetAccount();
 
             // Prompt the user to enter the account number to which the money will be transferred
-            Console.WriteLine("Till vilket konto: ");
+            Console.WriteLine("Ange kontot du vill skicka pengarna till: ");
             string? inputToAccount = Console.ReadLine();
 
             // Find the user and account that matches the entered account number
@@ -239,7 +237,7 @@ namespace BankNET2024
             var toAccount = toUser?.Accounts.FirstOrDefault(a => a.AccountNumber == inputToAccount);
 
             // Prompt the user to enter the amount of money to transfer
-            Console.WriteLine("Hur mycket pengar: ");
+            Console.WriteLine("Ange summan du vill skicka: ");
             if (decimal.TryParse(Console.ReadLine(), out decimal amount))
             {
                 // Check if the destination account exists and if the amount is less than the balance of the source account
@@ -257,11 +255,11 @@ namespace BankNET2024
                         Console.WriteLine("Skickar...");
                         await Task.Delay(1000); // Simulate a delay
                                                 // Log the transfer details
-                        Console.WriteLine($"Pengarna skickades från {fromAccount.AccountNumber} ny balans: {fromAccount.Balance} till {toAccount.AccountNumber} ny balans: {toAccount.Balance}\n");
+                        Console.WriteLine($"Pengarna skickades från {fromAccount.AccountNumber}, Ny balans: {fromAccount.Balance:F} {fromAccount.Currency} till {toAccount.AccountNumber}\n");
 
                         // Add transaction logs to both accounts
-                        fromAccount.Transactions.Add(new TransactionLog(DateTime.Now, $"Överföring: {amount} {fromAccount.Currency} till {toAccount.AccountNumber}"));
-                        toAccount.Transactions.Add(new TransactionLog(DateTime.Now, $"Överföring: {convertedAmount} {toAccount.Currency} från {fromAccount.AccountNumber}"));
+                        fromAccount.Transactions.Add(new TransactionLog(DateTime.Now, $"Överföring: {amount:F} {fromAccount.Currency} till {toAccount.AccountNumber}"));
+                        toAccount.Transactions.Add(new TransactionLog(DateTime.Now, $"Överföring: {convertedAmount:F} {toAccount.Currency} från {fromAccount.AccountNumber}"));
                     }
                     else
                     {
@@ -273,7 +271,7 @@ namespace BankNET2024
                 else
                 {
                     // Display an error message if something went wrong
-                    Console.WriteLine("Nåt gick fel");
+                    Console.WriteLine("Något gick fel");
                 }
             }
             else
@@ -363,7 +361,7 @@ namespace BankNET2024
         }
         public async Task LogOut(IUser? user)
         {
-            Console.WriteLine("Logging out...");
+            Console.WriteLine("Loggar ut...");
             await Task.Delay(2000);
             Console.Clear();
             Bankart();

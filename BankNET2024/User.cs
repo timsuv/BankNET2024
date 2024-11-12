@@ -162,17 +162,42 @@ namespace BankNET2024
             var loanAccount = Accounts.FirstOrDefault(a => a is LoanAccount);
             if (loanAccount != null && loanAccount is LoanAccount account)
             {
+                // Check if the loan is already paid off
+                if (account.LoanAmount == 0)
+                {
+                    Console.WriteLine("Ditt lån är redan betalt. Du har inget lån att betala.");
+                    return;
+                }
+
                 Console.WriteLine("Hur mycket vill du betala: ");
                 if (decimal.TryParse(Console.ReadLine(), out decimal payment))
                 {
                     if (payment <= payAcc.Balance)
                     {
+                        // Check if the payment exceeds the loan amount
+                        if (payment > account.LoanAmount)
+                        {
+                            Console.WriteLine("Betalningen är större än det kvarvarande lånebeloppet.");
+                            return;
+                        }
+
                         payAcc.Balance -= payment;
                         account.LoanAmount -= payment;
 
-                        Console.WriteLine($"Du har betalat {payment} och har nu {loanAccount.Balance} kvar att betala.");
+                        // If the loan is fully paid off after the payment
+                        if (account.LoanAmount == 0)
+                        {
+                            Console.WriteLine("Du har betalat av hela lånet. Lånet är nu betalt.");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Du har betalat {payment} och har nu {account.LoanAmount:F2} kvar att betala.");
+                        }
                     }
-                   
+                    else
+                    {
+                        Console.WriteLine("Otillräckligt saldo för betalning.");
+                    }
                 }
             }
             else
@@ -180,6 +205,7 @@ namespace BankNET2024
                 Console.WriteLine("Du har inget lån att betala.");
             }
         }
+
         public override string ToString()
         {
            return $"Användarnamn: {Username}, Lösenord: ****, Förnamn: {FirstName}, Efternamn: {LastName}, " +

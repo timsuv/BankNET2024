@@ -34,7 +34,7 @@ namespace BankNET2024
 
             Console.WriteLine(bankArt);
         }
-        static string maskInput()
+        static string MaskInupt()
         {
             SecureString password = new SecureString();
             ConsoleKeyInfo key;
@@ -66,7 +66,7 @@ namespace BankNET2024
                 userName = Console.ReadLine();
 
                 Console.Write("Enter password: "); // Prompt the user to enter the password
-                string password = maskInput();
+                string password = MaskInupt();
                 // Simulate a small delay process
 
                 // Read key inputs without displaying them
@@ -126,7 +126,7 @@ namespace BankNET2024
         private async Task UserMenu(IUser user)
         {
             var tempUser = (User)user; // Cast the user object to a User object
-            Menu menu = new(["Withdraw", "Deposit", "Min info", "Transfer", "Mina Transaktioner", "Change Currency", "Create new Accounnt", "Take a loan", "Logga ut", "Exit"], "Bank menu"); // Create a menu object
+            Menu menu = new(["Withdraw", "Deposit", "Min info", "Transfer", "Mina Transaktioner", "Change Currency", "Create new Accounnt", "Take a loan", "Pay loan" ,"Logga ut", "Exit"], "Bank menu"); // Create a menu object
             while (true)
             {
                 switch (menu.MenuRun()) // Run the menu
@@ -169,9 +169,12 @@ namespace BankNET2024
                         tempUser.TakeLoan();
                         break;
                     case 8:
-                        await LogOut(user);
+                        tempUser.PayLoan();
                         break;
                     case 9:
+                        await LogOut(user);
+                        break;
+                    case 10:
                         Environment.Exit(0);
                         break;
                     default:

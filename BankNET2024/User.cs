@@ -155,7 +155,7 @@ namespace BankNET2024
                         payAcc.Balance -= payment;
                         account.LoanAmount -= payment;
 
-                        Console.WriteLine($"Du har betalat {payment} och har nu {loanAccount.Balance} kvar att betala.");
+                        Console.WriteLine($"Du har betalat {payment} och har nu {account.LoanAmount} kvar att betala.");
                     }
                     else if (payment > payAcc.Balance)
                     {

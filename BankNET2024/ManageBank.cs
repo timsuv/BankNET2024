@@ -79,7 +79,7 @@ namespace BankNET2024
                 {
 
                     var tempUser = _users?.FirstOrDefault(user => user.Username == userName && user.Password == password); // Get the user object
-                    Console.WriteLine("Loggning pågår ....");
+                    Console.WriteLine("Inloggning pågår ....");
                     await Task.Delay(2000);
                     if (tempUser is Admin) // Check if the user is an admin or user
                     {
@@ -148,6 +148,7 @@ namespace BankNET2024
                         break;
                     case 6:
                         tempUser.CreateNewAccount();
+                        Console.ReadLine();
                         break;
                     case 7:
                         tempUser.TakeLoan();
@@ -259,7 +260,7 @@ namespace BankNET2024
                         Console.WriteLine("Skickar...");
                         await Task.Delay(1000); // Simulate a delay
                                                 // Log the transfer details
-                        Console.WriteLine($"Pengarna skickades från {fromAccount.AccountNumber}, Ny balans: {fromAccount.Balance:F} {fromAccount.Currency} till {toAccount.AccountNumber}\n");
+                        Console.WriteLine($"Pengarna skickades från {fromAccount.AccountNumber}, Ny balans: {fromAccount.Balance:F} {fromAccount.Currency}\n Pengarna skickades till {toAccount.AccountNumber}\n");
 
                         // Add transaction logs to both accounts
                         fromAccount.Transactions.Add(new TransactionLog(DateTime.Now, $"Överföring: {amount:F} {fromAccount.Currency} till {toAccount.AccountNumber}"));
@@ -365,7 +366,7 @@ namespace BankNET2024
         }
         public async Task LogOut(IUser? user)
         {
-            Console.WriteLine("Loggar ut...");
+            Console.WriteLine("Utloggning pågår...");
             await Task.Delay(2000);
             Console.Clear();
             Bankart();

@@ -117,12 +117,12 @@ namespace BankNET2024
                         if (account != null)
                         {
                             account.Withdraw();
-                            Console.ReadLine();
+                           
                         }
                         else
                         {
                             Console.WriteLine("Ingen giltig konto hittades.");
-                            Console.ReadLine();
+                            
                         }
                         break;
                     case 1:
@@ -256,11 +256,11 @@ namespace BankNET2024
                     fromAccount.Balance -= amount;
                     if (convertedAmount != 0)
                     {
-                        Console.WriteLine($"Omvandlad summa {convertedAmount}");
+                        Console.WriteLine($"Omvandlad summa {convertedAmount} {toAccount.Currency}");
                         Console.WriteLine("Skickar...");
                         await Task.Delay(1000); // Simulate a delay
                                                 // Log the transfer details
-                        Console.WriteLine($"Pengarna skickades från {fromAccount.AccountNumber}, Ny balans: {fromAccount.Balance:F} {fromAccount.Currency}\n Pengarna skickades till {toAccount.AccountNumber}\n");
+                        Console.WriteLine($"Pengarna skickades från {fromAccount.AccountNumber}, Ny balans: {fromAccount.Balance:F} {fromAccount.Currency}\nPengarna skickades till {toAccount.AccountNumber}\n");
 
                         // Add transaction logs to both accounts
                         fromAccount.Transactions.Add(new TransactionLog(DateTime.Now, $"Överföring: {amount:F} {fromAccount.Currency} till {toAccount.AccountNumber}"));

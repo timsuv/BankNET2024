@@ -21,7 +21,7 @@ namespace BankNET2024
         // Override the Withdraw method to prevent withdrawals from the savings account
         public override void Withdraw()
         {
-            Console.WriteLine("Du kan inte ta ut från sparkonto.");
+            Console.WriteLine("\nDu kan inte ta ut från sparkonto.");
         }
         // Method to periodically increase the balance with interest
         public async Task IncreaseBalance()

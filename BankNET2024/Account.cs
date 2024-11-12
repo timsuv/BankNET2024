@@ -25,7 +25,7 @@ namespace BankNET2024
             }
 
             Balance += amount;
-            Console.WriteLine($"Mängden pengar inlagd: {amount:F} {Currency} på {AccountNumber}");
+            Console.WriteLine($"\nMängden pengar inlagd: {amount:F} {Currency} på {AccountNumber}");
             Transactions.Add(new TransactionLog(DateTime.Now, $"Insättning: {amount}"));
             Console.ReadLine();
         }
@@ -40,12 +40,12 @@ namespace BankNET2024
 
             if (amount > Balance)  // Ensure the withdrawal doesn't exceed balance
             {
-                Console.WriteLine("Otillräckligt saldo för uttag.");
+                Console.WriteLine("\nOtillräckligt saldo för uttag.");
                 return;
             }
 
             Balance -= amount;
-            Console.WriteLine($"Mängden pengar uttagen: {amount:F} {Currency} från {AccountNumber}");
+            Console.WriteLine($"\nMängden pengar uttagen: {amount:F} {Currency} från {AccountNumber}");
             Transactions.Add(new TransactionLog(DateTime.Now, $"Uttag: {amount:F} {Currency}"));
             Console.ReadLine();
         }
@@ -58,7 +58,7 @@ namespace BankNET2024
             }
             else
             {
-                Console.WriteLine("Ogiltig mängd pengar.");
+                Console.WriteLine("\nOgiltig mängd pengar.");
                 return -1;  // Return a sentinel value to indicate invalid input
             }
         }

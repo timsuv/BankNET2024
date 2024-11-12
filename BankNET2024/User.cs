@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BankNET2024
 {
-    public class User: IUser
+    public class User : IUser
     {
         public string Username { get; set; }
         public string Password { get; set; }
@@ -27,8 +27,9 @@ namespace BankNET2024
         }
         public Account? GetAccount()
         {
+            Console.WriteLine();
             DisplayAccounts();
-            Console.WriteLine("Ange vilket konto du vill hitta: ");
+            Console.WriteLine("\nAnge vilket konto du vill hitta: ");
             string? account = Console.ReadLine();
 
             var foundAccount = Accounts.FirstOrDefault(a => a.AccountNumber == account);
@@ -43,7 +44,7 @@ namespace BankNET2024
             Console.WriteLine("Vad för sorts konto vill du skapa?\n1. Vanligt konto\n2. Sparkonto");
             int.TryParse(Console.ReadLine(), out int choice);
             if (choice != 1 && choice != 2) //Kollar så att användaren valt något av alternativen
-            { 
+            {
                 Console.WriteLine("Ogiltigt val. Ange 1 eller 2.");
             }
             else
@@ -56,15 +57,15 @@ namespace BankNET2024
                     if (choice == 1) //Ifall användaren valt vanligt konto
                     {
                         Account newAccount = new(accountNumber, initialBalance);
-                        Console.WriteLine($"Nu har ett nytt konto skapats med kontonummer {accountNumber} och saldo {initialBalance}.");
+                        Console.WriteLine($"Nu har ett nytt konto skapats med kontonummer {accountNumber} och saldo {initialBalance} {newAccount.Currency}.");
                         Accounts.Add(newAccount);//Lägger till kontot i kontolistan i User
                     }
                     else//Annars skapas ett sparkonto
                     {
                         Account newAccount = new SavingAccount(accountNumber, initialBalance);
-                        Console.WriteLine($"Nu har ett nytt sparkonto skapats med kontonummer {accountNumber} och saldo {initialBalance}.");
+                        Console.WriteLine($"Nu har ett nytt sparkonto skapats med kontonummer {accountNumber} och saldo {initialBalance} {newAccount.Currency}.");
                         Accounts.Add(newAccount);
-                    } 
+                    }
                 }
                 else
                 {
@@ -74,6 +75,7 @@ namespace BankNET2024
         }
         public void DisplayAccounts()
         {
+            Console.WriteLine("Lista över dina konto:");
             //visar infos om alla accounts med bara nummer och balance
             if (Accounts != null)
             {
@@ -89,7 +91,7 @@ namespace BankNET2024
 
             if (acc != null)
             {
-                Console.WriteLine("Vilken valuta vill du byta till?");
+                Console.WriteLine("\nVilken valuta vill du byta till?");
                 var currencyDictionary = Admin.GetCurrencyDictionary(); // hämtar valutorna från Admin
                 foreach (var currency in currencyDictionary) // skriver ut valutorna
                 {
@@ -101,7 +103,7 @@ namespace BankNET2024
                 {
                     acc.Balance *= (currentExchangeRate / newExchangeRate);
                     acc.Currency = newCurrency;
-                    Console.WriteLine($"Valuta ändrad till {acc.Currency}. Nytt Saldo: {acc.Balance:F2}  {acc.Currency:F2}");
+                    Console.WriteLine($"\nValuta ändrad till {acc.Currency}. Nytt Saldo: {acc.Balance:F2}  {acc.Currency:F2}");
                 }
                 else
                 {
@@ -116,30 +118,29 @@ namespace BankNET2024
             // Find an existing loan account, if any
             var existingLoanAccount = Accounts.OfType<LoanAccount>().FirstOrDefault();
 
-            Console.WriteLine("Hur mycket vill du låna: ");
+            Console.WriteLine("\nHur mycket vill du låna? ");
             if (decimal.TryParse(Console.ReadLine(), out decimal loanAmount))
             {
                 if (loanAmount <= Accounts.Sum(a => a.Balance) * 5 && loanAmount > 0)
                 {
                     if (existingLoanAccount != null)
                     {
-                        // If an existing loan account is found and the loan amount is 0, update it
+
                         if (existingLoanAccount.LoanAmount == 0)
                         {
                             existingLoanAccount.LoanAmount = loanAmount;
-                            Console.WriteLine($"Befintligt lånekonto uppdaterat med lånebelopp {loanAmount}.");
+                            Console.WriteLine($"\nBefintligt lånekonto uppdaterat med lånebelopp {loanAmount}.");
                         }
                         else
                         {
-                            Console.WriteLine("Du har redan ett lån som inte är betalt.");
+                            Console.WriteLine("\nDu har redan ett lån som inte är betalt.");
                         }
                     }
                     else
                     {
-                        // Create a new loan account if none exists
                         LoanAccount newLoanAccount = new(Guid.NewGuid().ToString(), 0, loanAmount);
                         Accounts.Add(newLoanAccount);
-                        Console.WriteLine($"Nytt lånekonto skapat med lånebelopp {loanAmount}.");
+                        Console.WriteLine($"\nNytt lånekonto skapat med lånebelopp {loanAmount} {newLoanAccount.Currency}.");
                     }
                 }
                 else
@@ -160,7 +161,7 @@ namespace BankNET2024
                 var payAcc = GetAccount();
                 if (payAcc != null)
                 {
-                    Console.WriteLine("Hur mycket vill du betala: ");
+                    Console.WriteLine("\nHur mycket vill du betala: ");
                     if (decimal.TryParse(Console.ReadLine(), out decimal payment))
                     {
                         if (payment <= payAcc.Balance && payment <= account.LoanAmount)
@@ -168,17 +169,21 @@ namespace BankNET2024
                             payAcc.Balance -= payment;
                             account.LoanAmount -= payment;
                             if (account.LoanAmount == 0)
-                                Console.WriteLine("Du har betalat av hela ditt lån");
+                            {
+                                Console.WriteLine("\nDu har betalat av hela ditt lån");
+                                payAcc.Transactions.Add(new TransactionLog(DateTime.Now, $"Lånet avbetalt: {payment} {account.Currency}"));
+                            }
                             else
-                                Console.WriteLine($"Du har betalat {payment} och har nu {account.LoanAmount} kvar att betala.");
+                                Console.WriteLine($"\nDu har betalat {payment} och har nu {account.LoanAmount} {account.Currency} kvar att betala.");
+                            payAcc.Transactions.Add(new TransactionLog(DateTime.Now, $"Lånebetalning: {payment} {account.Currency}"));
                         }
                         else if (payment > payAcc.Balance)
                         {
-                            Console.WriteLine("Du har inte tillräckligt med pengar på kontot");
+                            Console.WriteLine("\nDu har inte tillräckligt med pengar på kontot");
                         }
                         else
                         {
-                            Console.WriteLine("Du försökte betala mer än du har lånat, försök igen.");
+                            Console.WriteLine("\nDu försökte betala mer än du har lånat, försök igen.");
                         }
 
                         Console.ReadKey();
@@ -187,14 +192,14 @@ namespace BankNET2024
             }
             else
             {
-                Console.WriteLine("Du har inget lån att betala.");
+                Console.WriteLine("\nDu har inget lån att betala.");
             }
         }
 
         public override string ToString()
         {
-           return $"Förnamn: {FirstName}, Efternamn: {LastName}, " +
-           $"Telefonnummer: {PhoneNumber}";
+            return $"Förnamn: {FirstName}, Efternamn: {LastName}, " +
+            $"Telefonnummer: {PhoneNumber}";
         }
     }
 }

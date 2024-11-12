@@ -160,31 +160,35 @@ namespace BankNET2024
             if (loanAccount != null && loanAccount is LoanAccount account)
             {
                 var payAcc = GetAccount();
-                Console.WriteLine("Hur mycket vill du betala: ");
-                if (decimal.TryParse(Console.ReadLine(), out decimal payment))
+                if (payAcc != null)
                 {
-                    if (payment <= payAcc.Balance && payment <= account.LoanAmount)
+                    Console.WriteLine("Hur mycket vill du betala: ");
+                    if (decimal.TryParse(Console.ReadLine(), out decimal payment))
                     {
-                        payAcc.Balance -= payment;
-                        account.LoanAmount -= payment;
+                        if (payment <= payAcc.Balance && payment <= account.LoanAmount)
+                        {
+                            payAcc.Balance -= payment;
+                            account.LoanAmount -= payment;
 
-                        Console.WriteLine($"Du har betalat {payment} och har nu {account.LoanAmount} kvar att betala.");
-                    }
-                    else if (payment > payAcc.Balance)
-                    {
-                        Console.WriteLine("Du har inte tillräckligt med pengar på kontot");
-                    }
-                    else 
-                    {
-                        Console.WriteLine("Du försökte betala mer än du har lånat, försök igen.");
-                    }
+                            Console.WriteLine(
+                                $"Du har betalat {payment} och har nu {account.LoanAmount} kvar att betala.");
+                        }
+                        else if (payment > payAcc.Balance)
+                        {
+                            Console.WriteLine("Du har inte tillräckligt med pengar på kontot");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Du försökte betala mer än du har lånat, försök igen.");
+                        }
 
-                    Console.ReadKey();
+                        Console.ReadKey();
+                    }
                 }
-            }
-            else
-            {
-                Console.WriteLine("Du har inget lån att betala.");
+                else
+                {
+                    Console.WriteLine("Du har inget lån att betala.");
+                }
             }
         }
         public override string ToString()

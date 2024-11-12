@@ -142,11 +142,12 @@ namespace BankNET2024
         }
         public void PayLoan()
         {
-            var payAcc = GetAccount();
+            
 
             var loanAccount = Accounts.FirstOrDefault(a => a is LoanAccount);
             if (loanAccount != null && loanAccount is LoanAccount account)
             {
+                var payAcc = GetAccount();
                 Console.WriteLine("Hur mycket vill du betala: ");
                 if (decimal.TryParse(Console.ReadLine(), out decimal payment))
                 {

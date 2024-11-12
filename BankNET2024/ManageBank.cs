@@ -152,6 +152,7 @@ namespace BankNET2024
                         break;
                     case 8:
                         tempUser.PayLoan();
+                        Console.ReadLine();
                         break;
                     case 9:
                         await LogOut(user);

@@ -52,7 +52,7 @@ namespace BankNET2024
                 decimal.TryParse(Console.ReadLine(), out decimal initialBalance);
                 if (initialBalance > 0 && initialBalance < 1000000) //Sätter en maxgräns på insättningsbeloppet
                 {
-                    string accountNumber = Guid.NewGuid().ToString(); //Använder guid för att skapa ett unikt kontonummer
+                    string accountNumber = Guid.NewGuid().ToString().Substring(0, 8); //Använder guid för att skapa ett unikt kontonummer och kortar ner den
                     if (choice == 1) //Ifall användaren valt vanligt konto
                     {
                         Account newAccount = new(accountNumber, initialBalance);
@@ -64,7 +64,9 @@ namespace BankNET2024
                         Account newAccount = new SavingAccount(accountNumber, initialBalance);
                         Console.WriteLine($"Nu har ett nytt sparkonto skapats med kontonummer {accountNumber} och saldo {initialBalance}.");
                         Accounts.Add(newAccount);
-                    } 
+                    }
+
+                    Console.ReadLine();
                 }
                 else
                 {
@@ -184,10 +186,10 @@ namespace BankNET2024
 
                         Console.ReadKey();
                     }
-                }
-                else
-                {
-                    Console.WriteLine("Du har inget lån att betala.");
+                    else
+                    {
+                        Console.WriteLine("Du har inget lån att betala.");
+                    }
                 }
             }
         }

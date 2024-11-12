@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
-using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,7 +11,7 @@ namespace BankNET2024
     // Lägg till utloggning
     internal class ManageBank
     {
-        public static List<IUser>? _users =
+        private static List<IUser>? _users =
         [
                 new User("User1", "1", "Sussie", "Ekeberg", "0761772149", [new Account("Acc10", 10000), new Account("Acc30", 20000)]), // Temp User
                 new User("User2", "2", "Lars", "Larsson", "0731235647", [new Account("Acc20", 1000), new SavingAccount("Save10", 10000)]), // Temp User
@@ -34,30 +33,10 @@ namespace BankNET2024
 
             Console.WriteLine(bankArt);
         }
-        static string MaskInupt()
-        {
-            SecureString password = new SecureString();
-            ConsoleKeyInfo key;
-            do
-            {
-                key = Console.ReadKey(true);
-                if (!char.IsControl(key.KeyChar))
-                {
-                    password.AppendChar(key.KeyChar);
-                    Console.Write("*");
-                }
-                else if (key.Key == ConsoleKey.Backspace && password.Length > 0)
-                {
-                    password.RemoveAt(password.Length - 1);
-                    Console.Write("\b \b");
-                }
-            } while (key.Key != ConsoleKey.Enter);
-            return new System.Net.NetworkCredential(string.Empty, password).Password;
-
-        }
         public async Task LogIn()
         {
             var attempts = 3;
+            string password;
             string? userName;
 
             while (attempts != 0) // Loop until the attempts are exhausted
@@ -66,23 +45,32 @@ namespace BankNET2024
                 userName = Console.ReadLine();
 
                 Console.Write("Enter password: "); // Prompt the user to enter the password
-                string password = MaskInupt();
-                // Simulate a small delay process
+                password = string.Empty; // Reset the password for each input
+
+                 // Simulate a small delay process
 
                 // Read key inputs without displaying them
-               
+                while (true)
+                {
+                    var key = Console.ReadKey(intercept: true); // Intercept: true hides the input
+
+                    if (key.Key == ConsoleKey.Enter) // Exit when Enter is pressed
+                        break;
+
+                    password += key.KeyChar; // Add the character to the password
+                    Console.Write("*"); // Display an asterisk instead
+                }
 
                 Console.WriteLine(); // New line after the password is entered
 
                 if (ValidLogIn(userName, password))
                 {
-
                     var tempUser = _users?.FirstOrDefault(user => user.Username == userName && user.Password == password); // Get the user object
                     Console.WriteLine("Logging in....");
                     await Task.Delay(2000);
                     if (tempUser is Admin) // Check if the user is an admin or user
                     {
-                        await AdminMenu(tempUser);
+                        AdminMenu(tempUser);
                     }
                     else if (tempUser is User)
                     {
@@ -100,33 +88,10 @@ namespace BankNET2024
             Console.WriteLine("OUT OF ATTEMPTS"); // Display a message when the attempts are exhausted
             Environment.Exit(0);
         }
-        public async Task LogOut(IUser? user)
-        {
-            Console.WriteLine("Logging out...");
-            await Task.Delay(2000);
-            Console.Clear();
-            string bankArt = @"
-    ███▄▄▄▄      ▄████████     ███     ▀█████████▄     ▄████████ ███▄▄▄▄      ▄█   ▄█▄ 
-    ███▀▀▀██▄   ███    ███ ▀█████████▄   ███    ███   ███    ███ ███▀▀▀██▄   ███ ▄███▀ 
-    ███   ███   ███    █▀     ▀███▀▀██   ███    ███   ███    ███ ███   ███   ███▐██▀   
-    ███   ███  ▄███▄▄▄         ███   ▀  ▄███▄▄▄██▀    ███    ███ ███   ███  ▄█████▀    
-    ███   ███ ▀▀███▀▀▀         ███     ▀▀███▀▀▀██▄  ▀███████████ ███   ███ ▀▀█████▄    
-    ███   ███   ███    █▄      ███       ███    ██▄   ███    ███ ███   ███   ███▐██▄   
-    ███   ███   ███    ███     ███       ███    ███   ███    ███ ███   ███   ███ ▀███▄ 
-     ▀█   █▀    ██████████    ▄████▀   ▄█████████▀    ███    █▀   ▀█   █▀    ███   ▀█▀ 
-                                                                             ▀         
-    ";
-
-            Console.WriteLine(bankArt);
-            user = null;
-
-
-            await LogIn();
-        }
         private async Task UserMenu(IUser user)
         {
             var tempUser = (User)user; // Cast the user object to a User object
-            Menu menu = new(["Withdraw", "Deposit", "Min info", "Transfer", "Mina Transaktioner", "Change Currency", "Create new Accounnt", "Take a loan", "Pay loan" ,"Logga ut", "Exit"], "Bank menu"); // Create a menu object
+            Menu menu = new(["Withdraw", "Deposit", "Min info", "Transfer", "Mina Transaktioner", "Change Currency", "Create new Accounnt", "Take a loan","Exit"], "Bank menu"); // Create a menu object
             while (true)
             {
                 switch (menu.MenuRun()) // Run the menu
@@ -169,12 +134,6 @@ namespace BankNET2024
                         tempUser.TakeLoan();
                         break;
                     case 8:
-                        tempUser.PayLoan();
-                        break;
-                    case 9:
-                        await LogOut(user);
-                        break;
-                    case 10:
                         Environment.Exit(0);
                         break;
                     default:
@@ -182,10 +141,10 @@ namespace BankNET2024
                 }
             }
         }
-        private async Task AdminMenu(IUser user)
+        private void AdminMenu(IUser user)
         {
             var admin = (Admin)user;
-            Menu menu = new(["Show all _users", "Delete User", "Change Currency value", "Show dict", "Logga ut"], "Admin menu");
+            Menu menu = new(["Show all _users", "Delete User", "Change Currency value", "Show dict"], "Admin menu");
             while (true)
             {
                 switch (menu.MenuRun())
@@ -215,10 +174,6 @@ namespace BankNET2024
                         }
                         Console.ReadLine();
                         break;
-                    case 4:
-                        await LogOut(admin);
-                        return;
-
                     default:
                         break;
                 }
@@ -241,7 +196,6 @@ namespace BankNET2024
             }
             Console.ReadLine();
         }
-
         private async Task Transfer(User user)
         {
             // Get the account from which the money will be transferred
@@ -285,7 +239,7 @@ namespace BankNET2024
                         Console.WriteLine("Något gick fel");
                     }
 
-
+                    
                 }
                 else
                 {
@@ -303,7 +257,7 @@ namespace BankNET2024
         {
             var currencyDictionary = Admin.GetCurrencyDictionary();
 
-            try
+            try 
             {
                 // Kontrollera om valutorna finns i valutadictionaryn
                 if (currencyDictionary.TryGetValue(fromAccount.Currency, out decimal fromExchangeRate) &&
@@ -315,7 +269,7 @@ namespace BankNET2024
                     return convertedAmount;
                 }
             }
-            catch (Exception ex)
+            catch (Exception ex) 
             {
                 Console.WriteLine($"Något gick fel {ex.Message}");
             }
@@ -370,6 +324,6 @@ namespace BankNET2024
             }
             return false;
         }
-
+        
     }
 }

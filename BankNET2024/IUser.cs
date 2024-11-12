@@ -12,5 +12,6 @@ namespace BankNET2024
         public string LastName { get; set; }
         public string  Username { get; set; }
         public string Password { get; set; }
+        List<Account> Accounts { get; set; } 
     }
 }

@@ -28,6 +28,7 @@ namespace BankNET2024
             FirstName = firstName;
             LastName = lastName;
             EmployeeID = GenerateEmployeeID();
+            Accounts = new List<Account>();
         }
 
         public string Username { get; set; }
@@ -35,6 +36,7 @@ namespace BankNET2024
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string EmployeeID { get; private set; }
+        public List<Account> Accounts { get; set; }
 
         private string GenerateEmployeeID() // Generate uniq employee ID
         {
@@ -51,7 +53,7 @@ namespace BankNET2024
         public void ChangeCurrencyRate()
         {
             Console.WriteLine("Vilken valuta vill du ändra värdet på?");
-            string currency = Console.ReadLine().ToUpper();    
+            string currency = Console.ReadLine().ToUpper();
             Console.WriteLine("Ange det nya värdet: ");
             if (decimal.TryParse(Console.ReadLine(), out decimal rate))
             {
@@ -69,7 +71,7 @@ namespace BankNET2024
             {
                 Console.WriteLine("Ogiltigt värde.");
             }
-            
+
         }
 
         public override string ToString()

@@ -52,9 +52,16 @@ namespace BankNET2024
         }
         public override string ToString()
         {
-            return $"Kontonummer: {AccountNumber}, Saldo: {Balance:F} {Currency:F}";
+            var accountInfo = new StringBuilder();
+            accountInfo.AppendLine($"Kontonummer: {AccountNumber}, Saldo: {Balance:F2} {Currency}");
+            accountInfo.AppendLine("Transaktioner:");
+            foreach (var transaction in Transactions)
+            {
+                accountInfo.AppendLine(transaction.ToString());
+            }
+            return accountInfo.ToString();
         }
-       
-        
+
+
     }
 }

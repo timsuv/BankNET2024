@@ -2,144 +2,71 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace BankNET2024
 {
-    public class Account
+    public class Account(string accountNumber, decimal balance, string currency = "SEK")
     {
-        public static List<Account> Accounts = new List<Account>();
-        protected Account(string accountNumber, decimal balance, string name, string contactInfo, decimal amount, string password)
+        public string AccountNumber { get; set; } = accountNumber;
+        public decimal Balance { get; set; } = balance;
+        public string Currency { get; set; } = currency;
+        public List<TransactionLog> Transactions { get; set; } = [];
+        public void Deposit()
         {
-            AccountNumber = accountNumber;
-            Balance = balance;
+            decimal amount = Amount();
+
+            if (amount <= 0)  // Check if the amount is invalid
+            {
+                return;  // Exit the method early if invalid input
+            }
+
+            Balance += amount;
+            Console.WriteLine($"Mängden pengar inlagd: {amount:F} {Currency} på {AccountNumber}");
+            Transactions.Add(new TransactionLog(DateTime.Now, $"Insättning: {amount}"));
+            Console.ReadLine();
+        }
+        public virtual void Withdraw()
+        {
+            decimal amount = Amount();
+
+            if (amount <= 0)
+            {
+                return;
+            }
+
+            if (amount > Balance)  // Ensure the withdrawal doesn't exceed balance
+            {
+                Console.WriteLine("Otillräckligt saldo för uttag.");
+                return;
+            }
+
+            Balance -= amount;
+            Console.WriteLine($"Mängden pengar uttagen: {amount:F} {Currency} från {AccountNumber}");
+            Transactions.Add(new TransactionLog(DateTime.Now, $"Uttag: {amount:F} {Currency}"));
+            Console.ReadLine();
+        }
+        private decimal Amount()
+        {
+            Console.WriteLine("\nAnge mängden pengar: ");
+            if (decimal.TryParse(Console.ReadLine(), out decimal amount) && amount > 0)
+            {
+                return amount;
+            }
+            else
+            {
+                Console.WriteLine("Ogiltig mängd pengar.");
+                return -1;  // Return a sentinel value to indicate invalid input
+            }
+        }
+        public override string ToString()
+        {
+            return $"Kontonummer: {AccountNumber}, Saldo: {Balance:F} {Currency}";
+        }
        
-
-
-        }
-
-        public string AccountNumber { get; set; }
-        public decimal Balance { get; set; }
-
-        public string Name { get; set; }
-        public string ContactInformation { get; set; }
-        public decimal Amount { get; set; }
-        public string Password { get; set; }
-
-
-        public void Deposit(List<Account> accounts)
-        {
-            Console.WriteLine("\nVilket konto vill du sätta in på?");
-            string accountNumber = Console.ReadLine();
-
-            Account toAccount = accounts.FirstOrDefault(a => a.AccountNumber == accountNumber);
-
-            if (toAccount != null)
-            {
-                Console.WriteLine("\nAnge mängden pengar: ");
-                string input = Console.ReadLine();
-                if (decimal.TryParse(input, out decimal amount) && amount > 0)
-                {
-                    Balance += amount;
-                    toAccount.Balance += amount;
-                    var log = $"Mängden pengar inlagd: {amount} på {AccountNumber}";
-                    Console.WriteLine(log);
-                    Transaction transaction = new Transaction(DateTime.Now, new List<string> { log });
-                }
-                else
-                {
-                    Console.WriteLine("Ogiltig mängd. Ange en positiv siffra.");
-                }
-            }
-            else
-            {
-                Console.WriteLine("Insättning misslyckades. Detta bankkonto existerar inte.");
-            }
-        }
-
-        public void Withdraw(List<Account> accounts)
-        {
-            Console.WriteLine("\nVilket konto vill du dra ut från?");
-            string accountNumber = Console.ReadLine();
-
-            Account toAccount = accounts.FirstOrDefault(a => a.AccountNumber == accountNumber);
-
-            if (toAccount != null)
-            {
-                Console.WriteLine("\nAnge mängden pengar: ");
-                string input = Console.ReadLine();
-                if (decimal.TryParse(input, out decimal amount) && amount > 0)
-                {
-                    if (Balance >= amount)
-                    {
-                        Balance -= amount;
-                        toAccount.Balance += amount;
-                        var log = $"Mängden pengar uttagen: {amount} från {AccountNumber}";
-                        Console.WriteLine(log);
-                        Transaction transaction = new Transaction(DateTime.Now, new List<string> { log });
-                    }
-                    else
-                    {
-                        Console.WriteLine("Uttag misslyckades. Inte tillräckligt med pengar.");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Ogiltig mängd. Ange en positiv siffra.");
-                }
-            }
-            else
-            {
-                Console.WriteLine("Uttag misslyckades. Detta bankkonto existerar inte.");
-            }
-        }
-
-
-        public void DisplayAccount(User user)
-        {
-            Console.WriteLine("");
-        }
-        public async Task Transfer(List<Account> accounts)
-        {
-            Console.WriteLine("\nVilket konto vill du sätta in på?");
-            string accountNumber = Console.ReadLine();
-
-            Account toAccount = accounts.FirstOrDefault(a => a.AccountNumber == accountNumber);
-
-            if (toAccount != null)
-            {
-                Console.WriteLine("\nAnge mängden pengar: ");
-                string input = Console.ReadLine();
-                if (decimal.TryParse(input, out decimal amount) && amount > 0)
-                {
-                    if (Balance >= amount)
-                    {
-                        Balance -= amount;
-                        toAccount.Balance += amount;
-                        var log = $"Överförde {amount} från {AccountNumber} till {toAccount.AccountNumber}";
-                        Console.WriteLine(log);
-                        Transaction transaction = new Transaction(DateTime.Now, new List<string> { log });
-                    }
-                    else
-                    {
-                        Console.WriteLine("Uttag misslyckades. Inte tillräckligt med pengar.");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Ogiltig mängd. Ange en positiv siffra");
-                }
-            }
-            else
-            {
-                Console.WriteLine("Uttag misslyckades. Detta bankkonto existerar inte.");
-            }
-        }
-
-
-
-       
-
+        
     }
 }

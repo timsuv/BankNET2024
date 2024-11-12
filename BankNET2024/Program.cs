@@ -2,9 +2,11 @@
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            ManageBank manageBank = new(); // Create a new instance of the ManageBank class
+
+            await manageBank.LogIn(); // Call the LogIn method of the ManageBank class
         }
     }
 }

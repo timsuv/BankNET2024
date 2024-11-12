@@ -171,7 +171,7 @@ namespace BankNET2024
         private async Task AdminMenu(IUser user)
         {
             var admin = (Admin)user;
-            Menu menu = new(["Visa alla användrare", "Radera enn användare", "Byta valutas värde", "Visa alla valutor", "Logga ut"], "Admin meny");
+            Menu menu = new(["Visa alla användare", "Radera en användare", "Byta valutas värde", "Visa alla valutor", "Logga ut"], "Admin meny");
             while (true)
             {
                 switch (menu.MenuRun())
@@ -324,7 +324,7 @@ namespace BankNET2024
                     {
                         foreach (var account in tempUser.Accounts)
                         {
-                            Console.WriteLine($"Användare: {tempUser.Username}, Kontonummer: {account.AccountNumber}, Belopp {account.Balance}");
+                            Console.WriteLine($"Användare: {tempUser.Username}, Kontonummer: {account.AccountNumber}, Belopp: {account.Balance} {account.Currency}");
                         }
                     }
                 }

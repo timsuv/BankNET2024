@@ -89,3 +89,5 @@ AnvändarNamn : User1
 lösenord: 1
 AnvändarNamn: Admin
 Lösenord: 3
+
+Länk till OOAD: https://lucid.app/lucidchart/8f069cee-41b3-47c3-94b9-0ca0a5535c2f/edit?viewport_loc=-1239%2C-2279%2C2698%2C1376%2CML.hC8iuIUdo&invitationId=inv_45c468d2-2f11-4730-aa6c-b0ffbd90bfd1

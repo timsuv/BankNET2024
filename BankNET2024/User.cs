@@ -150,14 +150,23 @@ namespace BankNET2024
                 Console.WriteLine("Hur mycket vill du betala: ");
                 if (decimal.TryParse(Console.ReadLine(), out decimal payment))
                 {
-                    if (payment <= payAcc.Balance)
+                    if (payment <= payAcc.Balance && payment <= account.LoanAmount)
                     {
                         payAcc.Balance -= payment;
                         account.LoanAmount -= payment;
 
                         Console.WriteLine($"Du har betalat {payment} och har nu {loanAccount.Balance} kvar att betala.");
                     }
-                   
+                    else if (payment > payAcc.Balance)
+                    {
+                        Console.WriteLine("Du har inte tillräckligt med pengar på kontot");
+                    }
+                    else 
+                    {
+                        Console.WriteLine("Du försökte betala mer än du har lånat, försök igen.");
+                    }
+
+                    Console.ReadKey();
                 }
             }
             else

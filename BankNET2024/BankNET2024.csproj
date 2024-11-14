@@ -8,11 +8,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="IUser.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Banc.pdf" />
+    <None Remove="BankNet.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Banc.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BankNet.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="IUser.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

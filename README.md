@@ -8,7 +8,8 @@ Funktioner:
 Ändra valutakurser.
 Hantera användare (t.ex. ta bort användare, visa alla användare).
 Kan visa valutakurslistor.
-Har en metod ChangeCurrencyRate() för att justera valutakurser.
+Har en metod ChangeCur[BankNet.pdf](https://github.com/user-attachments/files/17748831/BankNet.pdf)
+rencyRate() för att justera valutakurser.
 GetCurrencyDictionary() returnerar en lista över valutakurser som administratören kan manipulera.
 
 2. Account
@@ -90,5 +91,7 @@ lösenord: 1
 AnvändarNamn: Admin
 Lösenord: 3
 
+
 OOAD:
 ![Sample Image](BankNET2024/BankNet.png)
+[BankNet.pdf](https://github.com/user-attachments/files/17748838/BankNet.pdf)

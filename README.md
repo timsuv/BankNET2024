@@ -92,6 +92,8 @@ AnvändarNamn: Admin
 Lösenord: 3
 
 
-OOAD:
+First UML draft:
 ![Sample Image](BankNET2024/BankNet.png)
-[BankNet.pdf](https://github.com/user-attachments/files/17748838/BankNet.pdf)
+
+Updated UML
+![BankUmlUpdate](https://github.com/user-attachments/assets/597ebc36-c706-4ced-9110-d4746d53e3ce)

@@ -84,7 +84,7 @@ User kan skapa konton som LoanAccount och SavingAccount och hantera sina konton 
 Alla transaktioner (t.ex. uttag, insättningar, och överföringar) loggas genom TransactionLog.
 Admin kan hantera och ta bort användare samt ändra valutakurser genom menyn.
 
-Projektet gjort av Ossy, Tim, Axel, Sami, Joshua
+Projektet gjort av Ossy, Tim, Joel, Axel, Sami, Joshua
 Exemple på användare
 AnvändarNamn : User1
 lösenord: 1

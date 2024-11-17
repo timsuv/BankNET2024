@@ -1,88 +1,39 @@
-Projektet är en bankapplikation som simulerar en banktjänst med användarhantering, kontohantering och transaktionsloggning. Systemet erbjuder två huvudroller: User (vanlig användare) och Admin (administratör). Användare kan ha flera typer av konton, inklusive Account, SavingAccount och LoanAccount, där de kan göra insättningar, uttag, överföringar och hantera sina transaktioner. Administratörer kan hantera användarkonton, ändra valutakurser och visa alla användares kontoinformation.
+The project is a banking application that simulates a banking service with user management, account management, and transaction logging. It includes two main roles: User (regular user) and Admin (administrator). Users can have multiple types of accounts, including Account, SavingAccount, and LoanAccount, and they can perform actions such as deposits, withdrawals, transfers, and managing their transactions. Administrators have additional privileges, such as managing user accounts, changing exchange rates, and viewing all user account information.
 
-Applikationen är designad för att simulera ett interaktivt bankkonto med funktionalitet för att logga in, skapa nya konton, ta lån, betala lån, och överföra pengar mellan användare. Systemet använder en menystruktur för användarinteraktioner och en transaktionslogg för att hålla reda på alla finansiella aktiviteter.
-  
-1. Admin
-Syfte: Representerar en administratör som kan hantera användare och deras konton, samt ändra valutakurser.
-Funktioner:
-Ändra valutakurser.
-Hantera användare (t.ex. ta bort användare, visa alla användare).
-Kan visa valutakurslistor.
-Har en metod ChangeCur[BankNet.pdf](https://github.com/user-attachments/files/17748831/BankNet.pdf)
-rencyRate() för att justera valutakurser.
-GetCurrencyDictionary() returnerar en lista över valutakurser som administratören kan manipulera.
+Admin Role:
+The Admin represents an administrator who can manage users and their accounts, as well as change exchange rates. The admin has several key functions, including the ability to change exchange rates and manage users. This includes actions such as deleting users or viewing a list of all users. The admin can also view and modify exchange rate lists and adjust rates using a method called ChangeCurrencyRate(). The GetCurrencyDictionary() method allows the admin to manipulate the exchange rates by returning a list of current rates.
 
-2. Account
-Syfte: Representerar ett vanligt bankkonto där pengar lagras och transaktioner görs.
-Funktioner:
-Kan hantera grundläggande funktioner som insättningar, uttag och överföringar.
-Håller reda på kontonummer, saldo och valuta.
-Loggar transaktioner via TransactionLog (t.ex. när pengar sätts in eller tas ut).
-Kan kopplas till en användare som har åtkomst till kontot.
+Account:
+The Account class represents a standard bank account where money is stored and transactions are made. It can perform basic functions such as deposits, withdrawals, and transfers. The account keeps track of its account number, balance, and currency type. It logs all transactions (such as deposits or withdrawals) using a TransactionLog. Each account can be associated with a user, granting them access to manage and perform operations on the account.
 
-3. SavingAccount
-Syfte: En specialversion av Account som representerar ett sparkonto. Har troligen fördelar som högre ränta eller andra funktioner.
-Funktioner:
-Ärver från Account, vilket innebär att det kan göra samma saker (insättningar, uttag, transaktioner), men har funktioner specifika för sparande.
-Till exempel, användaren kan ha möjlighet att sätta in pengar men kanske inte göra uttag lika ofta.
-Kan också kopplas till en användare och hanteras via deras User-profil.
+SavingAccount:
+The SavingAccount class is a special type of account designed for savings. It inherits from the regular Account class but adds features specific to saving accounts. Typically, these accounts offer higher interest rates or have restrictions on withdrawals. Users can still perform actions like deposits, but withdrawals may be limited. This class also allows the user to manage their savings while retaining the core functionality of an account, such as tracking transactions.
 
-4. LoanAccount
-Syfte: Representerar ett konto som används för att hantera lån som användare kan ta från banken.
-Funktioner:
-Håller reda på det lånade beloppet och hur mycket som ska återbetalas.
-Kan hantera betalningar på lånet och ge användaren information om hur mycket som återstår att betala.
-Kan kopplas till en användare och interagerar med andra konton för att göra avbetalningar eller visa lånets status.
+LoanAccount:
+The LoanAccount class represents an account used to manage loans taken by the user. It tracks the amount borrowed and the balance that remains to be repaid. The LoanAccount class manages loan payments and provides information on how much the user still owes. It can interact with other accounts to make payments or display the loan's current status. This class is also linked to a specific user, allowing them to manage their loan through their account.
 
-5. IUser (Interface)
-Syfte: Ett interface som definierar de grundläggande egenskaperna och funktionerna för alla typer av användare (t.ex. vanliga användare och administratörer).
-Funktioner:
-Definierar funktioner som alla användartyper måste implementera, t.ex. inloggning, visa kontoinformation, hantera konton och valutafunktioner.
-IUser implementeras av både User och Admin, vilket gör att dessa klasser kan behandlas på ett liknande sätt när det gäller användarinteraktioner.
+IUser Interface:
+The IUser interface defines the common properties and functions that all user types (such as regular users and administrators) must implement. It establishes a set of behaviors for logging in, viewing account information, managing accounts, and handling currency functions. Both the User and Admin classes implement the IUser interface, which ensures they can be treated similarly in terms of user interactions. By using this interface, both user roles can interact with the system in a unified way.
 
-6. User
-Syfte: Representerar en vanlig användare som kan ha flera bankkonton (inklusive vanliga konton, sparkonton och lånekonton).
-Funktioner:
-Kan skapa nya konton, ta lån, hantera sina konton, och se sina transaktioner.
-Har metoder för att sätta in och ta ut pengar, överföra pengar till andra användare, visa kontoinformation och historik, etc.
-Kan också skapa nya konton (t.ex. SavingAccount eller LoanAccount).
-7. TransactionLog
+User:
+The User class represents a regular user who can have multiple types of accounts, such as regular accounts, savings accounts, and loan accounts. Users can create new accounts, take out loans, manage their accounts, and view their transactions. The User class provides methods for depositing and withdrawing money, transferring money to other users, and viewing account information and transaction history. It also allows users to create new accounts, including saving accounts and loan accounts, and interact with their financial data.
 
-Syfte: Representerar en transaktion som sker på ett konto (t.ex. när pengar sätts in, tas ut eller när en överföring görs).
-Funktioner:
-Loggar detaljer om transaktionen, inklusive datum, belopp och typ av transaktion.
-Används för att skapa historik för varje konto, vilket gör att användaren kan se en lista över sina tidigare transaktioner.
-Håller reda på om en transaktion är en insättning, uttag eller överföring och kan visa detaljer om denna transaktion.
+TransactionLog:
+The TransactionLog class logs all transactions that occur on an account, such as deposits, withdrawals, or transfers. It records the date, amount, and type of transaction, and keeps a history of these events. The log helps users keep track of their financial activities by providing a list of past transactions. The TransactionLog class is used by all account types (including LoanAccount and SavingAccount) to ensure that every financial action is tracked.
 
-8. Menu
-Syfte: Representerar en meny med valalternativ för användaren att välja mellan (t.ex. insättning, uttag, överföring).
-Funktioner:
-Visar en lista över tillgängliga alternativ och hanterar användarens input för att välja vad de vill göra.
-MenuRun() är den huvudsakliga metoden som kör menyn och returnerar vilket alternativ användaren valt.
-Fungerar som en navigationsstruktur för användare att interagera med applikationens funktioner.'
+Menu:
+The Menu class represents a navigation menu that presents options to the user, such as deposit, withdrawal, or transfer. It displays a list of available options and handles user input, allowing the user to select the desired action. The MenuRun() method is responsible for executing the menu, processing the user's choice, and returning the selected option. This class acts as a central point for user interaction, allowing them to easily navigate through the application's various features.
 
-9. ManageBank
-Syfte: Är den centrala klassen som styr applikationen. Den hanterar användarinloggning, interaktion med användare och administratörer samt kontohantering.
-Funktioner:
-LogIn(): Hanterar inloggning för användare och administratörer genom att be om användarnamn och lösenord, samt verifiera dessa mot lagrade uppgifter.
-UserMenu(): Hanterar funktioner som en vanlig användare kan göra efter inloggning, t.ex. att sätta in eller ta ut pengar, skapa nya konton, och göra överföringar.
-AdminMenu(): Ger administratören möjlighet att hantera användare, ändra valutakurser, och visa kontoinformation för alla användare.
-Loggar ut användaren efter tre misslyckade inloggningsförsök och avslutar programmet.
-Hantera konton: Användare kan skapa och hantera konton av olika typer, inklusive vanliga konton och lånekonton.
+ManageBank:
+The ManageBank class is the central controller of the application. It is responsible for managing user login, interactions with both users and administrators, and account management. The LogIn() method handles user authentication by prompting for a username and password and verifying them against stored credentials. Depending on whether the user is a regular user or an administrator, the system presents the appropriate menu using the UserMenu() or AdminMenu() methods. The ManageBank class also logs users out after three failed login attempts and can exit the program when needed. It is also responsible for managing various types of accounts, including creating new accounts and handling different banking actions like deposits and transfers.
 
-Relationer mellan klasserna:
-ManageBank styr hela applikationen och håller reda på alla användare i form av IUser-objekt. Den hanterar både användar- och administratörsmenyer.
-User implementerar IUser och kan ha flera olika typer av konton, inklusive Account, SavingAccount och LoanAccount.
-LoanAccount, SavingAccount och Account är alla kontoklasser som representerar olika typer av konton användarna kan ha.
-TransactionLog används av alla konton (inklusive LoanAccount och SavingAccount) för att logga transaktioner.
-Admin är en särskild typ av IUser som har extra funktioner för att hantera och administrera användare och valutakurser.
-Menu används av både User och Admin för att interagera med applikationen och göra val baserat på menyalternativen.
-Flöde i applikationen:
-ManageBank ansvarar för att initiera applikationen och ge användaren möjlighet att logga in.
-Beroende på om användaren är en vanlig User eller en Admin, presenteras olika menyer via Menu.
-User kan skapa konton som LoanAccount och SavingAccount och hantera sina konton genom metoder som insättning, uttag, och överföringar.
-Alla transaktioner (t.ex. uttag, insättningar, och överföringar) loggas genom TransactionLog.
-Admin kan hantera och ta bort användare samt ändra valutakurser genom menyn.
+Relationships Between Classes:
+The ManageBank class governs the entire application and keeps track of all users as IUser objects. It manages both user and administrator menus and directs interactions accordingly. The User class implements the IUser interface and can have various types of accounts, including Account, SavingAccount, and LoanAccount. Each account type is linked to a specific user, and the accounts (whether regular, saving, or loan) all interact with the TransactionLog to track financial transactions.
+
+The Admin class is a specialized implementation of IUser with additional functionality for managing users and adjusting exchange rates. The Menu class is used by both User and Admin to navigate the application and choose the appropriate actions.
+
+Application Flow:
+The ManageBank class is responsible for initializing the application and providing the user with the option to log in. After logging in, depending on the user type (regular user or admin), a corresponding menu is presented through the Menu class. Regular users can create accounts like LoanAccount and SavingAccount, manage their accounts, and perform actions like deposits, withdrawals, and transfers. All transactions, such as withdrawals, deposits, and transfers, are logged by the TransactionLog. Administrators have the ability to manage and remove users, adjust exchange rates, and view all user account details.
 
 Projektet gjort av Ossy, Tim, Joel, Axel, Sami, Joshua
 Exemple på användare
